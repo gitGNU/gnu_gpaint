@@ -4,3 +4,4 @@ src/main.c
 src/ui.c
 src/callbacks.c
 src/support.c
+src/drawing.c

@@ -1,3 +1,41 @@
+November 12, 2002       Andy Tai <atai@gnu.org>
+
+   * Port to the GNOME 2 platform, also minor bug fixes
+     File name specification via the initial command line added.
+
+October 28, 2002        Andy Tai <atai@gnu.org>
+   
+   * fix build problems with resp. to recent Gnome 1.4 libraries
+
+
+March 16, 2002          Andy Tai  (atai@gnu.org)    
+These changes are contributed by Michael A. Meffie III.
+   * Michael added to author list, about box
+   * released version 0.2.2  
+   * The menu is re-arranged so it is now much more user friendly.
+   * Initial brush tool implementation.
+   * Improvement to the eraser tool.
+   * Bug fix in clipboard, and more sensible initial color settings
+   * General usability improvements so gpaint is much more usable!
+   * Added the TODO file.
+
+January 13, 2002        Andy Tai  (atai@gnu.org) 
+   * released version 0.2.1  
+   * Icons now smaller, so the toolbar takes less space
+   * First attempt at support RPM creation
+   * Updated to work with the GNOME 1.4 platform
+   * First implementation of image flipping and envolving infrastructure 
+     for future interactive rotation and shearing
+   * Improve image paste with better manual control
+
+November 20, 2000       Andy Tai  (atai@gnu.org)
+   * released version 0.2
+   * Printing support added
+   * Now works in 8, 16 24 and 32 bit screens
+   * Cut, paste support added
+   * bug fixes
+   * Color palette added to UI
+
 October 24, 2000        Andy Tai (atai@atai.org)
    
    * Version 0.1.1 released.  Improvement of text tool, save as implemented, 

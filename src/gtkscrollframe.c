@@ -24,7 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkvscrollbar.h>
 #include <gtk/gtksignal.h>
@@ -211,11 +214,11 @@ gtk_scroll_frame_class_init (GtkScrollFrameClass *class)
 	object_class->set_arg = gtk_scroll_frame_set_arg;
 	object_class->get_arg = gtk_scroll_frame_get_arg;
 	object_class->destroy = gtk_scroll_frame_destroy;
-	object_class->finalize = gtk_scroll_frame_finalize;
+	//object_class->finalize = gtk_scroll_frame_finalize;
 
 	widget_class->map = gtk_scroll_frame_map;
 	widget_class->unmap = gtk_scroll_frame_unmap;
-	widget_class->draw = gtk_scroll_frame_draw;
+	//widget_class->draw = gtk_scroll_frame_draw;
 	widget_class->size_request = gtk_scroll_frame_size_request;
 	widget_class->size_allocate = gtk_scroll_frame_size_allocate;
 	widget_class->expose_event = gtk_scroll_frame_expose;
@@ -372,8 +375,8 @@ gtk_scroll_frame_finalize (GtkObject *object)
 
 	g_free (priv);
 
-	if (GTK_OBJECT_CLASS (parent_class)->finalize)
-		(* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+	//if (GTK_OBJECT_CLASS (parent_class)->finalize)
+	//	(* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 /* Map handler for the scroll frame widget */
@@ -533,8 +536,8 @@ gtk_scroll_frame_size_request (GtkWidget *widget, GtkRequisition *requisition)
 	requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
 	if (priv->shadow_type != GTK_SHADOW_NONE) {
-		requisition->width += 2 * widget->style->klass->xthickness;
-		requisition->height += 2 * widget->style->klass->ythickness;
+		//requisition->width += 2 * widget->style->klass->xthickness;
+		//requisition->height += 2 * widget->style->klass->ythickness;
 	}
 
 	gtk_widget_size_request (priv->hsb, &hsb_requisition);
@@ -676,8 +679,8 @@ gtk_scroll_frame_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 		xthickness = 0;
 		ythickness = 0;
 	} else {
-		xthickness = widget->style->klass->xthickness;
-		ythickness = widget->style->klass->ythickness;
+		//xthickness = widget->style->klass->xthickness;
+		//ythickness = widget->style->klass->ythickness;
 	}
 
 	if (bin->child && GTK_WIDGET_VISIBLE (bin->child)) {

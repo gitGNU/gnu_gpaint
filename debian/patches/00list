@@ -1,0 +1,12 @@
+#01_add_icon
+#02_add_pt_BR_translation
+#03_fix_left_toolbar
+#04_add_warning_on_close_modified_file
+#05_update_to_libgnomeprint2_2_api
+#06_create_new_window_on_open
+#07_warning_when_save_fails
+#08_fix_file_saving
+09_fix_menu_entry
+10_fix_gcc_warnings
+11_update_pt_BR_translation
+

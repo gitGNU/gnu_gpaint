@@ -1,28 +1,23 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = intl po macros src
+SUBDIRS = po src
 
 EXTRA_DIST =            \
         gpaint.desktop \
-        gpaint.spec        
+        gpaint.spec        \
+	gpaint.glade \
+	gpaint.gladep
 
 install-data-local:
 	@$(NORMAL_INSTALL)
-	if test -d $(srcdir)/pixmaps; then \
-	  $(mkinstalldirs) $(DESTDIR)@PACKAGE_PIXMAPS_DIR@; \
-	  for pixmap in $(srcdir)/pixmaps/*xpm $(srcdir)/pixmaps/*png; do \
-	    if test -f $$pixmap; then \
-	      $(INSTALL_DATA) $$pixmap $(DESTDIR)@PACKAGE_PIXMAPS_DIR@; \
-	    fi \
-	  done \
-	fi
 
 dist-hook:
-	if test -d pixmaps; then \
+	if test -d $(srcdir)/pixmaps; then \
 	  mkdir $(distdir)/pixmaps; \
-	  for pixmap in $(srcdir)/pixmaps/*xpm $(srcdir)/pixmaps/*png; do \
+	  for pixmap in $(srcdir)/pixmaps/*; do \
 	    if test -f $$pixmap; then \
 	      cp -p $$pixmap $(distdir)/pixmaps; \
 	    fi \
 	  done \
 	fi
+

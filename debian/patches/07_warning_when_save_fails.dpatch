@@ -1,0 +1,62 @@
+#!/bin/sh -e
+## 07_warning_when_save_fails.dpatch by Goedson Teixeira Paixao <goedson@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+if [ $# -ne 1 ]; then
+    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+    exit 1
+fi
+
+[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+
+case "$1" in
+       -patch) patch $patch_opts -p1 < $0;;
+       -unpatch) patch $patch_opts -p1 -R < $0;;
+        *)
+                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+                exit 1;;
+esac
+
+exit 0
+
+@DPATCH@
+diff -urNad /home/goedson/Debian/packages/maintainer/gpaint/src/util.c gpaint/src/util.c
+--- /home/goedson/Debian/packages/maintainer/gpaint/src/util.c	2004-02-24 21:51:20.000000000 -0300
++++ gpaint/src/util.c	2004-02-24 21:51:47.000000000 -0300
+@@ -242,6 +242,15 @@
+     gtk_widget_show(widget);
+ 
+ }
++static void show_save_failed_warning(image_buf *ibuf) {
++  GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(ibuf->window),
++					     GTK_DIALOG_MODAL,
++					     GTK_MESSAGE_WARNING,
++					     GTK_BUTTONS_OK,
++					     _("Failed to save file %s."), ibuf->name);
++  gtk_dialog_run(GTK_DIALOG(dialog));
++  gtk_widget_destroy(GTK_WIDGET(dialog));
++}
+ static void save_canvas_callback(GtkFileSelection *widget)
+ {
+     char tmp[4000];
+@@ -259,7 +268,7 @@
+ 	    close_image_buf(ibuf);
+     }
+     else 
+-        gdk_beep(); /*show error message, TODO */
++        show_save_failed_warning(ibuf); /*show error message, TODO */
+ }
+ 
+ gboolean save_canvas(image_buf *ibuf, int saveas)
+@@ -275,7 +284,7 @@
+ 	  return TRUE;
+       }
+       else{
+-            gdk_beep(); /*show error message, TODO */
++            show_save_failed_warning(ibuf); /*show error message, TODO */
+             return FALSE;  
+       }
+     }

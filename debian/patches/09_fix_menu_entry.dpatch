@@ -1,0 +1,26 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 09_fix_menu_entry.dpatch by  Goedson Teixeira Paixao <goedson@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fixes the gpaint.desktop file to work in the new menu scheme.
+
+@DPATCH@
+diff -urNad gpaint-0.2.4+0.3.0pre5/gpaint.desktop /tmp/dpep.Opm1zi/gpaint-0.2.4+0.3.0pre5/gpaint.desktop
+--- gpaint-0.2.4+0.3.0pre5/gpaint.desktop	2005-01-03 15:38:20.000000000 -0200
++++ /tmp/dpep.Opm1zi/gpaint-0.2.4+0.3.0pre5/gpaint.desktop	2005-03-20 11:34:13.942716216 -0300
+@@ -3,11 +3,9 @@
+ Comment=A small-scale painting program for GNOME, the GNU Desktop
+ Comment[fr]=Un petit outil de dessin pour GNOME, le desktop GNU
+ Comment[pt_BR]=Um pequeno programa de desenho para o GNOME, o Desktop GNU
+-TryExec=gpaint-2
+-Exec=gpaint-2
+-Icon=gnome-logo-icon-transparent.png
++TryExec=gpaint
++Exec=gpaint
++Icon=gpaint.xpm
+ Terminal=0
+ Type=Application
+-
+-
+-
++Categories=Application;Graphics;2DGraphics;RasterGraphics;

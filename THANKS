@@ -1,5 +1,14 @@
+
+Thanks to Andy Tai for creating GNU Paint!
+
+Thanks to Helen Meffie for helping to test gpaint!
+
+Thanks to Goedson Teixeira Paixao <goedson@debian.org> for gpaint
+debian package maintenance and many patches.
+
 Thanks to Pierre Sarrazin and  George Farris <george@gmsys.com> 
 for providing the initial version of the .spec and .desktop files.  
+
 Thanks to SATO Satoru and Kazuya NUMATA for Japanese messageo
 catalogs.
 

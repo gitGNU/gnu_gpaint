@@ -1,0 +1,36 @@
+#!/bin/sh -e
+##  by Goedson Teixeira Paixao <goedson@debian.org>
+##
+## DP: Adds an icon to the GNOME menu item
+
+if [ $# -ne 1 ]; then
+    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+    exit 1
+fi
+
+[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+
+case "$1" in
+       -patch) patch $patch_opts -p1 < $0;;
+       -unpatch) patch $patch_opts -p1 -R < $0;;
+        *)
+                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+                exit 1;;
+esac
+
+exit 0
+
+@DPATCH@
+diff -ru gpaint-0.2.3.orig/gpaint.desktop gpaint-0.2.3/gpaint.desktop
+--- gpaint-0.2.3.orig/gpaint.desktop	2002-01-14 08:31:57.000000000 -0200
++++ gpaint-0.2.3/gpaint.desktop	2002-11-30 12:02:10.000000000 -0200
+@@ -4,7 +4,7 @@
+ Comment[fr]=Un petit outil de dessin pour GNOME, le desktop GNU
+ TryExec=gpaint
+ Exec=gpaint
+-Icon=gnome-logo-icon-transparent.png
++Icon=gpaint.xpm
+ Terminal=0
+ Type=Application
+ 

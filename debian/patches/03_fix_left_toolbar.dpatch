@@ -1,0 +1,60 @@
+#!/bin/sh -e
+##  by Goedson Teixeira Paixao <goedson@debian.org>
+##
+## DP: Fix the left toolbar
+
+if [ $# -ne 1 ]; then
+    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+    exit 1
+fi
+
+[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+
+case "$1" in
+       -patch) patch $patch_opts -p1 < $0;;
+       -unpatch) patch $patch_opts -p1 -R < $0;;
+        *)
+                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+                exit 1;;
+esac
+
+exit 0
+
+@DPATCH@
+diff -ru gpaint-0.2.3.orig/src/ui.c gpaint-0.2.3/src/ui.c
+--- gpaint-0.2.3.orig/src/ui.c	Mon Nov  4 07:10:18 2002
++++ gpaint-0.2.3/src/ui.c	Wed Dec 18 11:18:40 2002
+@@ -419,6 +419,7 @@
+     GtkWidget *filled_button;
+     GtkWidget *scroll_frame;
+     GtkWidget *appbar1;
++    GtkWidget *left_toolbar;
+     
+     GtkStockItem stock_item;
+     GtkTooltips *tooltips;
+@@ -1710,11 +1711,20 @@
+     gtk_object_set_data_full (GTK_OBJECT (mainwindow), "table4", table4,
+                               (GtkDestroyNotify) gtk_widget_unref);
+     gtk_widget_show (table4);
+-    gnome_app_add_docked (GNOME_APP (mainwindow), table4, "table4",
+-                          BONOBO_DOCK_ITEM_BEH_NEVER_HORIZONTAL,
+-                          BONOBO_DOCK_LEFT, 0, 0, 0);
+-    gtk_container_set_border_width (GTK_CONTAINER (table4), 2);
+ 
++    left_toolbar = gtk_toolbar_new();
++    gtk_toolbar_set_orientation(GTK_TOOLBAR(left_toolbar), GTK_ORIENTATION_VERTICAL);
++    gtk_toolbar_set_style(GTK_TOOLBAR(left_toolbar), GTK_TOOLBAR_BOTH);
++    gtk_widget_set_name (left_toolbar, "left_toolbar");
++    gtk_widget_ref (left_toolbar);
++    gtk_object_set_data_full (GTK_OBJECT (mainwindow), "left_toolbar", left_toolbar,
++                              (GtkDestroyNotify) gtk_widget_unref);
++    gtk_widget_show (left_toolbar);
++    gnome_app_add_docked (GNOME_APP (mainwindow), left_toolbar, "left_toolbar",
++                           BONOBO_DOCK_ITEM_BEH_NEVER_HORIZONTAL,
++                           BONOBO_DOCK_LEFT, 1, 0, 0);
++    gtk_toolbar_append_widget (GTK_TOOLBAR (left_toolbar), table4, NULL, NULL);
++    gtk_container_set_border_width (GTK_CONTAINER (table4), 2);
+     toolbar4 = gtk_toolbar_new();
+     gtk_toolbar_set_orientation(GTK_TOOLBAR(toolbar4), GTK_ORIENTATION_VERTICAL);
+     gtk_toolbar_set_style(GTK_TOOLBAR(toolbar4), GTK_TOOLBAR_BOTH);

@@ -1,53 +1,45 @@
-#include "pixmaps.h"
+/* $Id: pixmaps.c,v 1.4 2004/03/13 03:49:19 meffie Exp $
+ *
+ * GNU Paint 
+ * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ *
+ * Authors: Li-Cheng (Andy) Tai
+ *          Michael A. Meffie III <meffiem@neo.rr.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307 USA
+ */
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include "../pixmaps/about_pict.xpm"
 #include "../pixmaps/arcOp.xpm"
-#include "../pixmaps/arrow.xpm"
-#include "../pixmaps/babygnu_l.xpm"
 #include "../pixmaps/boxOp.xpm"
 #include "../pixmaps/brushOp.xpm"
 #include "../pixmaps/clineOp.xpm"
 #include "../pixmaps/curveOp.xpm"
-#include "../pixmaps/dotPenOp.xpm"
-#include "../pixmaps/dynPenOp.xpm"
 #include "../pixmaps/eraseOp.xpm"
-#include "../pixmaps/fboxOp.xpm"
-#include "../pixmaps/ffillOp.xpm"
-#include "../pixmaps/ffreehandOp.xpm"
 #include "../pixmaps/filled.xpm"
 #include "../pixmaps/fillOp.xpm"
-#include "../pixmaps/fovalOp.xpm"
-#include "../pixmaps/fpolyOp.xpm"
 #include "../pixmaps/freehandOp.xpm"
 #include "../pixmaps/lassoOp.xpm"
 #include "../pixmaps/lineOp.xpm"
 #include "../pixmaps/ovalOp.xpm"
-#include "../pixmaps/paintA.xpm"
-#include "../pixmaps/paintB.xpm"
-#include "../pixmaps/paintC.xpm"
-#include "../pixmaps/paintD.xpm"
-#include "../pixmaps/paintE.xpm"
-#include "../pixmaps/paintF.xpm"
-#include "../pixmaps/paintG.xpm"
-#include "../pixmaps/paintH.xpm"
-#include "../pixmaps/paintI.xpm"
-#include "../pixmaps/paintJ.xpm"
-#include "../pixmaps/paintK.xpm"
-#include "../pixmaps/paintL.xpm"
-#include "../pixmaps/paintM.xpm"
-#include "../pixmaps/paintN.xpm"
-#include "../pixmaps/paintO.xpm"
-#include "../pixmaps/paintP.xpm"
-#include "../pixmaps/paintQ.xpm"
-#include "../pixmaps/paintR.xpm"
-#include "../pixmaps/paintS.xpm"
-#include "../pixmaps/paintT.xpm"
 #include "../pixmaps/pencilOp.xpm"
-#include "../pixmaps/polyOp.xpm"
-#include "../pixmaps/rayOp.xpm"
-#include "../pixmaps/selectOp.xpm"
 #include "../pixmaps/selpolyOp.xpm"
-#include "../pixmaps/smearOp.xpm"
-#include "../pixmaps/sprayOp.xpm"
 #include "../pixmaps/textOp.xpm"
-#include "../pixmaps/tfillOp.xpm"
 #include "../pixmaps/unfilled.xpm"

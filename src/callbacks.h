@@ -1,9 +1,27 @@
+/* $Id: callbacks.h,v 1.12 2005/01/03 19:33:22 meffie Exp $
+ *
+ * GNU Paint 
+ * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307 USA
+ */
+
 #include <gtk/gtk.h>
 #include <gnome.h>
 #include "pixmaps.h"
-
-#define BEGIN_BUSY_CURSOR { GdkCursor *origcursor = ibuf->cursor; gdk_window_set_cursor(ibuf->window->window, busy_cursor); gdk_window_set_cursor(ibuf->drawing_area->window, busy_cursor); gdk_flush(); 
-#define END_BUSY_CURSOR gdk_window_set_cursor(ibuf->window->window, arrow_cursor);  gdk_window_set_cursor(ibuf->drawing_area->window, origcursor); gdk_flush(); }
 
 void
 on_mainwindow_realize                  (GtkWidget       *widget,
@@ -307,50 +325,6 @@ void
 on_brush_button_clicked                (GtkToggleButton       *button,
                                         gpointer         user_data);
 
-gboolean
-on_drawingarea_configure_event         (GtkWidget       *widget,
-                                        GdkEventConfigure *event,
-                                        gpointer         user_data);
-
-gboolean
-on_drawingarea_button_press_event      (GtkWidget       *widget,
-                                        GdkEventButton  *event,
-                                        gpointer         user_data);
-
-gboolean
-on_drawingarea_button_release_event    (GtkWidget       *widget,
-                                        GdkEventButton  *event,
-                                        gpointer         user_data);
-
-gboolean
-on_drawingarea_motion_notify_event     (GtkWidget       *widget,
-                                        GdkEventMotion  *event,
-                                        gpointer         user_data);
-
-gboolean
-on_drawingarea_focus_in_event          (GtkWidget       *widget,
-                                        GdkEventFocus   *event,
-                                        gpointer         user_data);
-gboolean
-on_drawingarea_focus_out_event         (GtkWidget       *widget,
-                                        GdkEventFocus   *event,
-                                        gpointer         user_data);
-
-
-void
-on_drawingarea_realize                 (GtkWidget       *widget,
-                                        gpointer         user_data);
-
-gboolean
-on_drawingarea_expose_event            (GtkWidget       *widget,
-                                        GdkEventExpose  *event,
-                                        gpointer         user_data);
-
-gboolean
-on_drawingarea_delete_event            (GtkWidget       *widget,
-                                        GdkEvent        *event,
-                                        gpointer         user_data);
-
 void
 on_new_canvas_ok_button_clicked        (GtkButton       *button,
                                         gpointer         user_data);
@@ -371,9 +345,6 @@ void
 on_pen_button_realize                  (GtkWidget       *widget,
                                         gpointer         user_data);
 
-GtkWidget*
-create_dreawing_area_in_scroll_frame (gchar *widget_name, gchar *string1, gchar *string2,
-                gint int1, gint int2);
 
 void
 on_scroll_frame_realize                (GtkWidget       *widget,
@@ -521,54 +492,6 @@ on_about_dialog_version_label_realize  (GtkWidget       *widget,
                                         gpointer         user_data);
 
 void
-on_erase_button_toggled                (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_lasso_button_toggled                (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_fill_button_toggled                 (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_line_button_toggled                 (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_rectangle_button_toggled            (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_freehand_button_toggled             (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_pen_button_toggled                  (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_polselect_button_toggled            (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_text_button_toggled                 (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_arc_button_toggled                  (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_oval_button_toggled                 (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_brush_button_toggled                (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
 on_emboss_menu_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
@@ -599,15 +522,7 @@ on_multiline_button_realize            (GtkWidget       *widget,
                                         gpointer         user_data);
 
 void
-on_multiline_button_toggled            (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
 on_curve_button_realize                (GtkWidget       *widget,
-                                        gpointer         user_data);
-
-void
-on_curve_button_toggled                (GtkToggleButton *togglebutton,
                                         gpointer         user_data);
 
 void
@@ -615,15 +530,7 @@ on_unfilled_button_realize             (GtkWidget       *widget,
                                         gpointer         user_data);
 
 void
-on_unfilled_button_toggled             (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
 on_filled_button_realize               (GtkWidget       *widget,
-                                        gpointer         user_data);
-
-void
-on_filled_button_toggled               (GtkToggleButton *togglebutton,
                                         gpointer         user_data);
 
 void
@@ -631,16 +538,7 @@ on_closed_freehand_button_realize      (GtkWidget       *widget,
                                         gpointer         user_data);
 
 void
-on_closed_freehand_button_toggled      (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
 on_filled_button_realize               (GtkWidget       *widget,
-                                        gpointer         user_data);
-
-gboolean
-on_drawingarea_key_release_event     (GtkWidget       *widget,
-                                        GdkEventKey     *event,
                                         gpointer         user_data);
 
 gboolean
@@ -791,4 +689,205 @@ on_about_dialog_button_release_event   (GtkWidget       *widget,
 
 void
 on_exit_menu_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_tool_button_clicked                 (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_tool_button_realize                 (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_tool_button_realize                 (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_fille_button_toggled                (GtkToggleButton *togglebutton,
+                                        gpointer         user_data);
+
+void
+on_filled_button_toggled               (GtkToggleButton *togglebutton,
+                                        gpointer         user_data);
+
+GtkWidget*
+create_drawing_area_in_scroll_frame (gchar *widget_name, gchar *string1, gchar *string2,
+                gint int1, gint int2);
+
+void
+on_tool_palette_realize                (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_image_effect_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_image_effect_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_image_effect_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_new_canvas_window_realize           (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_new_canvas_window_destroy           (GtkObject       *object,
+                                        gpointer         user_data);
+
+void
+on_fontpicker_realize                  (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_rotate_menu_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_create_new_window_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_close_this_window_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_close_menu_activate                 (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_close_this_window_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_close_this_window_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+
+
+void
+on_close_menu_activate                 (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+gboolean
+on_mainwindow_destroy_event            (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+void
+on_tool_button_clicked                 (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_toot_button_clicked                 (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_tool_button_realize                 (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_tool_freehand_button_realize        (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_image_effect_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_image_effect_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+gboolean
+on_color_palette_entry_expose_event    (GtkWidget       *widget,
+                                        GdkEventExpose  *event,
+                                        gpointer         user_data);
+
+GtkWidget*
+create_drawing_area_in_scroll_frame (gchar *widget_name, gchar *string1, gchar *string2,
+                gint int1, gint int2);
+
+void
+on_tool_button_clicked                 (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_tool_button_realize                 (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_tool_button_realize                 (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+gboolean
+on_color_palette_entry_expose_event    (GtkWidget       *widget,
+                                        GdkEventExpose  *event,
+                                        gpointer         user_data);
+
+void
+on_tool_button_clicked                 (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_tool_button_realize                 (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_tool_button_clicked                 (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_tool_button_realize                 (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_tool_button_clicked                 (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_tool_button_realize                 (GtkWidget       *widget,
+                                        gpointer         user_data);
+
+void
+on_mainwindow_destroy                  (GtkObject       *object,
+                                        gpointer         user_data);
+
+void
+on_invert_menu_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_windows_menu_item_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_close_this_window_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_close_window_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_quit_menu_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_create_new_window                   (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_rotate_menu_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_rotate_menu_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_rotate_menu_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);

@@ -1,0 +1,435 @@
+# GPaint Dutch translation.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the GPaint package.
+# Jan-Willem Harmanny <jwharmanny@hotmail.com>, 2003.
+#
+#. Display the filename in the title bar.
+#: src/drawing.c:304
+msgid ""
+msgstr ""
+"Project-Id-Version: gpaint cvs\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-01-31 21:49-0500\n"
+"PO-Revision-Date: 2003-03-14 22:15--100\n"
+"Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
+"Language-Team: Dutch <nl@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/ui.c:31
+#, fuzzy
+msgid "_New"
+msgstr "Nieuw"
+
+#: src/ui.c:37 src/ui.c:38
+msgid "Print Preview"
+msgstr "Afdrukvoorbeeld"
+
+#: src/ui.c:64
+msgid "Get Snapshot of Desktop"
+msgstr "Neem een foto van het bureaublad"
+
+#: src/ui.c:71
+msgid "Set Desktop Background"
+msgstr "Als bureaublad achtergrond instellen"
+
+#: src/ui.c:83
+msgid "Left to Right"
+msgstr "Links naar rechts"
+
+#: src/ui.c:90
+msgid "Top to Bottom"
+msgstr "Boven naar beneden"
+
+#: src/ui.c:102
+msgid "Clockwise"
+msgstr ""
+
+#: src/ui.c:109
+msgid "Counter Clockwise"
+msgstr ""
+
+#: src/ui.c:121
+#, fuzzy
+msgid "_Invert"
+msgstr "_Herstellen"
+
+#: src/ui.c:128
+msgid "_Sharpen"
+msgstr "Ver_scherpen"
+
+#: src/ui.c:136
+msgid "S_mooth"
+msgstr "Afvlakken"
+
+#: src/ui.c:143
+msgid "_Directional Smooth"
+msgstr "Afvlakken in een richting"
+
+#: src/ui.c:150
+msgid "Despeckle"
+msgstr "Ontspikkelen"
+
+#: src/ui.c:158
+msgid "_Edge Detect"
+msgstr "Rand _opzoeken"
+
+#: src/ui.c:165
+msgid "Emboss"
+msgstr "Emboss"
+
+#: src/ui.c:172
+msgid "_Oil Paint"
+msgstr "_Olieverf"
+
+#: src/ui.c:179
+msgid "_Add Noise"
+msgstr "_Ruis toevoegen"
+
+#: src/ui.c:186
+msgid "Spread"
+msgstr "Uitspreiden"
+
+#: src/ui.c:193
+msgid "_Pixelize"
+msgstr "_Pixeliseren"
+
+#: src/ui.c:200
+msgid "_Blend"
+msgstr "_Mengen"
+
+#: src/ui.c:207
+msgid "Solarize"
+msgstr ""
+
+#: src/ui.c:215
+msgid "_Normalize Contrast"
+msgstr "_Contrast normaliseren"
+
+#: src/ui.c:222
+msgid "_Quantize Color"
+msgstr "Kleur _quantiseren"
+
+#: src/ui.c:229
+msgid "Convert to _Greyscale"
+msgstr "Naar _grijswaarden omzetten"
+
+#: src/ui.c:241
+msgid "Desktop"
+msgstr "Bureaublad"
+
+#: src/ui.c:248
+msgid "Flip"
+msgstr "Spiegelen"
+
+#: src/ui.c:255
+msgid "Rotate"
+msgstr "Draaien"
+
+#: src/ui.c:262
+msgid "_Effects"
+msgstr "_Effecten"
+
+#: src/ui.c:287
+#, fuzzy
+msgid "_File"
+msgstr "_Nieuw bestand"
+
+#: src/ui.c:294
+msgid "_Edit"
+msgstr ""
+
+#: src/ui.c:301
+msgid "_Image"
+msgstr "_Afbeelding"
+
+#: src/ui.c:309
+msgid "_Help"
+msgstr ""
+
+#: src/ui.c:444
+msgid "gpaint"
+msgstr "gpaint"
+
+#: src/ui.c:572
+msgid "New"
+msgstr "Nieuw"
+
+#: src/ui.c:576
+msgid "New File"
+msgstr "Nieuw bestand"
+
+#: src/ui.c:580
+msgid "Open"
+msgstr "Openen"
+
+#: src/ui.c:584
+msgid "Open File"
+msgstr "Bestand openen"
+
+#: src/ui.c:588
+msgid "Save"
+msgstr "Opslaan"
+
+#: src/ui.c:592
+msgid "Save File"
+msgstr "Bestand opslaan"
+
+#: src/ui.c:596
+msgid "Save As"
+msgstr "Opslaan als"
+
+#: src/ui.c:600
+msgid "Save File As"
+msgstr "Bestand opslaan als"
+
+#: src/ui.c:609 src/ui.c:613
+msgid "Print"
+msgstr "Afdrukken"
+
+#: src/ui.c:639
+msgid "Bold"
+msgstr "Vet"
+
+#: src/ui.c:644
+msgid "bold text"
+msgstr "vette tekst"
+
+#: src/ui.c:648
+msgid "Italic"
+msgstr "Cursief"
+
+#: src/ui.c:653
+msgid "italic text"
+msgstr "cursieve tekst"
+
+#: src/ui.c:657
+msgid "Underline"
+msgstr "Onderstrepen"
+
+#: src/ui.c:662
+msgid "underline text"
+msgstr "tekst onderstrepen"
+
+#: src/ui.c:674 src/ui.c:705
+msgid "line width"
+msgstr "regel breedte"
+
+#: src/ui.c:692
+msgid "1"
+msgstr "1"
+
+#: src/ui.c:693
+msgid "2"
+msgstr "2"
+
+#: src/ui.c:694
+msgid "3"
+msgstr "3"
+
+#: src/ui.c:695
+msgid "4"
+msgstr "4"
+
+#: src/ui.c:696
+msgid "6"
+msgstr "6"
+
+#: src/ui.c:697
+msgid "8"
+msgstr "8"
+
+#: src/ui.c:731
+msgid "background color"
+msgstr "achtergrondkleur"
+
+#: src/ui.c:732
+msgid "Background color"
+msgstr "Achtergrondkleur"
+
+#: src/ui.c:739
+msgid "foreground color"
+msgstr "voorgrondkleur"
+
+#: src/ui.c:740
+msgid "Foreground color"
+msgstr "Voorgrondkleur"
+
+#: src/ui.c:1263
+msgid "erase"
+msgstr "wissen"
+
+#: src/ui.c:1274
+msgid "lasso"
+msgstr "lasso"
+
+#: src/ui.c:1285 src/ui.c:1432
+msgid "fill"
+msgstr "vullen"
+
+#: src/ui.c:1296
+msgid "line"
+msgstr "lijn"
+
+#: src/ui.c:1307
+#, fuzzy
+msgid "multiline"
+msgstr "lijn"
+
+#: src/ui.c:1318
+msgid "rectangle"
+msgstr "rechthoek"
+
+#: src/ui.c:1329
+msgid "freehand"
+msgstr ""
+
+#: src/ui.c:1351
+msgid "pen"
+msgstr "pen"
+
+#: src/ui.c:1362
+#, fuzzy
+msgid "polyselect"
+msgstr "polygoon selecteren"
+
+#: src/ui.c:1373
+msgid "text"
+msgstr "tekst"
+
+#: src/ui.c:1384
+msgid "arc"
+msgstr "boog"
+
+#: src/ui.c:1395
+msgid "curve"
+msgstr "kromme"
+
+#: src/ui.c:1406
+msgid "oval"
+msgstr "ovaal"
+
+#: src/ui.c:1417
+msgid "brush"
+msgstr "kwast"
+
+#: src/ui.c:2063
+msgid "New Canvas"
+msgstr "Nieuwe canvas"
+
+#: src/ui.c:2071
+msgid "Enter the desired image size:"
+msgstr "Voer het gewenste afbeeldingsformaat in:"
+
+#: src/ui.c:2100
+msgid "Width: "
+msgstr "Breedte:"
+
+#: src/ui.c:2108
+msgid "Height: "
+msgstr "Hoogte:"
+
+#: src/ui.c:2199
+msgid "about"
+msgstr "over"
+
+#: src/ui.c:2228
+msgid ""
+"This program is free software; you may redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 2, or (at your opinion) any later "
+"version.\n"
+msgstr ""
+
+#: src/ui.c:2237
+msgid ""
+"based on xpaint, by David Koblas and Torsten Martinsen \n"
+"Copyright 1992--1996"
+msgstr ""
+"gebaseerd op xpaint, door David Koblas en Torsten Mertinsen \n"
+"Copyright 1992--1996"
+
+#: src/ui.c:2245
+msgid ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+msgstr ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+
+#: src/support.c:60 src/support.c:85
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr "Kan pixmap bestand niet vinden: %s"
+
+#. default filename
+#: src/drawing.c:44
+msgid "untitled.png"
+msgstr ""
+
+#: src/drawing.c:219
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"\n"
+"Do you want to overwrite it?"
+msgstr ""
+
+#: src/drawing.c:259
+#, c-format
+msgid ""
+"Failed to save file %s.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: src/drawing.c:307
+msgid "Untitled"
+msgstr ""
+
+#: src/drawing.c:323
+msgid " (modified)"
+msgstr ""
+
+#: src/drawing.c:325
+#, fuzzy
+msgid " - gpaint"
+msgstr "gpaint"
+
+#: src/drawing.c:425
+#, c-format
+msgid ""
+"Do you want to save the changes you made to \"%s\"?\n"
+"Your changes will be lost if you don't save them."
+msgstr ""
+
+#~ msgid "+90"
+#~ msgstr "+90"
+
+#~ msgid "+45"
+#~ msgstr "+45"
+
+#~ msgid "-45"
+#~ msgstr "-45"
+
+#~ msgid "-90"
+#~ msgstr "-90"
+
+#~ msgid "+180"
+#~ msgstr "+180"
+
+#~ msgid "About G_NOME"
+#~ msgstr "Over G_NOME"
+
+#~ msgid "About _GNU"
+#~ msgstr "Over _GNU"
+
+#~ msgid "polyline"
+#~ msgstr "polylijn"
+
+#~ msgid "Zoom:"
+#~ msgstr "Zoom:"
+
+#~ msgid "Couldn't create pixmap from file: %s"
+#~ msgstr "Kan pixmap niet aanmaken uit bestand: %s"

@@ -1,0 +1,82 @@
+2005-01-03  Goedson Paixao 
+	* pr_BR.po: Updated for 0.3 prerelease
+
+2003-04-06  Christophe Merlet  <redfox@redfoxcenter.org>
+
+        * fr.po: Added French translation from
+	Gael Chamoulaud (strider) <strider@freespiders.org> and
+	Laurent Richard <laurent.richard@lilit.be>
+
+2003-03-14  Vincent van Adrighem  <V.vanAdrighem@dirck.mine.nu>
+
+	* nl.po: Dutch translation updated.
+
+2003-03-11  Paul Duffy <dubhthach@frink.nuigalway.ie>
+
+        * ga.po: Added Irish translation
+
+2003-03-08  Takeshi AIHANA <aihana@gnome.gr.jp>
+
+	* ja.po: Added Japanese translation by
+                  KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>.
+
+2003-03-01  Duarte Loreto <happyguy_pt@hotmail.com>
+
+        * pt.po: New Portuguese translation.
+
+2003-02-26  Evandro Fernandes Giovanini <evandrofg@ig.com.br>
+
+	* pt_BR.po: Updated Brazilian Portuguese translation from
+	Fabio Rafael da Rosa <f2r@users.sourceforge.net>.
+
+2003-02-25  Miloslav Trmac  <mitr@volny.cz>
+
+	* cs.po: Finished Czech translation.
+
+2003-02-24  Yuriy Syrota <rasta renome.rovno.ua>
+
+	* uk.po: Added Ukrainian translation.
+
+2003-02-22  Evandro Fernandes Giovanini <evandrofg@ig.com.br>
+
+	* pt_BR.po: Added Brazilian Portuguese translation from
+	Fabio Rafael da Rosa <f2r@users.sourceforge.net>.
+
+2003-02-22  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* ca.po: Added Catalan file
+
+2003-02-20  Vincent van Adrighem  <V.vanAdrighem@dirck.mine.nu>
+
+	* nl.po: Dutch translation added by Jan-Willem Harmanny.
+
+2003-02-07  Miloslav Trmac  <mitr@volny.cz>
+
+	* cs.po: Updated Czech translation.
+
+2003-02-05  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
+
+	* es.po: Updated Spanish translation.
+
+2003-02-04  Miloslav Trmac  <mitr@volny.cz>
+
+	* cs.po: Added Czech translation.
+
+2003-02-04  Pablo Gonzalo del Campo  <pablodc@bigfoot.com>
+
+	* es.po: Added Spanish translation.
+
+2003-02-03  Daniel Yacob  <locales@geez.org>
+
+	* am.po: Added Amharic translation.
+
+2003-02-03  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Added Swedish translation.
+
+2003-02-02  Christian Rose  <menthos@menthos.com>
+
+	* .cvsignore: Added.
+        * POTFILES, cat-id-tbl.c, gdraw.pot, stamp-cat-id:
+	These files don't belong in cvs.
+

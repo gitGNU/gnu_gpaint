@@ -1,0 +1,87 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 11_update_pt_BR_translation.dpatch by  Goedson Teixeira Paixao <goedson@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Updates the pt_BR translation.
+
+@DPATCH@
+diff -urNad gpaint-0.2.4+0.3.0pre5/po/pt_BR.po /tmp/dpep.wt2xDP/gpaint-0.2.4+0.3.0pre5/po/pt_BR.po
+--- gpaint-0.2.4+0.3.0pre5/po/pt_BR.po	2005-02-01 00:49:27.000000000 -0200
++++ /tmp/dpep.wt2xDP/gpaint-0.2.4+0.3.0pre5/po/pt_BR.po	2005-03-20 12:10:59.786377008 -0300
+@@ -9,7 +9,7 @@
+ "Project-Id-Version: gpaint 0.2.1POT-Creation-Date\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2005-01-31 21:49-0500\n"
+-"PO-Revision-Date: 2004-12-31 17:05-0200\n"
++"PO-Revision-Date: 2005-03-20 12:10-0300\n"
+ "Last-Translator: Goedson Teixeira Paixão <gopaixao@dcc.ufmg.br>\n"
+ "Language-Team: Portuguese/Brazil <debian-l10n-portuguese@lists.debian.org>\n"
+ "MIME-Version: (null)\n"
+@@ -42,11 +42,11 @@
+ 
+ #: src/ui.c:102
+ msgid "Clockwise"
+-msgstr ""
++msgstr "Sentido horário"
+ 
+ #: src/ui.c:109
+ msgid "Counter Clockwise"
+-msgstr ""
++msgstr "Sentido anti-horário"
+ 
+ #: src/ui.c:121
+ msgid "_Invert"
+@@ -364,7 +364,7 @@
+ #. default filename
+ #: src/drawing.c:44
+ msgid "untitled.png"
+-msgstr ""
++msgstr "sem_nome.png"
+ 
+ #: src/drawing.c:219
+ #, c-format
+@@ -373,6 +373,9 @@
+ "\n"
+ "Do you want to overwrite it?"
+ msgstr ""
++"O arquivo %s já existe.\n"
++"\n"
++"Deseja sobrescrevê-lo?"
+ 
+ #: src/drawing.c:259
+ #, c-format
+@@ -381,19 +384,21 @@
+ "\n"
+ "%s"
+ msgstr ""
++"Falha ao salvar o arquivo %s.\n"
++"\n"
++"%s"
+ 
+ #: src/drawing.c:307
+ msgid "Untitled"
+-msgstr ""
++msgstr "Sem Nome"
+ 
+ #: src/drawing.c:323
+ msgid " (modified)"
+-msgstr ""
++msgstr " (modificado)"
+ 
+ #: src/drawing.c:325
+-#, fuzzy
+ msgid " - gpaint"
+-msgstr "gpaint"
++msgstr " - gpaint"
+ 
+ #: src/drawing.c:425
+ #, c-format
+@@ -401,6 +406,8 @@
+ "Do you want to save the changes you made to \"%s\"?\n"
+ "Your changes will be lost if you don't save them."
+ msgstr ""
++"Você deseja salvar as mudanças que você fez em \"%s\"?\n"
++"Suas mudanças serão perdidas se você não salvá-las."
+ 
+ #~ msgid "+90"
+ #~ msgstr "+90"

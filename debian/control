@@ -1,13 +1,13 @@
 Source: gpaint
-Section: graphics
+Section: gnome
 Priority: optional
-Maintainer: Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>
-Build-Depends: debhelper, libgnome-dev, zlib1g-dev, libxml-dev, libgnomeprint-dev
-Standards-Version: 3.5.2
+Maintainer: Goedson Teixeira Paixao <goedson@debian.org>
+Build-Depends: debhelper (>= 4.1.46), libgnomeui-dev, zlib1g-dev, libxml2-dev, libgnomeprint2.2-dev, libgnomeprintui2.2-dev, autotools-dev, dpatch, cdbs
+Standards-Version: 3.6.1
 
 Package: gpaint
 Architecture: any
-Depends: ${shlibs:Depends}, gnome-panel-data | gnome-desktop-data
+Depends: ${shlibs:Depends}
 Description: GNU Paint - a small, easy to use paint program for GNOME
  This is gpaint (GNU Paint), a small-scale painting program for GNOME,
  the GNU Desktop Environment. gpaint does not attempt to compete with

@@ -1,0 +1,441 @@
+# Spanish translation for gpaint.
+# Copyright © 2003 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gpaint package.
+# Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2003.
+#
+#. Display the filename in the title bar.
+#: src/drawing.c:304
+msgid ""
+msgstr ""
+"Project-Id-Version: gpaint\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-01-31 21:49-0500\n"
+"PO-Revision-Date: 2003-02-05 12:01-0300\n"
+"Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
+"Language-Team: Spanish <traductores@es.gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.1\n"
+
+#: src/ui.c:31
+#, fuzzy
+msgid "_New"
+msgstr "Nuevo"
+
+#: src/ui.c:37 src/ui.c:38
+msgid "Print Preview"
+msgstr "Vista previa de la impresión"
+
+#: src/ui.c:64
+msgid "Get Snapshot of Desktop"
+msgstr "Capturar una imagen del escritorio"
+
+#: src/ui.c:71
+msgid "Set Desktop Background"
+msgstr "Establecer el fondo del escritorio"
+
+#: src/ui.c:83
+msgid "Left to Right"
+msgstr "Izquierda a derecha"
+
+#: src/ui.c:90
+msgid "Top to Bottom"
+msgstr "Arriba hacia abajo"
+
+#: src/ui.c:102
+msgid "Clockwise"
+msgstr ""
+
+#: src/ui.c:109
+msgid "Counter Clockwise"
+msgstr ""
+
+#: src/ui.c:121
+#, fuzzy
+msgid "_Invert"
+msgstr "Inve_rtir"
+
+#: src/ui.c:128
+msgid "_Sharpen"
+msgstr "_"
+
+#: src/ui.c:136
+msgid "S_mooth"
+msgstr "S_uavizar"
+
+#: src/ui.c:143
+msgid "_Directional Smooth"
+msgstr "Suavizado _direccional"
+
+#: src/ui.c:150
+msgid "Despeckle"
+msgstr "Desempolvar"
+
+#: src/ui.c:158
+msgid "_Edge Detect"
+msgstr "D_etección de borde"
+
+#: src/ui.c:165
+msgid "Emboss"
+msgstr "Resaltar"
+
+#: src/ui.c:172
+msgid "_Oil Paint"
+msgstr "P_intura al aceite"
+
+#: src/ui.c:179
+msgid "_Add Noise"
+msgstr "_Añadir ruido"
+
+#: src/ui.c:186
+msgid "Spread"
+msgstr "Desparramar"
+
+#: src/ui.c:193
+msgid "_Pixelize"
+msgstr "_Pixelar"
+
+#: src/ui.c:200
+msgid "_Blend"
+msgstr "C_ombinar"
+
+#: src/ui.c:207
+msgid "Solarize"
+msgstr "Solarización"
+
+#: src/ui.c:215
+msgid "_Normalize Contrast"
+msgstr "Contraste _normalizado"
+
+#: src/ui.c:222
+msgid "_Quantize Color"
+msgstr "_Cuantizar color"
+
+#: src/ui.c:229
+msgid "Convert to _Greyscale"
+msgstr "Convertir a escala de _grises"
+
+#: src/ui.c:241
+msgid "Desktop"
+msgstr "Escritorio"
+
+#: src/ui.c:248
+msgid "Flip"
+msgstr "Voltear"
+
+#: src/ui.c:255
+msgid "Rotate"
+msgstr "Rotar"
+
+#: src/ui.c:262
+msgid "_Effects"
+msgstr "_Efectos"
+
+#: src/ui.c:287
+#, fuzzy
+msgid "_File"
+msgstr "_Nuevo archivo"
+
+#: src/ui.c:294
+msgid "_Edit"
+msgstr ""
+
+#: src/ui.c:301
+msgid "_Image"
+msgstr "_Imagen"
+
+#: src/ui.c:309
+msgid "_Help"
+msgstr ""
+
+#: src/ui.c:444
+msgid "gpaint"
+msgstr "gpaint"
+
+#: src/ui.c:572
+msgid "New"
+msgstr "Nuevo"
+
+#: src/ui.c:576
+msgid "New File"
+msgstr "Archivo nuevo"
+
+#: src/ui.c:580
+msgid "Open"
+msgstr "Abrir"
+
+#: src/ui.c:584
+msgid "Open File"
+msgstr "Abrir archivo"
+
+#: src/ui.c:588
+msgid "Save"
+msgstr "Guardar"
+
+#: src/ui.c:592
+msgid "Save File"
+msgstr "Guardar archivo"
+
+#: src/ui.c:596
+msgid "Save As"
+msgstr "Guardar como"
+
+#: src/ui.c:600
+msgid "Save File As"
+msgstr "Guardar archivo como"
+
+#: src/ui.c:609 src/ui.c:613
+msgid "Print"
+msgstr "Imprimir"
+
+#: src/ui.c:639
+msgid "Bold"
+msgstr "Negrita"
+
+#: src/ui.c:644
+msgid "bold text"
+msgstr "Texto en negrita"
+
+#: src/ui.c:648
+msgid "Italic"
+msgstr "Itálica"
+
+#: src/ui.c:653
+msgid "italic text"
+msgstr "Texto en itálica"
+
+#: src/ui.c:657
+msgid "Underline"
+msgstr "Subrayado"
+
+#: src/ui.c:662
+msgid "underline text"
+msgstr "texto subrayado"
+
+#: src/ui.c:674 src/ui.c:705
+msgid "line width"
+msgstr "ancho de la línea"
+
+#: src/ui.c:692
+msgid "1"
+msgstr "1"
+
+#: src/ui.c:693
+msgid "2"
+msgstr "2"
+
+#: src/ui.c:694
+msgid "3"
+msgstr "3"
+
+#: src/ui.c:695
+msgid "4"
+msgstr "4"
+
+#: src/ui.c:696
+msgid "6"
+msgstr "6"
+
+#: src/ui.c:697
+msgid "8"
+msgstr "8"
+
+#: src/ui.c:731
+msgid "background color"
+msgstr "color de fondo"
+
+#: src/ui.c:732
+msgid "Background color"
+msgstr "Color de fondo"
+
+#: src/ui.c:739
+msgid "foreground color"
+msgstr "color de frente"
+
+#: src/ui.c:740
+msgid "Foreground color"
+msgstr "Color de frente"
+
+#: src/ui.c:1263
+msgid "erase"
+msgstr "borrar"
+
+#: src/ui.c:1274
+msgid "lasso"
+msgstr "enlazar"
+
+#: src/ui.c:1285 src/ui.c:1432
+msgid "fill"
+msgstr "rellenar"
+
+#: src/ui.c:1296
+msgid "line"
+msgstr "línea"
+
+#: src/ui.c:1307
+#, fuzzy
+msgid "multiline"
+msgstr "línea"
+
+#: src/ui.c:1318
+msgid "rectangle"
+msgstr "rectángulo"
+
+#: src/ui.c:1329
+#, fuzzy
+msgid "freehand"
+msgstr "mano alzada cerrada"
+
+#: src/ui.c:1351
+msgid "pen"
+msgstr "lápiz"
+
+#: src/ui.c:1362
+#, fuzzy
+msgid "polyselect"
+msgstr "selección poligonal"
+
+#: src/ui.c:1373
+msgid "text"
+msgstr "texto"
+
+#: src/ui.c:1384
+msgid "arc"
+msgstr "arco"
+
+#: src/ui.c:1395
+msgid "curve"
+msgstr "curva"
+
+#: src/ui.c:1406
+msgid "oval"
+msgstr "ovalo"
+
+#: src/ui.c:1417
+msgid "brush"
+msgstr "brocha"
+
+#: src/ui.c:2063
+msgid "New Canvas"
+msgstr "Nuevo lienzo"
+
+#: src/ui.c:2071
+msgid "Enter the desired image size:"
+msgstr "Ingrese el tamaño de la imagen que desea:"
+
+#: src/ui.c:2100
+msgid "Width: "
+msgstr "Ancho:"
+
+#: src/ui.c:2108
+msgid "Height: "
+msgstr "Alto:"
+
+#: src/ui.c:2199
+msgid "about"
+msgstr "acerca"
+
+#: src/ui.c:2228
+msgid ""
+"This program is free software; you may redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 2, or (at your opinion) any later "
+"version.\n"
+msgstr ""
+"Este programa es software libre; puede redistribuirlo y/o modificarlo bajo "
+"los términos de la Licencia Pública General GNU como se encuentra publicada "
+"por la Free Software Foundation en su versión 2 o (a su elección) cualquier "
+"otra versión posterior.\n"
+
+#: src/ui.c:2237
+msgid ""
+"based on xpaint, by David Koblas and Torsten Martinsen \n"
+"Copyright 1992--1996"
+msgstr ""
+"basado en xpaint, por David Koblas y Torsten Martinsen \n"
+"Copyright 1992--1996"
+
+#: src/ui.c:2245
+msgid ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+msgstr ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+
+#: src/support.c:60 src/support.c:85
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr "No se ha podido encontrar el archivo pixmap: %s"
+
+#. default filename
+#: src/drawing.c:44
+msgid "untitled.png"
+msgstr ""
+
+#: src/drawing.c:219
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"\n"
+"Do you want to overwrite it?"
+msgstr ""
+
+#: src/drawing.c:259
+#, c-format
+msgid ""
+"Failed to save file %s.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: src/drawing.c:307
+msgid "Untitled"
+msgstr ""
+
+#: src/drawing.c:323
+msgid " (modified)"
+msgstr ""
+
+#: src/drawing.c:325
+#, fuzzy
+msgid " - gpaint"
+msgstr "gpaint"
+
+#: src/drawing.c:425
+#, c-format
+msgid ""
+"Do you want to save the changes you made to \"%s\"?\n"
+"Your changes will be lost if you don't save them."
+msgstr ""
+
+#~ msgid "+90"
+#~ msgstr "+90"
+
+#~ msgid "+45"
+#~ msgstr "+45"
+
+#~ msgid "-45"
+#~ msgstr "-45"
+
+#~ msgid "-90"
+#~ msgstr "-90"
+
+#~ msgid "+180"
+#~ msgstr "+180"
+
+#~ msgid "About G_NOME"
+#~ msgstr "Acerca de G_NOME"
+
+#~ msgid "About _GNU"
+#~ msgstr "Acerca de _GNU"
+
+#~ msgid "polyline"
+#~ msgstr "polígono"
+
+#~ msgid "Zoom:"
+#~ msgstr "Acercamiento:"
+
+#~ msgid "Couldn't create pixmap from file: %s"
+#~ msgstr "No se ha podido crear el pixmap desde el archivo: %s"

@@ -1,0 +1,439 @@
+# gpaint ja.po
+# Copyright (C) 2003 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gpaint package.
+# KAMAGASAKO Masatoshi <emerald@gnome.gr.jp> 2003
+#
+#. Display the filename in the title bar.
+#: src/drawing.c:304
+msgid ""
+msgstr ""
+"Project-Id-Version: gpaint HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-01-31 21:49-0500\n"
+"PO-Revision-Date: 2003-03-07 11:45+0900\n"
+"Last-Translator: KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>\n"
+"Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/ui.c:31
+#, fuzzy
+msgid "_New"
+msgstr "新規"
+
+#: src/ui.c:37 src/ui.c:38
+msgid "Print Preview"
+msgstr "プレビューを表示"
+
+#: src/ui.c:64
+msgid "Get Snapshot of Desktop"
+msgstr "デスクトップの取り込み"
+
+#: src/ui.c:71
+msgid "Set Desktop Background"
+msgstr "デスクトップに設定"
+
+#: src/ui.c:83
+msgid "Left to Right"
+msgstr "左右反転"
+
+#: src/ui.c:90
+msgid "Top to Bottom"
+msgstr "上下反転"
+
+#: src/ui.c:102
+msgid "Clockwise"
+msgstr ""
+
+#: src/ui.c:109
+msgid "Counter Clockwise"
+msgstr ""
+
+#: src/ui.c:121
+#, fuzzy
+msgid "_Invert"
+msgstr "戻す(_R)"
+
+#: src/ui.c:128
+msgid "_Sharpen"
+msgstr "シャープ化(_S)"
+
+#: src/ui.c:136
+msgid "S_mooth"
+msgstr "なめらか(S_)"
+
+#: src/ui.c:143
+msgid "_Directional Smooth"
+msgstr "指向性スムーズ(_D)"
+
+#: src/ui.c:150
+msgid "Despeckle"
+msgstr "しみ取り"
+
+#: src/ui.c:158
+msgid "_Edge Detect"
+msgstr "輪郭を検出(_E)"
+
+#: src/ui.c:165
+msgid "Emboss"
+msgstr "エンボス"
+
+#: src/ui.c:172
+msgid "_Oil Paint"
+msgstr "油絵(_O)"
+
+#: src/ui.c:179
+msgid "_Add Noise"
+msgstr "ノイズ追加(_A)"
+
+#: src/ui.c:186
+msgid "Spread"
+msgstr "散らす"
+
+#: src/ui.c:193
+msgid "_Pixelize"
+msgstr "ピクセル化(_P)"
+
+#: src/ui.c:200
+msgid "_Blend"
+msgstr "ブレンド(_B)"
+
+#: src/ui.c:207
+msgid "Solarize"
+msgstr "ソラリゼーション"
+
+#: src/ui.c:215
+msgid "_Normalize Contrast"
+msgstr "コントラストの正規化(_N)"
+
+#: src/ui.c:222
+msgid "_Quantize Color"
+msgstr "色の量子化(_Q)"
+
+#: src/ui.c:229
+msgid "Convert to _Greyscale"
+msgstr "グレースケールに変換(_G)"
+
+#: src/ui.c:241
+msgid "Desktop"
+msgstr "デスクトップ"
+
+#: src/ui.c:248
+msgid "Flip"
+msgstr "反転"
+
+#: src/ui.c:255
+msgid "Rotate"
+msgstr "回転"
+
+#: src/ui.c:262
+msgid "_Effects"
+msgstr "効果(_E)"
+
+#: src/ui.c:287
+#, fuzzy
+msgid "_File"
+msgstr "新規ファイル(_N)"
+
+#: src/ui.c:294
+msgid "_Edit"
+msgstr ""
+
+#: src/ui.c:301
+msgid "_Image"
+msgstr "画像(_I)"
+
+#: src/ui.c:309
+msgid "_Help"
+msgstr ""
+
+#: src/ui.c:444
+msgid "gpaint"
+msgstr "gpaint"
+
+#: src/ui.c:572
+msgid "New"
+msgstr "新規"
+
+#: src/ui.c:576
+msgid "New File"
+msgstr "新規ファイル"
+
+#: src/ui.c:580
+msgid "Open"
+msgstr "開く"
+
+#: src/ui.c:584
+msgid "Open File"
+msgstr "ファイルを開く"
+
+#: src/ui.c:588
+msgid "Save"
+msgstr "保存"
+
+#: src/ui.c:592
+msgid "Save File"
+msgstr "ファイルを保存"
+
+#: src/ui.c:596
+msgid "Save As"
+msgstr "名前を付けて保存"
+
+#: src/ui.c:600
+msgid "Save File As"
+msgstr "名前を付けて保存"
+
+#: src/ui.c:609 src/ui.c:613
+msgid "Print"
+msgstr "印刷"
+
+#: src/ui.c:639
+msgid "Bold"
+msgstr "ボールド体"
+
+#: src/ui.c:644
+msgid "bold text"
+msgstr "ボールド体テキスト"
+
+#: src/ui.c:648
+msgid "Italic"
+msgstr "イタリック調"
+
+#: src/ui.c:653
+msgid "italic text"
+msgstr "イタリック調テキスト"
+
+#: src/ui.c:657
+msgid "Underline"
+msgstr "下線"
+
+#: src/ui.c:662
+msgid "underline text"
+msgstr "下線付きテキスト"
+
+#: src/ui.c:674 src/ui.c:705
+msgid "line width"
+msgstr "線の幅"
+
+#: src/ui.c:692
+msgid "1"
+msgstr "1"
+
+#: src/ui.c:693
+msgid "2"
+msgstr "2"
+
+#: src/ui.c:694
+msgid "3"
+msgstr "3"
+
+#: src/ui.c:695
+msgid "4"
+msgstr "4"
+
+#: src/ui.c:696
+msgid "6"
+msgstr "6"
+
+#: src/ui.c:697
+msgid "8"
+msgstr "8"
+
+#: src/ui.c:731
+msgid "background color"
+msgstr "背景色"
+
+#: src/ui.c:732
+msgid "Background color"
+msgstr "背景色"
+
+#: src/ui.c:739
+msgid "foreground color"
+msgstr "前景色"
+
+#: src/ui.c:740
+msgid "Foreground color"
+msgstr "前景色"
+
+#: src/ui.c:1263
+msgid "erase"
+msgstr "消去"
+
+#: src/ui.c:1274
+msgid "lasso"
+msgstr "フリーハンドで選択"
+
+#: src/ui.c:1285 src/ui.c:1432
+msgid "fill"
+msgstr "塗り潰し"
+
+#: src/ui.c:1296
+msgid "line"
+msgstr "線"
+
+#: src/ui.c:1307
+#, fuzzy
+msgid "multiline"
+msgstr "線"
+
+#: src/ui.c:1318
+msgid "rectangle"
+msgstr "四角形"
+
+#: src/ui.c:1329
+#, fuzzy
+msgid "freehand"
+msgstr "閉じた曲線"
+
+#: src/ui.c:1351
+msgid "pen"
+msgstr "ペン"
+
+#: src/ui.c:1362
+#, fuzzy
+msgid "polyselect"
+msgstr "多角形で選択"
+
+#: src/ui.c:1373
+msgid "text"
+msgstr "テキスト"
+
+#: src/ui.c:1384
+msgid "arc"
+msgstr "弧"
+
+#: src/ui.c:1395
+msgid "curve"
+msgstr "曲線"
+
+#: src/ui.c:1406
+msgid "oval"
+msgstr "楕円"
+
+#: src/ui.c:1417
+msgid "brush"
+msgstr "ブラシ"
+
+#: src/ui.c:2063
+msgid "New Canvas"
+msgstr "新規キャンバス"
+
+#: src/ui.c:2071
+msgid "Enter the desired image size:"
+msgstr "画像のサイズを入力してください:"
+
+#: src/ui.c:2100
+msgid "Width: "
+msgstr "幅"
+
+#: src/ui.c:2108
+msgid "Height: "
+msgstr "高さ"
+
+#: src/ui.c:2199
+msgid "about"
+msgstr "情報"
+
+#: src/ui.c:2228
+msgid ""
+"This program is free software; you may redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 2, or (at your opinion) any later "
+"version.\n"
+msgstr ""
+"このソフトウェアはフリーソフトウェアです; フリーソフトウェア財団によって配布"
+"されている GNU 一般使用許諾契約書第 2 版もしくは (あなたの選択で) それ以降の"
+"版の下で再配布・改変することができます。\n"
+
+#: src/ui.c:2237
+msgid ""
+"based on xpaint, by David Koblas and Torsten Martinsen \n"
+"Copyright 1992--1996"
+msgstr ""
+"based on xpaint, by David Koblas and Torsten Martinsen\n"
+"Copyright 1992--1996"
+
+#: src/ui.c:2245
+msgid ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+msgstr ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com)"
+
+#: src/support.c:60 src/support.c:85
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr "pixmap ファイルが見つかりません: %s"
+
+#. default filename
+#: src/drawing.c:44
+msgid "untitled.png"
+msgstr ""
+
+#: src/drawing.c:219
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"\n"
+"Do you want to overwrite it?"
+msgstr ""
+
+#: src/drawing.c:259
+#, c-format
+msgid ""
+"Failed to save file %s.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: src/drawing.c:307
+msgid "Untitled"
+msgstr ""
+
+#: src/drawing.c:323
+msgid " (modified)"
+msgstr ""
+
+#: src/drawing.c:325
+#, fuzzy
+msgid " - gpaint"
+msgstr "gpaint"
+
+#: src/drawing.c:425
+#, c-format
+msgid ""
+"Do you want to save the changes you made to \"%s\"?\n"
+"Your changes will be lost if you don't save them."
+msgstr ""
+
+#~ msgid "+90"
+#~ msgstr "+90"
+
+#~ msgid "+45"
+#~ msgstr "+45"
+
+#~ msgid "-45"
+#~ msgstr "-45"
+
+#~ msgid "-90"
+#~ msgstr "-90"
+
+#~ msgid "+180"
+#~ msgstr "+180"
+
+#~ msgid "About G_NOME"
+#~ msgstr "GNOME について(G_)"
+
+#~ msgid "About _GNU"
+#~ msgstr "GNU について(_G)"
+
+#~ msgid "polyline"
+#~ msgstr "折線"
+
+#~ msgid "Zoom:"
+#~ msgstr "ズーム"
+
+#~ msgid "Couldn't create pixmap from file: %s"
+#~ msgstr "ファイルから pixmap を生成できませんでした: %s"

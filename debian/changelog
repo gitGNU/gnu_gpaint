@@ -1,3 +1,116 @@
+gpaint (0.2.4+0.3.0pre5-2) unstable; urgency=low
+
+  * Use the new menu scheme. Thanks to Adam
+    Zimmerman for the bugreport (Closes: #296698).
+  * Updated pt_BR translation.
+  * Fixed some GCC warnings during compilation.
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Sun, 20 Mar 2005 14:53:00 -0300
+
+gpaint (0.2.4+0.3.0pre5-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Tue,  1 Feb 2005 19:23:01 -0200
+
+gpaint (0.2.4+0.3.0pre4-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Fri, 31 Dec 2004 16:46:59 -0200
+
+gpaint (0.2.4-1) unstable; urgency=low
+
+  * New upstream release
+    - bug fix release commiting our patches
+  * debian/patches/00list:
+    - disabled the patches commited upstream
+  * debian/control:
+    - changed Section: to gnome
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Mon, 29 Nov 2004 11:29:04 -0200
+
+gpaint (0.2.3-8) unstable; urgency=low
+
+  * Fixed file saving issues. 
+    - Thanks Emily Dai <emily.dai@lisnpireinc.com> for the patch.
+  * Fixed unquoted fields in Debian menu file.
+  * Fixed manpage section.
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Fri, 17 Sep 2004 08:42:25 -0300
+
+gpaint (0.2.3-7) unstable; urgency=low
+
+  * Added warning when saving file fails (closes: #227866).
+  * debian/control:
+    updated Standards-Version to 3.6.1. No changes needed.
+  * debian/rules:
+    use cdbs
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Tue, 24 Feb 2004 09:39:46 -0300
+
+gpaint (0.2.3-6) unstable; urgency=low
+
+  * Changed Maintainer: field to @debian.org address.
+  * Use dpatch to apply the build-time patches.
+  * When opening an image, open it in a new window if the current image
+    has unsaved modifications.
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Sun, 22 Jun 2003 22:22:08 -0300
+
+gpaint (0.2.3-5) unstable; urgency=low
+
+  * Added versioning to debhelper build-dependency (closes: #181158)
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Wed, 19 Feb 2003 23:21:36 -0300
+
+gpaint (0.2.3-4) unstable; urgency=low
+
+  * Fixed dimension and color map for the menu icon.
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Mon, 27 Jan 2003 22:09:43 -0200
+
+gpaint (0.2.3-3) unstable; urgency=low
+
+  * Fix window close handling. (closes: #175456)
+  * Update to GNOME 2.2 API.
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Mon, 20 Jan 2003 21:13:28 -0200
+
+gpaint (0.2.3-2) unstable; urgency=low
+
+  * Added warning when closing changed files. (closes: #175456)
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Sun, 12 Jan 2003 10:00:22 -0200
+
+gpaint (0.2.3-1) unstable; urgency=low
+
+  * New upstream release
+    - load files specified by command line parameters (closes: #144189)
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Wed, 18 Dec 2002 11:27:46 -0200
+
+gpaint (0.2.2-4) unstable; urgency=low
+
+  * Copied gnome-graphics.png as gpaint.xpm to use as menu icon
+  * Added Debian menu icon (closes: #148769)
+  * Removed dependency to gnome-panel-data and gnome-desktop-data
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Sat,  8 Jun 2002 07:04:46 -0300
+
+gpaint (0.2.2-3) unstable; urgency=low
+
+  * General cleanup
+  * Removed dependency on autoconf and automake when building (closes: #146075,  #147534)
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Sat,  1 Jun 2002 15:01:02 -0300
+
+gpaint (0.2.2-2) unstable; urgency=low
+
+  * Just suggest gnome-panel-data|gnome-desktop-data (closes: #140280)
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Tue,  2 Apr 2002 19:17:27 -0300
+
 gpaint (0.2.2-1) unstable; urgency=low
 
   * New upstream release.

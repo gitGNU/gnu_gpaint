@@ -1,16 +1,65 @@
-TODO for gpaint
+
+TODO for gpaint 
+Version 0.3.0 
+
+$Id: TODO,v 1.8 2005/01/27 02:55:44 meffie Exp $
 
 
 =========================================================================
 BUGS
 
-* Clear is broken after the flip operation.
+* File Save As: Prompt to confirm file overwrite if filename already exists
 
-* Rotate operation asserts.
+* Font selection is broken. gdk_draw_string() is deprecated.
+
+* Flip image while selection is blinking causes selection line droppings.
+
+* Multiline problems
+  - line segment banding is not right. second point should be set
+    upon mouse release, not mouse down
+  - need to indicate current end point (blink?)
+  - need to clear end point when drawing is cleared
+  - sometimes color is inverted at corners
+
+* Font cursor droppings
+  - font cursor is blinking while rotate selected can cause cursor
+    droppings on the image.
+
+* gdk-critical
+  - select long font name, line width widget disappears
+  - detaching tool bar causes gdk-critical errors and crashes
+
+* tool button selection weirdness? sometimes the tool needs to be
+  selected more than once because it is being deselected after
+  the first click (?)
+
+* prompt to save file does not allow the user to select a the file name
+  when it is untitled. Picks untitled.png and overwrites the existing
+  untitled.png without warning.
+
+=========================================================================
+To be finished
+
+* Curve Tool Button - implement or drop? This is implemented as a spline
+                      in Xpaint. Most likely this button will be replaced
+                      with a spray can tool button.
+                      
+* Spray Paint Tool - The spray can tool, also known as the airbrush.
+
+* Bold/Italics buttons are grayed out.
+
+=========================================================================
+Critical Missing Features
+
+* Undo Feature - Should be able to undo and redo changes to the drawing.
+
+* Help Topics - online user documentation
 
 
 =========================================================================
-New Features
+Nice to have new features
+
+* Nicer about box, with credits and a better logo.
 
 * Paint Brush Tool - select different kinds of brush tips.
   Note: square brush is the only tip now.
@@ -25,15 +74,6 @@ New Features
 
 * Printing--right now there is little or no printing control (user
   interfaces)--we may borrow the code from eog for this.
-
-* Help Topics - online user documentation
-
-* Spray Paint Tool - The spray can tool, also known as the airbrush.
-
-* Undo Feature - Should be able to undo and redo changes to the drawing.
-
-* Background Color Selection - Should be able to right click on a color
-  palette to select the current background color.
 
 * Cursors - Need better mouse cursors to indicate the current selected
   tool, and to indicate the area to be changed. For example, the eraser
@@ -53,44 +93,19 @@ New Features
 * File Formats - It would be nice to be able to select the format type
   in the save dialog.
 
-* Save Confirmation - The application should prompt the user to save
-  unchanged images when exiting. Well maybe it could be optional.
-
 * Zoom - Fixed size zoom (like the "fat bits" feature of xpaint,
   set to 1:6)
+
+* print, zoom-in/out adjustment (right now user has no control)
 
 
 =========================================================================
 Future Release
 
-* GNOME 2
-
 * adding variable zooming to the image window (like xpaint can do)
 
 * Make gpaint a bonobo component
 
-=========================================================================
-Done
+* Drag and drop support
 
-* Black background bug
-  - initial image was black, now is white
-  - background color selector was black, now white
-
-* Invisible rubberbanding when drawing black shapes on white background
-
-* fixed crash on empty cut/copy/paste
-
-* Main window
-  - too small initial image
-  - not placed entirely on screen (center in ui.c)
-  - smoother initial show
-
-* Main Menu
-  - simpler layout and names
-  - removed unfinished items
-
-* Eraser Tool - interpolation fixed 
-  Note: still need to work on tool objects.
-
-* Brush Tool - square brush with interpolation
 

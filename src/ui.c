@@ -10,16 +10,25 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
 
+#include <bonobo.h>
 #include <gnome.h>
 
 #include "callbacks.h"
 #include "ui.h"
 #include "support.h"
 
-static GnomeUIInfo file1_menu_uiinfo[] =
+#define GLADE_HOOKUP_OBJECT(component,widget,name) \
+  g_object_set_data_full (G_OBJECT (component), name, \
+    gtk_widget_ref (widget), (GDestroyNotify) gtk_widget_unref)
+
+#define GLADE_HOOKUP_OBJECT_NO_REF(component,widget,name) \
+  g_object_set_data (G_OBJECT (component), name, widget)
+
+static GnomeUIInfo file_menu_item_menu_uiinfo[] =
 {
-  GNOMEUIINFO_MENU_NEW_ITEM (N_("_New File"), NULL, on_new_file_menu_activate, NULL),
+  GNOMEUIINFO_MENU_NEW_ITEM (N_("_New"), NULL, on_new_file_menu_activate, NULL),
   GNOMEUIINFO_MENU_OPEN_ITEM (on_open_menu_activate, NULL),
   GNOMEUIINFO_MENU_SAVE_ITEM (on_save_menu_activate, NULL),
   GNOMEUIINFO_MENU_SAVE_AS_ITEM (on_save_as_menu_activate, NULL),
@@ -33,12 +42,12 @@ static GnomeUIInfo file1_menu_uiinfo[] =
   },
   GNOMEUIINFO_MENU_PRINT_ITEM (on_print_menu_activate, NULL),
   GNOMEUIINFO_SEPARATOR,
-  GNOMEUIINFO_MENU_CLOSE_ITEM (on_exit_menu_activate, NULL),
-  GNOMEUIINFO_MENU_EXIT_ITEM (on_exit_menu_activate, NULL),
+  GNOMEUIINFO_MENU_CLOSE_ITEM (on_close_window_activate, NULL),
+  GNOMEUIINFO_MENU_EXIT_ITEM (on_quit_menu_activate, NULL),
   GNOMEUIINFO_END
 };
 
-static GnomeUIInfo edit1_menu_uiinfo[] =
+static GnomeUIInfo edit_menu_item_menu_uiinfo[] =
 {
   GNOMEUIINFO_MENU_CUT_ITEM (on_cut_menu_activate, NULL),
   GNOMEUIINFO_MENU_COPY_ITEM (on_copy_menu_activate, NULL),
@@ -90,37 +99,16 @@ static GnomeUIInfo flip_menu_menu_uiinfo[] =
 static GnomeUIInfo rotate_by_menu_menu_uiinfo[] =
 {
   {
-    GNOME_APP_UI_ITEM, N_("+90"),
+    GNOME_APP_UI_ITEM, N_("Clockwise"),
     NULL,
-    (gpointer) on_rotate_p90_menu_activate, NULL, NULL,
+    (gpointer) on_rotate_menu_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
-    GNOME_APP_UI_ITEM, N_("+45"),
+    GNOME_APP_UI_ITEM, N_("Counter Clockwise"),
     NULL,
-    (gpointer) on_rotate_p45_menu_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL,
-    0, (GdkModifierType) 0, NULL
-  },
-  {
-    GNOME_APP_UI_ITEM, N_("-45"),
-    NULL,
-    (gpointer) on_rotate_n45_menu_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL,
-    0, (GdkModifierType) 0, NULL
-  },
-  {
-    GNOME_APP_UI_ITEM, N_("-90"),
-    NULL,
-    (gpointer) on_rotate_n90_menu_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL,
-    0, (GdkModifierType) 0, NULL
-  },
-  {
-    GNOME_APP_UI_ITEM, N_("+180"),
-    NULL,
-    (gpointer) on_rotate_p180_menu_activate, NULL, NULL,
+    (gpointer) on_rotate_menu_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
@@ -130,16 +118,16 @@ static GnomeUIInfo rotate_by_menu_menu_uiinfo[] =
 static GnomeUIInfo effects_menu_menu_uiinfo[] =
 {
   {
-    GNOME_APP_UI_ITEM, N_("_Revert"),
+    GNOME_APP_UI_ITEM, N_("_Invert"),
     NULL,
-    (gpointer) on_revert_menu_activate, NULL, NULL,
+    (gpointer) on_invert_menu_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("_Sharpen"),
     NULL,
-    (gpointer) on_sharpen_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
@@ -147,21 +135,21 @@ static GnomeUIInfo effects_menu_menu_uiinfo[] =
   {
     GNOME_APP_UI_ITEM, N_("S_mooth"),
     NULL,
-    (gpointer) on_smooth_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("_Directional Smooth"),
     NULL,
-    (gpointer) on_directional_smooth_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("Despeckle"),
     NULL,
-    (gpointer) on_despeckle_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
@@ -169,56 +157,56 @@ static GnomeUIInfo effects_menu_menu_uiinfo[] =
   {
     GNOME_APP_UI_ITEM, N_("_Edge Detect"),
     NULL,
-    (gpointer) on_edge_detect_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("Emboss"),
     NULL,
-    (gpointer) on_emboss_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("_Oil Paint"),
     NULL,
-    (gpointer) on_oil_paint_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("_Add Noise"),
     NULL,
-    (gpointer) on_add_noise_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("Spread"),
     NULL,
-    (gpointer) on_spread_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("_Pixelize"),
     NULL,
-    (gpointer) on_pixelize_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("_Blend"),
     NULL,
-    (gpointer) on_blend_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("Solarize"),
     NULL,
-    (gpointer) on_solarize_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
@@ -226,28 +214,28 @@ static GnomeUIInfo effects_menu_menu_uiinfo[] =
   {
     GNOME_APP_UI_ITEM, N_("_Normalize Contrast"),
     NULL,
-    (gpointer) on_normalize_contrast_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("_Quantize Color"),
     NULL,
-    (gpointer) on_quantize_color_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   {
     GNOME_APP_UI_ITEM, N_("Convert to _Greyscale"),
     NULL,
-    (gpointer) on_convert_to_greyscale_menu_activate, NULL, NULL,
+    (gpointer) on_image_effect_activate, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
   GNOMEUIINFO_END
 };
 
-static GnomeUIInfo image_menu_menu_uiinfo[] =
+static GnomeUIInfo image_menu_item_menu_uiinfo[] =
 {
   {
     GNOME_APP_UI_SUBTREE, N_("Desktop"),
@@ -280,39 +268,50 @@ static GnomeUIInfo image_menu_menu_uiinfo[] =
   GNOMEUIINFO_END
 };
 
-static GnomeUIInfo help1_menu_uiinfo[] =
+static GnomeUIInfo windows_menu_item_menu_uiinfo[] =
 {
-  GNOMEUIINFO_HELP ("gpaint"),
-  GNOMEUIINFO_MENU_ABOUT_ITEM (on_about_menu_activate, NULL),
-  {
-    GNOME_APP_UI_ITEM, N_("About G_NOME"),
-    NULL,
-    (gpointer) on_about_gnome_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL,
-    0, (GdkModifierType) 0, NULL
-  },
-  {
-    GNOME_APP_UI_ITEM, N_("About _GNU"),
-    NULL,
-    (gpointer) on_about_gnu_activate, NULL, NULL,
-    GNOME_APP_PIXMAP_NONE, NULL,
-    0, (GdkModifierType) 0, NULL
-  },
+  GNOMEUIINFO_MENU_NEW_WINDOW_ITEM (on_create_new_window, NULL),
+  GNOMEUIINFO_MENU_CLOSE_WINDOW_ITEM (on_close_window_activate, NULL),
   GNOMEUIINFO_END
 };
 
-static GnomeUIInfo rotate_by_menu_uiinfo[] =
+static GnomeUIInfo help_menu_item_menu_uiinfo[] =
 {
-  GNOMEUIINFO_MENU_FILE_TREE (file1_menu_uiinfo),
-  GNOMEUIINFO_MENU_EDIT_TREE (edit1_menu_uiinfo),
+  GNOMEUIINFO_MENU_ABOUT_ITEM (on_about_menu_activate, NULL),
+  GNOMEUIINFO_END
+};
+
+static GnomeUIInfo main_menu_uiinfo[] =
+{
   {
-    GNOME_APP_UI_SUBTREE, N_("_Image"),
+    GNOME_APP_UI_SUBTREE, N_("_File"),
     NULL,
-    image_menu_menu_uiinfo, NULL, NULL,
+    file_menu_item_menu_uiinfo, NULL, NULL,
     GNOME_APP_PIXMAP_NONE, NULL,
     0, (GdkModifierType) 0, NULL
   },
-  GNOMEUIINFO_MENU_HELP_TREE (help1_menu_uiinfo),
+  {
+    GNOME_APP_UI_SUBTREE, N_("_Edit"),
+    NULL,
+    edit_menu_item_menu_uiinfo, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, (GdkModifierType) 0, NULL
+  },
+  {
+    GNOME_APP_UI_SUBTREE, N_("_Image"),
+    NULL,
+    image_menu_item_menu_uiinfo, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, (GdkModifierType) 0, NULL
+  },
+  GNOMEUIINFO_MENU_WINDOWS_TREE (windows_menu_item_menu_uiinfo),
+  {
+    GNOME_APP_UI_SUBTREE, N_("_Help"),
+    NULL,
+    help_menu_item_menu_uiinfo, NULL, NULL,
+    GNOME_APP_PIXMAP_NONE, NULL,
+    0, (GdkModifierType) 0, NULL
+  },
   GNOMEUIINFO_END
 };
 
@@ -321,24 +320,27 @@ create_mainwindow (void)
 {
   GtkWidget *mainwindow;
   GtkWidget *dock1;
+  GtkWidget *toolbar1;
+  GtkIconSize tmp_toolbar_icon_size;
+  GtkWidget *tmp_image;
+  GtkWidget *new_button;
+  GtkWidget *open_button;
+  GtkWidget *save_button;
+  GtkWidget *save_as_button;
+  GtkWidget *separatortoolitem1;
+  GtkWidget *print_button;
   GtkWidget *toolbar6;
+  GtkWidget *toolitem1;
   GtkWidget *fontpicker;
-  GtkWidget *tmp_toolbar_icon;
   GtkWidget *bold_button;
   GtkWidget *italic_button;
   GtkWidget *underline_button;
+  GtkWidget *toolitem2;
   GtkWidget *table5;
   GtkWidget *Line_Width;
   GtkWidget *line_width_combo;
   GList *line_width_combo_items = NULL;
   GtkWidget *line_width_combo_combo_entry;
-  GtkWidget *toolbar1;
-  GtkWidget *new_button;
-  GtkWidget *open_button;
-  GtkWidget *save_button;
-  GtkWidget *save_as_button;
-  GtkWidget *print_button;
-  GtkWidget *table3;
   GtkWidget *table8;
   GtkWidget *fixed1;
   GtkWidget *background_color_picker;
@@ -399,22 +401,38 @@ create_mainwindow (void)
   GtkWidget *color_palette_entry13;
   GtkWidget *frame29;
   GtkWidget *color_palette_entry27;
+  GtkWidget *tool_palette_toolbar;
+  GtkWidget *tool_palette_tool_item;
   GtkWidget *table4;
   GtkWidget *toolbar4;
+  GtkWidget *toolitem3;
   GtkWidget *erase_button;
+  GtkWidget *toolitem5;
   GtkWidget *lasso_button;
+  GtkWidget *toolitem7;
   GtkWidget *fill_button;
+  GtkWidget *toolitem9;
   GtkWidget *line_button;
+  GtkWidget *toolitem10;
   GtkWidget *multiline_button;
+  GtkWidget *toolitem11;
   GtkWidget *rectangle_button;
+  GtkWidget *toolitem12;
   GtkWidget *closed_freehand_button;
   GtkWidget *toolbar5;
+  GtkWidget *toolitem4;
   GtkWidget *pen_button;
+  GtkWidget *toolitem6;
   GtkWidget *polselect_button;
+  GtkWidget *toolitem8;
   GtkWidget *text_button;
+  GtkWidget *toolitem13;
   GtkWidget *arc_button;
+  GtkWidget *toolitem14;
   GtkWidget *curve_button;
+  GtkWidget *toolitem15;
   GtkWidget *oval_button;
+  GtkWidget *toolitem16;
   GtkWidget *brush_button;
   GtkWidget *filled_button;
   GtkWidget *scroll_frame;
@@ -423,444 +441,253 @@ create_mainwindow (void)
 
   tooltips = gtk_tooltips_new ();
 
-  mainwindow = gnome_app_new ("gpaint", _("gpaint"));
+  mainwindow = gnome_app_new ("Gpaint_HEAD", _("gpaint"));
   gtk_widget_set_name (mainwindow, "mainwindow");
-  gtk_object_set_data (GTK_OBJECT (mainwindow), "mainwindow", mainwindow);
 
   dock1 = GNOME_APP (mainwindow)->dock;
   gtk_widget_set_name (dock1, "dock1");
-  gtk_widget_ref (dock1);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "dock1", dock1,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (dock1);
 
-  gnome_app_create_menus (GNOME_APP (mainwindow), rotate_by_menu_uiinfo);
+  gnome_app_create_menus (GNOME_APP (mainwindow), main_menu_uiinfo);
 
-  gtk_widget_set_name (rotate_by_menu_uiinfo[0].widget, "file1");
-  gtk_widget_ref (rotate_by_menu_uiinfo[0].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "file1",
-                            rotate_by_menu_uiinfo[0].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (main_menu_uiinfo[0].widget, "file_menu_item");
 
-  gtk_widget_set_name (file1_menu_uiinfo[0].widget, "new_file_menu");
-  gtk_widget_ref (file1_menu_uiinfo[0].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "new_file_menu",
-                            file1_menu_uiinfo[0].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[0].widget, "new_file_menu");
 
-  gtk_widget_set_name (file1_menu_uiinfo[1].widget, "open_menu");
-  gtk_widget_ref (file1_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "open_menu",
-                            file1_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[1].widget, "open_menu");
 
-  gtk_widget_set_name (file1_menu_uiinfo[2].widget, "save_menu");
-  gtk_widget_ref (file1_menu_uiinfo[2].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "save_menu",
-                            file1_menu_uiinfo[2].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[2].widget, "save_menu");
 
-  gtk_widget_set_name (file1_menu_uiinfo[3].widget, "save_as_menu");
-  gtk_widget_ref (file1_menu_uiinfo[3].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "save_as_menu",
-                            file1_menu_uiinfo[3].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[3].widget, "save_as_menu");
 
-  gtk_widget_set_name (file1_menu_uiinfo[4].widget, "separator1");
-  gtk_widget_ref (file1_menu_uiinfo[4].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "separator1",
-                            file1_menu_uiinfo[4].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[4].widget, "separator1");
 
-  gtk_widget_set_name (file1_menu_uiinfo[5].widget, "print_preview");
-  gtk_widget_ref (file1_menu_uiinfo[5].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "print_preview",
-                            file1_menu_uiinfo[5].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[5].widget, "print_preview");
 
-  gtk_widget_set_name (file1_menu_uiinfo[6].widget, "print_menu");
-  gtk_widget_ref (file1_menu_uiinfo[6].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "print_menu",
-                            file1_menu_uiinfo[6].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[6].widget, "print_menu");
 
-  gtk_widget_set_name (file1_menu_uiinfo[7].widget, "separator6");
-  gtk_widget_ref (file1_menu_uiinfo[7].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "separator6",
-                            file1_menu_uiinfo[7].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[7].widget, "separator6");
 
-  gtk_widget_set_name (file1_menu_uiinfo[8].widget, "exit_menu");
-  gtk_widget_ref (file1_menu_uiinfo[8].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "exit_menu",
-                            file1_menu_uiinfo[8].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[8].widget, "exit_menu");
 
-  gtk_widget_set_name (file1_menu_uiinfo[9].widget, "exit1");
-  gtk_widget_ref (file1_menu_uiinfo[9].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "exit1",
-                            file1_menu_uiinfo[9].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (file_menu_item_menu_uiinfo[9].widget, "quit_menu_item");
 
-  gtk_widget_set_name (rotate_by_menu_uiinfo[1].widget, "edit1");
-  gtk_widget_ref (rotate_by_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "edit1",
-                            rotate_by_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (main_menu_uiinfo[1].widget, "edit_menu_item");
 
-  gtk_widget_set_name (edit1_menu_uiinfo[0].widget, "cut_menu");
-  gtk_widget_ref (edit1_menu_uiinfo[0].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "cut_menu",
-                            edit1_menu_uiinfo[0].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (edit_menu_item_menu_uiinfo[0].widget, "cut_menu");
 
-  gtk_widget_set_name (edit1_menu_uiinfo[1].widget, "copy_menu");
-  gtk_widget_ref (edit1_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "copy_menu",
-                            edit1_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (edit_menu_item_menu_uiinfo[1].widget, "copy_menu");
 
-  gtk_widget_set_name (edit1_menu_uiinfo[2].widget, "paste_menu");
-  gtk_widget_ref (edit1_menu_uiinfo[2].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "paste_menu",
-                            edit1_menu_uiinfo[2].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (edit_menu_item_menu_uiinfo[2].widget, "paste_menu");
 
-  gtk_widget_set_name (edit1_menu_uiinfo[3].widget, "clear_menu");
-  gtk_widget_ref (edit1_menu_uiinfo[3].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "clear_menu",
-                            edit1_menu_uiinfo[3].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (edit_menu_item_menu_uiinfo[3].widget, "clear_menu");
 
-  gtk_widget_set_name (edit1_menu_uiinfo[4].widget, "separator10");
-  gtk_widget_ref (edit1_menu_uiinfo[4].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "separator10",
-                            edit1_menu_uiinfo[4].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (edit_menu_item_menu_uiinfo[4].widget, "separator10");
 
-  gtk_widget_set_name (edit1_menu_uiinfo[5].widget, "select_all");
-  gtk_widget_ref (edit1_menu_uiinfo[5].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "select_all",
-                            edit1_menu_uiinfo[5].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (edit_menu_item_menu_uiinfo[5].widget, "select_all");
 
-  gtk_widget_set_name (rotate_by_menu_uiinfo[2].widget, "image_menu");
-  gtk_widget_ref (rotate_by_menu_uiinfo[2].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "image_menu",
-                            rotate_by_menu_uiinfo[2].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (main_menu_uiinfo[2].widget, "image_menu_item");
 
-  gtk_widget_set_name (image_menu_menu_uiinfo[0].widget, "desktop_menu");
-  gtk_widget_ref (image_menu_menu_uiinfo[0].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "desktop_menu",
-                            image_menu_menu_uiinfo[0].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (image_menu_item_menu_uiinfo[0].widget, "desktop_menu");
 
   gtk_widget_set_name (desktop_menu_menu_uiinfo[0].widget, "get_desktop");
-  gtk_widget_ref (desktop_menu_menu_uiinfo[0].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "get_desktop",
-                            desktop_menu_menu_uiinfo[0].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
 
   gtk_widget_set_name (desktop_menu_menu_uiinfo[1].widget, "set_as_background_titled");
-  gtk_widget_ref (desktop_menu_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "set_as_background_titled",
-                            desktop_menu_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
 
-  gtk_widget_set_name (image_menu_menu_uiinfo[1].widget, "flip_menu");
-  gtk_widget_ref (image_menu_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "flip_menu",
-                            image_menu_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (image_menu_item_menu_uiinfo[1].widget, "flip_menu");
 
   gtk_widget_set_name (flip_menu_menu_uiinfo[0].widget, "flip_x_axis_menu");
-  gtk_widget_ref (flip_menu_menu_uiinfo[0].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "flip_x_axis_menu",
-                            flip_menu_menu_uiinfo[0].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
 
   gtk_widget_set_name (flip_menu_menu_uiinfo[1].widget, "flip_y_axis_menu");
-  gtk_widget_ref (flip_menu_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "flip_y_axis_menu",
-                            flip_menu_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
 
-  gtk_widget_set_name (image_menu_menu_uiinfo[2].widget, "rotate_by_menu");
-  gtk_widget_ref (image_menu_menu_uiinfo[2].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "rotate_by_menu",
-                            image_menu_menu_uiinfo[2].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_set_sensitive (image_menu_menu_uiinfo[2].widget, FALSE);
+  gtk_widget_set_name (image_menu_item_menu_uiinfo[2].widget, "rotate_by_menu");
 
   gtk_widget_set_name (rotate_by_menu_menu_uiinfo[0].widget, "rotate_p90_menu");
-  gtk_widget_ref (rotate_by_menu_menu_uiinfo[0].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "rotate_p90_menu",
-                            rotate_by_menu_menu_uiinfo[0].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
 
-  gtk_widget_set_name (rotate_by_menu_menu_uiinfo[1].widget, "rotate_p45_menu");
-  gtk_widget_ref (rotate_by_menu_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "rotate_p45_menu",
-                            rotate_by_menu_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (rotate_by_menu_menu_uiinfo[1].widget, "rotate_n90_menu");
 
-  gtk_widget_set_name (rotate_by_menu_menu_uiinfo[2].widget, "rotate_n45_menu");
-  gtk_widget_ref (rotate_by_menu_menu_uiinfo[2].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "rotate_n45_menu",
-                            rotate_by_menu_menu_uiinfo[2].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (image_menu_item_menu_uiinfo[3].widget, "effects_menu");
 
-  gtk_widget_set_name (rotate_by_menu_menu_uiinfo[3].widget, "rotate_n90_menu");
-  gtk_widget_ref (rotate_by_menu_menu_uiinfo[3].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "rotate_n90_menu",
-                            rotate_by_menu_menu_uiinfo[3].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[0].widget, "invert_menu");
 
-  gtk_widget_set_name (rotate_by_menu_menu_uiinfo[4].widget, "rotate_p180_menu");
-  gtk_widget_ref (rotate_by_menu_menu_uiinfo[4].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "rotate_p180_menu",
-                            rotate_by_menu_menu_uiinfo[4].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
-
-  gtk_widget_set_name (image_menu_menu_uiinfo[3].widget, "effects_menu");
-  gtk_widget_ref (image_menu_menu_uiinfo[3].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "effects_menu",
-                            image_menu_menu_uiinfo[3].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
-
-  gtk_widget_set_name (effects_menu_menu_uiinfo[0].widget, "revert_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[0].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "revert_menu",
-                            effects_menu_menu_uiinfo[0].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
-
-  gtk_widget_set_name (effects_menu_menu_uiinfo[1].widget, "sharpen_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "sharpen_menu",
-                            effects_menu_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[1].widget, "sharpen");
 
   gtk_widget_set_name (effects_menu_menu_uiinfo[2].widget, "separator4");
-  gtk_widget_ref (effects_menu_menu_uiinfo[2].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "separator4",
-                            effects_menu_menu_uiinfo[2].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[3].widget, "smooth_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[3].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "smooth_menu",
-                            effects_menu_menu_uiinfo[3].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[3].widget, "smooth");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[4].widget, "directional_smooth_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[4].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "directional_smooth_menu",
-                            effects_menu_menu_uiinfo[4].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[4].widget, "directional_smooth");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[5].widget, "despeckle_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[5].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "despeckle_menu",
-                            effects_menu_menu_uiinfo[5].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[5].widget, "despeckle");
 
   gtk_widget_set_name (effects_menu_menu_uiinfo[6].widget, "separator7");
-  gtk_widget_ref (effects_menu_menu_uiinfo[6].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "separator7",
-                            effects_menu_menu_uiinfo[6].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[7].widget, "edge_detect_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[7].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "edge_detect_menu",
-                            effects_menu_menu_uiinfo[7].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[7].widget, "edge_detect");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[8].widget, "emboss_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[8].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "emboss_menu",
-                            effects_menu_menu_uiinfo[8].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[8].widget, "emboss");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[9].widget, "oil_paint_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[9].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "oil_paint_menu",
-                            effects_menu_menu_uiinfo[9].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[9].widget, "oil_paint");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[10].widget, "add_noise_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[10].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "add_noise_menu",
-                            effects_menu_menu_uiinfo[10].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[10].widget, "add_noise");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[11].widget, "spread_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[11].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "spread_menu",
-                            effects_menu_menu_uiinfo[11].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[11].widget, "spread");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[12].widget, "pixelize_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[12].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "pixelize_menu",
-                            effects_menu_menu_uiinfo[12].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[12].widget, "pixelize");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[13].widget, "blend_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[13].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "blend_menu",
-                            effects_menu_menu_uiinfo[13].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[13].widget, "blend");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[14].widget, "solarize_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[14].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "solarize_menu",
-                            effects_menu_menu_uiinfo[14].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[14].widget, "solarize");
 
   gtk_widget_set_name (effects_menu_menu_uiinfo[15].widget, "separator8");
-  gtk_widget_ref (effects_menu_menu_uiinfo[15].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "separator8",
-                            effects_menu_menu_uiinfo[15].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[16].widget, "normalize_contrast_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[16].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "normalize_contrast_menu",
-                            effects_menu_menu_uiinfo[16].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[16].widget, "normalize_contrast");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[17].widget, "quantize_color_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[17].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "quantize_color_menu",
-                            effects_menu_menu_uiinfo[17].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[17].widget, "quantize_color");
 
-  gtk_widget_set_name (effects_menu_menu_uiinfo[18].widget, "convert_to_greyscale_menu");
-  gtk_widget_ref (effects_menu_menu_uiinfo[18].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "convert_to_greyscale_menu",
-                            effects_menu_menu_uiinfo[18].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (effects_menu_menu_uiinfo[18].widget, "convert_to_greyscale");
 
-  gtk_widget_set_name (rotate_by_menu_uiinfo[3].widget, "help1");
-  gtk_widget_ref (rotate_by_menu_uiinfo[3].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "help1",
-                            rotate_by_menu_uiinfo[3].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (main_menu_uiinfo[3].widget, "windows_menu_item");
 
-  gtk_widget_set_name (help1_menu_uiinfo[1].widget, "about_menu");
-  gtk_widget_ref (help1_menu_uiinfo[1].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "about_menu",
-                            help1_menu_uiinfo[1].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (windows_menu_item_menu_uiinfo[0].widget, "create_new_window");
 
-  gtk_widget_set_name (help1_menu_uiinfo[2].widget, "about_gnome");
-  gtk_widget_ref (help1_menu_uiinfo[2].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "about_gnome",
-                            help1_menu_uiinfo[2].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (windows_menu_item_menu_uiinfo[1].widget, "close_this_window");
 
-  gtk_widget_set_name (help1_menu_uiinfo[3].widget, "about_gnu");
-  gtk_widget_ref (help1_menu_uiinfo[3].widget);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "about_gnu",
-                            help1_menu_uiinfo[3].widget,
-                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_set_name (main_menu_uiinfo[4].widget, "help_menu_item");
 
-  toolbar6 = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  gtk_widget_set_name (help_menu_item_menu_uiinfo[0].widget, "about_menu");
+
+  toolbar1 = gtk_toolbar_new ();
+  gtk_widget_set_name (toolbar1, "toolbar1");
+  gtk_widget_show (toolbar1);
+  gnome_app_add_toolbar (GNOME_APP (mainwindow), GTK_TOOLBAR (toolbar1), "toolbar1",
+                                BONOBO_DOCK_ITEM_BEH_NORMAL,
+                                BONOBO_DOCK_TOP, 1, 0, 0);
+  gtk_widget_set_size_request (toolbar1, 375, 55);
+  gtk_container_set_border_width (GTK_CONTAINER (toolbar1), 1);
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar1), GTK_TOOLBAR_BOTH);
+  tmp_toolbar_icon_size = gtk_toolbar_get_icon_size (GTK_TOOLBAR (toolbar1));
+
+  tmp_image = gtk_image_new_from_stock ("gtk-new", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  new_button = (GtkWidget*) gtk_tool_button_new (tmp_image, _("New"));
+  gtk_widget_set_name (new_button, "new_button");
+  gtk_widget_show (new_button);
+  gtk_container_add (GTK_CONTAINER (toolbar1), new_button);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (new_button), tooltips, _("New File"), NULL);
+
+  tmp_image = gtk_image_new_from_stock ("gtk-open", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  open_button = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Open"));
+  gtk_widget_set_name (open_button, "open_button");
+  gtk_widget_show (open_button);
+  gtk_container_add (GTK_CONTAINER (toolbar1), open_button);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (open_button), tooltips, _("Open File"), NULL);
+
+  tmp_image = gtk_image_new_from_stock ("gtk-save", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  save_button = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Save"));
+  gtk_widget_set_name (save_button, "save_button");
+  gtk_widget_show (save_button);
+  gtk_container_add (GTK_CONTAINER (toolbar1), save_button);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (save_button), tooltips, _("Save File"), NULL);
+
+  tmp_image = gtk_image_new_from_stock ("gtk-save-as", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  save_as_button = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Save As"));
+  gtk_widget_set_name (save_as_button, "save_as_button");
+  gtk_widget_show (save_as_button);
+  gtk_container_add (GTK_CONTAINER (toolbar1), save_as_button);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (save_as_button), tooltips, _("Save File As"), NULL);
+
+  separatortoolitem1 = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_set_name (separatortoolitem1, "separatortoolitem1");
+  gtk_widget_show (separatortoolitem1);
+  gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem1);
+
+  tmp_image = gtk_image_new_from_stock ("gtk-print", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  print_button = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Print"));
+  gtk_widget_set_name (print_button, "print_button");
+  gtk_widget_show (print_button);
+  gtk_container_add (GTK_CONTAINER (toolbar1), print_button);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (print_button), tooltips, _("Print"), NULL);
+
+  toolbar6 = gtk_toolbar_new ();
   gtk_widget_set_name (toolbar6, "toolbar6");
-  gtk_widget_ref (toolbar6);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "toolbar6", toolbar6,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (toolbar6);
   gnome_app_add_toolbar (GNOME_APP (mainwindow), GTK_TOOLBAR (toolbar6), "toolbar6",
-                                GNOME_DOCK_ITEM_BEH_NORMAL,
-                                GNOME_DOCK_TOP, 1, 0, 0);
-  gtk_toolbar_set_button_relief (GTK_TOOLBAR (toolbar6), GTK_RELIEF_NONE);
+                                BONOBO_DOCK_ITEM_BEH_NORMAL,
+                                BONOBO_DOCK_TOP, 2, 0, 0);
+  gtk_widget_set_size_request (toolbar6, 375, 53);
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar6), GTK_TOOLBAR_BOTH);
+  tmp_toolbar_icon_size = gtk_toolbar_get_icon_size (GTK_TOOLBAR (toolbar6));
+
+  toolitem1 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem1, "toolitem1");
+  gtk_widget_show (toolitem1);
+  gtk_container_add (GTK_CONTAINER (toolbar6), toolitem1);
 
   fontpicker = gnome_font_picker_new ();
   gtk_widget_set_name (fontpicker, "fontpicker");
-  gtk_widget_ref (fontpicker);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "fontpicker", fontpicker,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (fontpicker);
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar6), fontpicker, NULL, NULL);
-  gnome_font_picker_set_mode (GNOME_FONT_PICKER (fontpicker), GNOME_FONT_PICKER_MODE_FONT_INFO);
-  gnome_font_picker_fi_set_use_font_in_label (GNOME_FONT_PICKER (fontpicker),
-                                              TRUE, 14);
+  gtk_container_add (GTK_CONTAINER (toolitem1), fontpicker);
+  gnome_font_picker_set_mode (GNOME_FONT_PICKER (fontpicker),
+                              GNOME_FONT_PICKER_MODE_FONT_INFO);
 
-  tmp_toolbar_icon = gnome_stock_pixmap_widget (mainwindow, GNOME_STOCK_PIXMAP_TEXT_BOLD);
-  bold_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar6),
-                                GTK_TOOLBAR_CHILD_BUTTON,
-                                NULL,
-                                _("Bold"),
-                                _("bold text"), NULL,
-                                tmp_toolbar_icon, NULL, NULL);
+  tmp_image = gtk_image_new_from_stock ("gtk-bold", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  bold_button = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Bold"));
   gtk_widget_set_name (bold_button, "bold_button");
-  gtk_widget_ref (bold_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "bold_button", bold_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (bold_button);
+  gtk_container_add (GTK_CONTAINER (toolbar6), bold_button);
   gtk_widget_set_sensitive (bold_button, FALSE);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (bold_button), tooltips, _("bold text"), NULL);
 
-  tmp_toolbar_icon = gnome_stock_pixmap_widget (mainwindow, GNOME_STOCK_PIXMAP_TEXT_ITALIC);
-  italic_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar6),
-                                GTK_TOOLBAR_CHILD_BUTTON,
-                                NULL,
-                                _("Italic"),
-                                _("italic text"), NULL,
-                                tmp_toolbar_icon, NULL, NULL);
+  tmp_image = gtk_image_new_from_stock ("gtk-italic", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  italic_button = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Italic"));
   gtk_widget_set_name (italic_button, "italic_button");
-  gtk_widget_ref (italic_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "italic_button", italic_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (italic_button);
+  gtk_container_add (GTK_CONTAINER (toolbar6), italic_button);
   gtk_widget_set_sensitive (italic_button, FALSE);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (italic_button), tooltips, _("italic text"), NULL);
 
-  tmp_toolbar_icon = gnome_stock_pixmap_widget (mainwindow, GNOME_STOCK_PIXMAP_TEXT_UNDERLINE);
-  underline_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar6),
-                                GTK_TOOLBAR_CHILD_BUTTON,
-                                NULL,
-                                _("Underline"),
-                                _("underline text"), NULL,
-                                tmp_toolbar_icon, NULL, NULL);
+  tmp_image = gtk_image_new_from_stock ("gtk-underline", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  underline_button = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Underline"));
   gtk_widget_set_name (underline_button, "underline_button");
-  gtk_widget_ref (underline_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "underline_button", underline_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (underline_button);
+  gtk_container_add (GTK_CONTAINER (toolbar6), underline_button);
   gtk_widget_set_sensitive (underline_button, FALSE);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (underline_button), tooltips, _("underline text"), NULL);
+
+  toolitem2 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem2, "toolitem2");
+  gtk_widget_show (toolitem2);
+  gtk_container_add (GTK_CONTAINER (toolbar6), toolitem2);
 
   table5 = gtk_table_new (2, 1, FALSE);
   gtk_widget_set_name (table5, "table5");
-  gtk_widget_ref (table5);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "table5", table5,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (table5);
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar6));
-
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar6), table5, NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (toolitem2), table5);
 
   Line_Width = gtk_label_new (_("line width"));
   gtk_widget_set_name (Line_Width, "Line_Width");
-  gtk_widget_ref (Line_Width);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "Line_Width", Line_Width,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (Line_Width);
   gtk_table_attach (GTK_TABLE (table5), Line_Width, 0, 1, 0, 1,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (Line_Width), GTK_JUSTIFY_CENTER);
 
   line_width_combo = gtk_combo_new ();
+  g_object_set_data (G_OBJECT (GTK_COMBO (line_width_combo)->popwin),
+                     "GladeParentKey", line_width_combo);
   gtk_widget_set_name (line_width_combo, "line_width_combo");
-  gtk_widget_ref (line_width_combo);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "line_width_combo", line_width_combo,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (line_width_combo);
   gtk_table_attach (GTK_TABLE (table5), line_width_combo, 0, 1, 1, 2,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_usize (line_width_combo, 40, -2);
+  gtk_widget_set_size_request (line_width_combo, 60, 25);
   gtk_combo_set_value_in_list (GTK_COMBO (line_width_combo), TRUE, FALSE);
   line_width_combo_items = g_list_append (line_width_combo_items, (gpointer) _("1"));
   line_width_combo_items = g_list_append (line_width_combo_items, (gpointer) _("2"));
@@ -868,1051 +695,744 @@ create_mainwindow (void)
   line_width_combo_items = g_list_append (line_width_combo_items, (gpointer) _("4"));
   line_width_combo_items = g_list_append (line_width_combo_items, (gpointer) _("6"));
   line_width_combo_items = g_list_append (line_width_combo_items, (gpointer) _("8"));
+  line_width_combo_items = g_list_append (line_width_combo_items, (gpointer) "");
   gtk_combo_set_popdown_strings (GTK_COMBO (line_width_combo), line_width_combo_items);
   g_list_free (line_width_combo_items);
 
   line_width_combo_combo_entry = GTK_COMBO (line_width_combo)->entry;
   gtk_widget_set_name (line_width_combo_combo_entry, "line_width_combo_combo_entry");
-  gtk_widget_ref (line_width_combo_combo_entry);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "line_width_combo_combo_entry", line_width_combo_combo_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (line_width_combo_combo_entry);
   gtk_tooltips_set_tip (tooltips, line_width_combo_combo_entry, _("line width"), NULL);
-  gtk_entry_set_text (GTK_ENTRY (line_width_combo_combo_entry), _("1"));
-
-  toolbar1 = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
-  gtk_widget_set_name (toolbar1, "toolbar1");
-  gtk_widget_ref (toolbar1);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "toolbar1", toolbar1,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (toolbar1);
-  gnome_app_add_toolbar (GNOME_APP (mainwindow), GTK_TOOLBAR (toolbar1), "toolbar1",
-                                GNOME_DOCK_ITEM_BEH_NORMAL,
-                                GNOME_DOCK_TOP, 2, 0, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (toolbar1), 1);
-  gtk_toolbar_set_space_size (GTK_TOOLBAR (toolbar1), 16);
-  gtk_toolbar_set_space_style (GTK_TOOLBAR (toolbar1), GTK_TOOLBAR_SPACE_LINE);
-  gtk_toolbar_set_button_relief (GTK_TOOLBAR (toolbar1), GTK_RELIEF_NONE);
-
-  tmp_toolbar_icon = gnome_stock_pixmap_widget (mainwindow, GNOME_STOCK_PIXMAP_NEW);
-  new_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar1),
-                                GTK_TOOLBAR_CHILD_BUTTON,
-                                NULL,
-                                _("New"),
-                                _("New File"), NULL,
-                                tmp_toolbar_icon, NULL, NULL);
-  gtk_widget_set_name (new_button, "new_button");
-  gtk_widget_ref (new_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "new_button", new_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (new_button);
-
-  tmp_toolbar_icon = gnome_stock_pixmap_widget (mainwindow, GNOME_STOCK_PIXMAP_OPEN);
-  open_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar1),
-                                GTK_TOOLBAR_CHILD_BUTTON,
-                                NULL,
-                                _("Open"),
-                                _("Open File"), NULL,
-                                tmp_toolbar_icon, NULL, NULL);
-  gtk_widget_set_name (open_button, "open_button");
-  gtk_widget_ref (open_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "open_button", open_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (open_button);
-
-  tmp_toolbar_icon = gnome_stock_pixmap_widget (mainwindow, GNOME_STOCK_PIXMAP_SAVE);
-  save_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar1),
-                                GTK_TOOLBAR_CHILD_BUTTON,
-                                NULL,
-                                _("Save"),
-                                _("Save File"), NULL,
-                                tmp_toolbar_icon, NULL, NULL);
-  gtk_widget_set_name (save_button, "save_button");
-  gtk_widget_ref (save_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "save_button", save_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (save_button);
-
-  tmp_toolbar_icon = gnome_stock_pixmap_widget (mainwindow, GNOME_STOCK_PIXMAP_SAVE_AS);
-  save_as_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar1),
-                                GTK_TOOLBAR_CHILD_BUTTON,
-                                NULL,
-                                _("Save As"),
-                                _("Save File As"), NULL,
-                                tmp_toolbar_icon, NULL, NULL);
-  gtk_widget_set_name (save_as_button, "save_as_button");
-  gtk_widget_ref (save_as_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "save_as_button", save_as_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (save_as_button);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar1));
-
-  tmp_toolbar_icon = gnome_stock_pixmap_widget (mainwindow, GNOME_STOCK_PIXMAP_PRINT);
-  print_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar1),
-                                GTK_TOOLBAR_CHILD_BUTTON,
-                                NULL,
-                                _("Print"),
-                                _("Print"), NULL,
-                                tmp_toolbar_icon, NULL, NULL);
-  gtk_widget_set_name (print_button, "print_button");
-  gtk_widget_ref (print_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "print_button", print_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (print_button);
-
-  table3 = gtk_table_new (1, 1, FALSE);
-  gtk_widget_set_name (table3, "table3");
-  gtk_widget_ref (table3);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "table3", table3,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (table3);
-  gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar1), table3, NULL, NULL);
 
   table8 = gtk_table_new (2, 15, FALSE);
   gtk_widget_set_name (table8, "table8");
-  gtk_widget_ref (table8);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "table8", table8,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (table8);
   gnome_app_add_docked (GNOME_APP (mainwindow), table8, "table8",
-                                GNOME_DOCK_ITEM_BEH_NORMAL,
-                                GNOME_DOCK_BOTTOM, 0, 0, 0);
+                                BONOBO_DOCK_ITEM_BEH_NORMAL,
+                                BONOBO_DOCK_BOTTOM, 0, 0, 0);
   gtk_container_set_border_width (GTK_CONTAINER (table8), 5);
   gtk_table_set_row_spacings (GTK_TABLE (table8), 1);
   gtk_table_set_col_spacings (GTK_TABLE (table8), 1);
 
   fixed1 = gtk_fixed_new ();
   gtk_widget_set_name (fixed1, "fixed1");
-  gtk_widget_ref (fixed1);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "fixed1", fixed1,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (fixed1);
   gtk_table_attach (GTK_TABLE (table8), fixed1, 0, 1, 0, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
-  gtk_widget_set_usize (fixed1, -2, 28);
-  gtk_container_set_border_width (GTK_CONTAINER (fixed1), 3);
+  gtk_widget_set_size_request (fixed1, 70, 40);
+  gtk_container_set_border_width (GTK_CONTAINER (fixed1), 2);
 
   background_color_picker = gnome_color_picker_new ();
   gtk_widget_set_name (background_color_picker, "background_color_picker");
-  gtk_widget_ref (background_color_picker);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "background_color_picker", background_color_picker,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (background_color_picker);
-  gtk_fixed_put (GTK_FIXED (fixed1), background_color_picker, 16, 16);
-  gtk_widget_set_uposition (background_color_picker, 16, 16);
-  gtk_widget_set_usize (background_color_picker, 32, 24);
+  gtk_fixed_put (GTK_FIXED (fixed1), background_color_picker, 31, 16);
+  gtk_widget_set_size_request (background_color_picker, 36, 24);
   gtk_tooltips_set_tip (tooltips, background_color_picker, _("background color"), NULL);
   gnome_color_picker_set_title (GNOME_COLOR_PICKER (background_color_picker), _("Background color"));
 
   foreground_color_picker = gnome_color_picker_new ();
   gtk_widget_set_name (foreground_color_picker, "foreground_color_picker");
-  gtk_widget_ref (foreground_color_picker);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "foreground_color_picker", foreground_color_picker,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (foreground_color_picker);
   gtk_fixed_put (GTK_FIXED (fixed1), foreground_color_picker, 0, 0);
-  gtk_widget_set_uposition (foreground_color_picker, 0, 0);
-  gtk_widget_set_usize (foreground_color_picker, 32, 24);
+  gtk_widget_set_size_request (foreground_color_picker, 36, 24);
   gtk_tooltips_set_tip (tooltips, foreground_color_picker, _("foreground color"), NULL);
   gnome_color_picker_set_title (GNOME_COLOR_PICKER (foreground_color_picker), _("Foreground color"));
 
   frame2 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame2, "frame2");
-  gtk_widget_ref (frame2);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame2", frame2,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame2);
   gtk_table_attach (GTK_TABLE (table8), frame2, 1, 2, 0, 1,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame2, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_IN);
 
   color_palette_entry14 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry14, "color_palette_entry14");
-  gtk_widget_ref (color_palette_entry14);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry14", color_palette_entry14,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry14);
   gtk_container_add (GTK_CONTAINER (frame2), color_palette_entry14);
-  gtk_widget_set_usize (color_palette_entry14, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry14, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry14, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry14, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry14, GDK_EXTENSION_EVENTS_ALL);
 
   frame3 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame3, "frame3");
-  gtk_widget_ref (frame3);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame3", frame3,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame3);
   gtk_table_attach (GTK_TABLE (table8), frame3, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_widget_set_size_request (frame3, 20, 20);
   GTK_WIDGET_SET_FLAGS (frame3, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame3), GTK_SHADOW_IN);
 
   color_palette_entry0 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry0, "color_palette_entry0");
-  gtk_widget_ref (color_palette_entry0);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry0", color_palette_entry0,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry0);
   gtk_container_add (GTK_CONTAINER (frame3), color_palette_entry0);
-  gtk_widget_set_usize (color_palette_entry0, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry0, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry0, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry0, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry0, GDK_EXTENSION_EVENTS_ALL);
 
   frame4 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame4, "frame4");
-  gtk_widget_ref (frame4);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame4", frame4,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame4);
   gtk_table_attach (GTK_TABLE (table8), frame4, 2, 3, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame4, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame4), GTK_SHADOW_IN);
 
   color_palette_entry1 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry1, "color_palette_entry1");
-  gtk_widget_ref (color_palette_entry1);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry1", color_palette_entry1,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry1);
   gtk_container_add (GTK_CONTAINER (frame4), color_palette_entry1);
-  gtk_widget_set_usize (color_palette_entry1, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry1, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry1, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry1, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry1, GDK_EXTENSION_EVENTS_ALL);
 
   frame5 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame5, "frame5");
-  gtk_widget_ref (frame5);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame5", frame5,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame5);
   gtk_table_attach (GTK_TABLE (table8), frame5, 2, 3, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_widget_set_size_request (frame5, 20, 20);
   GTK_WIDGET_SET_FLAGS (frame5, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame5), GTK_SHADOW_IN);
 
   color_palette_entry15 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry15, "color_palette_entry15");
-  gtk_widget_ref (color_palette_entry15);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry15", color_palette_entry15,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry15);
   gtk_container_add (GTK_CONTAINER (frame5), color_palette_entry15);
-  gtk_widget_set_usize (color_palette_entry15, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry15, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry15, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry15, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry15, GDK_EXTENSION_EVENTS_ALL);
 
   frame6 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame6, "frame6");
-  gtk_widget_ref (frame6);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame6", frame6,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame6);
   gtk_table_attach (GTK_TABLE (table8), frame6, 3, 4, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_widget_set_size_request (frame6, 20, 20);
   GTK_WIDGET_SET_FLAGS (frame6, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame6), GTK_SHADOW_IN);
 
   color_palette_entry2 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry2, "color_palette_entry2");
-  gtk_widget_ref (color_palette_entry2);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry2", color_palette_entry2,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry2);
   gtk_container_add (GTK_CONTAINER (frame6), color_palette_entry2);
-  gtk_widget_set_usize (color_palette_entry2, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry2, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry2, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry2, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry2, GDK_EXTENSION_EVENTS_ALL);
 
   frame7 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame7, "frame7");
-  gtk_widget_ref (frame7);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame7", frame7,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame7);
   gtk_table_attach (GTK_TABLE (table8), frame7, 3, 4, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame7, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame7), GTK_SHADOW_IN);
 
   color_palette_entry16 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry16, "color_palette_entry16");
-  gtk_widget_ref (color_palette_entry16);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry16", color_palette_entry16,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry16);
   gtk_container_add (GTK_CONTAINER (frame7), color_palette_entry16);
-  gtk_widget_set_usize (color_palette_entry16, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry16, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry16, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry16, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry16, GDK_EXTENSION_EVENTS_ALL);
 
   frame8 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame8, "frame8");
-  gtk_widget_ref (frame8);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame8", frame8,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame8);
   gtk_table_attach (GTK_TABLE (table8), frame8, 4, 5, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame8, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame8), GTK_SHADOW_IN);
 
   color_palette_entry3 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry3, "color_palette_entry3");
-  gtk_widget_ref (color_palette_entry3);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry3", color_palette_entry3,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry3);
   gtk_container_add (GTK_CONTAINER (frame8), color_palette_entry3);
-  gtk_widget_set_usize (color_palette_entry3, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry3, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry3, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry3, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry3, GDK_EXTENSION_EVENTS_ALL);
 
   frame9 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame9, "frame9");
-  gtk_widget_ref (frame9);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame9", frame9,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame9);
   gtk_table_attach (GTK_TABLE (table8), frame9, 4, 5, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame9, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame9), GTK_SHADOW_IN);
 
   color_palette_entry17 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry17, "color_palette_entry17");
-  gtk_widget_ref (color_palette_entry17);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry17", color_palette_entry17,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry17);
   gtk_container_add (GTK_CONTAINER (frame9), color_palette_entry17);
-  gtk_widget_set_usize (color_palette_entry17, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry17, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry17, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry17, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry17, GDK_EXTENSION_EVENTS_ALL);
 
   frame10 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame10, "frame10");
-  gtk_widget_ref (frame10);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame10", frame10,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame10);
   gtk_table_attach (GTK_TABLE (table8), frame10, 5, 6, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame10, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame10), GTK_SHADOW_IN);
 
   color_palette_entry4 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry4, "color_palette_entry4");
-  gtk_widget_ref (color_palette_entry4);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry4", color_palette_entry4,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry4);
   gtk_container_add (GTK_CONTAINER (frame10), color_palette_entry4);
-  gtk_widget_set_usize (color_palette_entry4, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry4, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry4, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry4, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry4, GDK_EXTENSION_EVENTS_ALL);
 
   frame11 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame11, "frame11");
-  gtk_widget_ref (frame11);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame11", frame11,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame11);
   gtk_table_attach (GTK_TABLE (table8), frame11, 5, 6, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame11, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame11), GTK_SHADOW_IN);
 
   color_palette_entry18 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry18, "color_palette_entry18");
-  gtk_widget_ref (color_palette_entry18);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry18", color_palette_entry18,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry18);
   gtk_container_add (GTK_CONTAINER (frame11), color_palette_entry18);
-  gtk_widget_set_usize (color_palette_entry18, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry18, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry18, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry18, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry18, GDK_EXTENSION_EVENTS_ALL);
 
   frame12 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame12, "frame12");
-  gtk_widget_ref (frame12);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame12", frame12,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame12);
   gtk_table_attach (GTK_TABLE (table8), frame12, 6, 7, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame12, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame12), GTK_SHADOW_IN);
 
   color_palette_entry5 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry5, "color_palette_entry5");
-  gtk_widget_ref (color_palette_entry5);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry5", color_palette_entry5,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry5);
   gtk_container_add (GTK_CONTAINER (frame12), color_palette_entry5);
-  gtk_widget_set_usize (color_palette_entry5, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry5, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry5, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry5, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry5, GDK_EXTENSION_EVENTS_ALL);
 
   frame13 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame13, "frame13");
-  gtk_widget_ref (frame13);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame13", frame13,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame13);
   gtk_table_attach (GTK_TABLE (table8), frame13, 6, 7, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame13, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame13), GTK_SHADOW_IN);
 
   color_palette_entry19 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry19, "color_palette_entry19");
-  gtk_widget_ref (color_palette_entry19);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry19", color_palette_entry19,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry19);
   gtk_container_add (GTK_CONTAINER (frame13), color_palette_entry19);
-  gtk_widget_set_usize (color_palette_entry19, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry19, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry19, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry19, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry19, GDK_EXTENSION_EVENTS_ALL);
 
   frame14 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame14, "frame14");
-  gtk_widget_ref (frame14);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame14", frame14,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame14);
   gtk_table_attach (GTK_TABLE (table8), frame14, 7, 8, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame14, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame14), GTK_SHADOW_IN);
 
   color_palette_entry6 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry6, "color_palette_entry6");
-  gtk_widget_ref (color_palette_entry6);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry6", color_palette_entry6,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry6);
   gtk_container_add (GTK_CONTAINER (frame14), color_palette_entry6);
-  gtk_widget_set_usize (color_palette_entry6, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry6, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry6, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry6, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry6, GDK_EXTENSION_EVENTS_ALL);
 
   frame15 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame15, "frame15");
-  gtk_widget_ref (frame15);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame15", frame15,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame15);
   gtk_table_attach (GTK_TABLE (table8), frame15, 7, 8, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame15, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame15), GTK_SHADOW_IN);
 
   color_palette_entry20 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry20, "color_palette_entry20");
-  gtk_widget_ref (color_palette_entry20);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry20", color_palette_entry20,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry20);
   gtk_container_add (GTK_CONTAINER (frame15), color_palette_entry20);
-  gtk_widget_set_usize (color_palette_entry20, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry20, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry20, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry20, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry20, GDK_EXTENSION_EVENTS_ALL);
 
   frame16 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame16, "frame16");
-  gtk_widget_ref (frame16);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame16", frame16,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame16);
   gtk_table_attach (GTK_TABLE (table8), frame16, 8, 9, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame16, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame16), GTK_SHADOW_IN);
 
   color_palette_entry7 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry7, "color_palette_entry7");
-  gtk_widget_ref (color_palette_entry7);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry7", color_palette_entry7,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry7);
   gtk_container_add (GTK_CONTAINER (frame16), color_palette_entry7);
-  gtk_widget_set_usize (color_palette_entry7, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry7, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry7, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry7, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry7, GDK_EXTENSION_EVENTS_ALL);
 
   frame17 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame17, "frame17");
-  gtk_widget_ref (frame17);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame17", frame17,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame17);
   gtk_table_attach (GTK_TABLE (table8), frame17, 8, 9, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame17, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame17), GTK_SHADOW_IN);
 
   color_palette_entry21 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry21, "color_palette_entry21");
-  gtk_widget_ref (color_palette_entry21);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry21", color_palette_entry21,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry21);
   gtk_container_add (GTK_CONTAINER (frame17), color_palette_entry21);
-  gtk_widget_set_usize (color_palette_entry21, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry21, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry21, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry21, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry21, GDK_EXTENSION_EVENTS_ALL);
 
   frame18 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame18, "frame18");
-  gtk_widget_ref (frame18);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame18", frame18,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame18);
   gtk_table_attach (GTK_TABLE (table8), frame18, 9, 10, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame18, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame18), GTK_SHADOW_IN);
 
   color_palette_entry8 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry8, "color_palette_entry8");
-  gtk_widget_ref (color_palette_entry8);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry8", color_palette_entry8,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry8);
   gtk_container_add (GTK_CONTAINER (frame18), color_palette_entry8);
-  gtk_widget_set_usize (color_palette_entry8, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry8, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry8, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry8, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry8, GDK_EXTENSION_EVENTS_ALL);
 
   frame19 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame19, "frame19");
-  gtk_widget_ref (frame19);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame19", frame19,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame19);
   gtk_table_attach (GTK_TABLE (table8), frame19, 9, 10, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame19, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame19), GTK_SHADOW_IN);
 
   color_palette_entry22 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry22, "color_palette_entry22");
-  gtk_widget_ref (color_palette_entry22);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry22", color_palette_entry22,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry22);
   gtk_container_add (GTK_CONTAINER (frame19), color_palette_entry22);
-  gtk_widget_set_usize (color_palette_entry22, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry22, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry22, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry22, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry22, GDK_EXTENSION_EVENTS_ALL);
 
   frame20 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame20, "frame20");
-  gtk_widget_ref (frame20);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame20", frame20,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame20);
   gtk_table_attach (GTK_TABLE (table8), frame20, 10, 11, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame20, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame20), GTK_SHADOW_IN);
 
   color_palette_entry9 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry9, "color_palette_entry9");
-  gtk_widget_ref (color_palette_entry9);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry9", color_palette_entry9,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry9);
   gtk_container_add (GTK_CONTAINER (frame20), color_palette_entry9);
-  gtk_widget_set_usize (color_palette_entry9, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry9, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry9, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry9, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry9, GDK_EXTENSION_EVENTS_ALL);
 
   frame21 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame21, "frame21");
-  gtk_widget_ref (frame21);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame21", frame21,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame21);
   gtk_table_attach (GTK_TABLE (table8), frame21, 10, 11, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame21, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame21), GTK_SHADOW_IN);
 
   color_palette_entry23 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry23, "color_palette_entry23");
-  gtk_widget_ref (color_palette_entry23);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry23", color_palette_entry23,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry23);
   gtk_container_add (GTK_CONTAINER (frame21), color_palette_entry23);
-  gtk_widget_set_usize (color_palette_entry23, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry23, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry23, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry23, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry23, GDK_EXTENSION_EVENTS_ALL);
 
   frame22 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame22, "frame22");
-  gtk_widget_ref (frame22);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame22", frame22,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame22);
   gtk_table_attach (GTK_TABLE (table8), frame22, 11, 12, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame22, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame22), GTK_SHADOW_IN);
 
   color_palette_entry10 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry10, "color_palette_entry10");
-  gtk_widget_ref (color_palette_entry10);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry10", color_palette_entry10,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry10);
   gtk_container_add (GTK_CONTAINER (frame22), color_palette_entry10);
-  gtk_widget_set_usize (color_palette_entry10, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry10, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry10, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry10, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry10, GDK_EXTENSION_EVENTS_ALL);
 
   frame23 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame23, "frame23");
-  gtk_widget_ref (frame23);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame23", frame23,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame23);
   gtk_table_attach (GTK_TABLE (table8), frame23, 11, 12, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame23, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame23), GTK_SHADOW_IN);
 
   color_palette_entry24 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry24, "color_palette_entry24");
-  gtk_widget_ref (color_palette_entry24);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry24", color_palette_entry24,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry24);
   gtk_container_add (GTK_CONTAINER (frame23), color_palette_entry24);
-  gtk_widget_set_usize (color_palette_entry24, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry24, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry24, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry24, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry24, GDK_EXTENSION_EVENTS_ALL);
 
   frame24 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame24, "frame24");
-  gtk_widget_ref (frame24);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame24", frame24,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame24);
   gtk_table_attach (GTK_TABLE (table8), frame24, 12, 13, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame24, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame24), GTK_SHADOW_IN);
 
   color_palette_entry11 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry11, "color_palette_entry11");
-  gtk_widget_ref (color_palette_entry11);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry11", color_palette_entry11,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry11);
   gtk_container_add (GTK_CONTAINER (frame24), color_palette_entry11);
-  gtk_widget_set_usize (color_palette_entry11, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry11, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry11, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry11, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry11, GDK_EXTENSION_EVENTS_ALL);
 
   frame25 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame25, "frame25");
-  gtk_widget_ref (frame25);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame25", frame25,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame25);
   gtk_table_attach (GTK_TABLE (table8), frame25, 12, 13, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame25, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame25), GTK_SHADOW_IN);
 
   color_palette_entry25 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry25, "color_palette_entry25");
-  gtk_widget_ref (color_palette_entry25);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry25", color_palette_entry25,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry25);
   gtk_container_add (GTK_CONTAINER (frame25), color_palette_entry25);
-  gtk_widget_set_usize (color_palette_entry25, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry25, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry25, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry25, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry25, GDK_EXTENSION_EVENTS_ALL);
 
   frame26 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame26, "frame26");
-  gtk_widget_ref (frame26);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame26", frame26,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame26);
   gtk_table_attach (GTK_TABLE (table8), frame26, 13, 14, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame26, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame26), GTK_SHADOW_IN);
 
   color_palette_entry12 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry12, "color_palette_entry12");
-  gtk_widget_ref (color_palette_entry12);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry12", color_palette_entry12,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry12);
   gtk_container_add (GTK_CONTAINER (frame26), color_palette_entry12);
-  gtk_widget_set_usize (color_palette_entry12, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry12, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry12, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry12, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry12, GDK_EXTENSION_EVENTS_ALL);
 
   frame27 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame27, "frame27");
-  gtk_widget_ref (frame27);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame27", frame27,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame27);
   gtk_table_attach (GTK_TABLE (table8), frame27, 13, 14, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame27, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame27), GTK_SHADOW_IN);
 
   color_palette_entry26 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry26, "color_palette_entry26");
-  gtk_widget_ref (color_palette_entry26);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry26", color_palette_entry26,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry26);
   gtk_container_add (GTK_CONTAINER (frame27), color_palette_entry26);
-  gtk_widget_set_usize (color_palette_entry26, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry26, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry26, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry26, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry26, GDK_EXTENSION_EVENTS_ALL);
 
   frame28 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame28, "frame28");
-  gtk_widget_ref (frame28);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame28", frame28,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame28);
   gtk_table_attach (GTK_TABLE (table8), frame28, 14, 15, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame28, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame28), GTK_SHADOW_IN);
 
   color_palette_entry13 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry13, "color_palette_entry13");
-  gtk_widget_ref (color_palette_entry13);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry13", color_palette_entry13,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry13);
   gtk_container_add (GTK_CONTAINER (frame28), color_palette_entry13);
-  gtk_widget_set_usize (color_palette_entry13, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry13, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry13, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry13, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry13, GDK_EXTENSION_EVENTS_ALL);
 
   frame29 = gtk_frame_new (NULL);
   gtk_widget_set_name (frame29, "frame29");
-  gtk_widget_ref (frame29);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "frame29", frame29,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (frame29);
   gtk_table_attach (GTK_TABLE (table8), frame29, 14, 15, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame29, GTK_CAN_FOCUS);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame29), GTK_SHADOW_IN);
 
   color_palette_entry27 = gtk_drawing_area_new ();
   gtk_widget_set_name (color_palette_entry27, "color_palette_entry27");
-  gtk_widget_ref (color_palette_entry27);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "color_palette_entry27", color_palette_entry27,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (color_palette_entry27);
   gtk_container_add (GTK_CONTAINER (frame29), color_palette_entry27);
-  gtk_widget_set_usize (color_palette_entry27, 16, 16);
+  gtk_widget_set_size_request (color_palette_entry27, 16, 16);
   GTK_WIDGET_SET_FLAGS (color_palette_entry27, GTK_CAN_FOCUS);
   gtk_widget_set_events (color_palette_entry27, GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (color_palette_entry27, GDK_EXTENSION_EVENTS_ALL);
 
-  table4 = gtk_table_new (3, 2, FALSE);
-  gtk_widget_set_name (table4, "table4");
-  gtk_widget_ref (table4);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "table4", table4,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (table4);
-  gnome_app_add_docked (GNOME_APP (mainwindow), table4, "table4",
-                                GNOME_DOCK_ITEM_BEH_NEVER_HORIZONTAL,
-                                GNOME_DOCK_LEFT, 0, 0, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (table4), 2);
+  tool_palette_toolbar = gtk_toolbar_new ();
+  gtk_widget_set_name (tool_palette_toolbar, "tool_palette_toolbar");
+  gtk_widget_show (tool_palette_toolbar);
+  gnome_app_add_toolbar (GNOME_APP (mainwindow), GTK_TOOLBAR (tool_palette_toolbar), "tool_palette_toolbar",
+                                BONOBO_DOCK_ITEM_BEH_NEVER_HORIZONTAL,
+                                BONOBO_DOCK_LEFT, 0, 0, 0);
+  gtk_widget_set_size_request (tool_palette_toolbar, 87, 350);
+  gtk_toolbar_set_style (GTK_TOOLBAR (tool_palette_toolbar), GTK_TOOLBAR_BOTH);
+  gtk_toolbar_set_orientation (GTK_TOOLBAR (tool_palette_toolbar), GTK_ORIENTATION_VERTICAL);
+  tmp_toolbar_icon_size = gtk_toolbar_get_icon_size (GTK_TOOLBAR (tool_palette_toolbar));
 
-  toolbar4 = gtk_toolbar_new (GTK_ORIENTATION_VERTICAL, GTK_TOOLBAR_ICONS);
+  tool_palette_tool_item = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (tool_palette_tool_item, "tool_palette_tool_item");
+  gtk_widget_show (tool_palette_tool_item);
+  gtk_container_add (GTK_CONTAINER (tool_palette_toolbar), tool_palette_tool_item);
+  gtk_widget_set_size_request (tool_palette_tool_item, 85, 327);
+
+  table4 = gtk_table_new (2, 2, FALSE);
+  gtk_widget_set_name (table4, "table4");
+  gtk_widget_show (table4);
+  gtk_container_add (GTK_CONTAINER (tool_palette_tool_item), table4);
+  gtk_widget_set_size_request (table4, 85, 327);
+  gtk_container_set_border_width (GTK_CONTAINER (table4), 2);
+  gtk_table_set_row_spacings (GTK_TABLE (table4), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table4), 1);
+
+  toolbar4 = gtk_toolbar_new ();
   gtk_widget_set_name (toolbar4, "toolbar4");
-  gtk_widget_ref (toolbar4);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "toolbar4", toolbar4,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (toolbar4);
   gtk_table_attach (GTK_TABLE (table4), toolbar4, 0, 1, 0, 1,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (toolbar4), 1);
-  gtk_toolbar_set_space_style (GTK_TOOLBAR (toolbar4), GTK_TOOLBAR_SPACE_LINE);
-  gtk_toolbar_set_button_relief (GTK_TOOLBAR (toolbar4), GTK_RELIEF_HALF);
+  gtk_widget_set_size_request (toolbar4, 40, 287);
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar4), GTK_TOOLBAR_BOTH);
+  gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar4), GTK_ORIENTATION_VERTICAL);
+  tmp_toolbar_icon_size = gtk_toolbar_get_icon_size (GTK_TOOLBAR (toolbar4));
 
-  erase_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar4),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("erase"), NULL,
-                                NULL, NULL, NULL);
+  toolitem3 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem3, "toolitem3");
+  gtk_widget_show (toolitem3);
+  gtk_container_add (GTK_CONTAINER (toolbar4), toolitem3);
+
+  erase_button = gtk_toggle_button_new_with_mnemonic (_("erase"));
   gtk_widget_set_name (erase_button, "erase_button");
-  gtk_widget_ref (erase_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "erase_button", erase_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (erase_button);
+  gtk_container_add (GTK_CONTAINER (toolitem3), erase_button);
+  gtk_widget_set_size_request (erase_button, 40, 40);
 
-  lasso_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar4),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("lasso"), NULL,
-                                NULL, NULL, NULL);
+  toolitem5 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem5, "toolitem5");
+  gtk_widget_show (toolitem5);
+  gtk_container_add (GTK_CONTAINER (toolbar4), toolitem5);
+
+  lasso_button = gtk_toggle_button_new_with_mnemonic (_("lasso"));
   gtk_widget_set_name (lasso_button, "lasso_button");
-  gtk_widget_ref (lasso_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "lasso_button", lasso_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (lasso_button);
+  gtk_container_add (GTK_CONTAINER (toolitem5), lasso_button);
+  gtk_widget_set_size_request (lasso_button, 40, 40);
 
-  fill_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar4),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("fill"), NULL,
-                                NULL, NULL, NULL);
+  toolitem7 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem7, "toolitem7");
+  gtk_widget_show (toolitem7);
+  gtk_container_add (GTK_CONTAINER (toolbar4), toolitem7);
+
+  fill_button = gtk_toggle_button_new_with_mnemonic (_("fill"));
   gtk_widget_set_name (fill_button, "fill_button");
-  gtk_widget_ref (fill_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "fill_button", fill_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (fill_button);
+  gtk_container_add (GTK_CONTAINER (toolitem7), fill_button);
+  gtk_widget_set_size_request (fill_button, 40, 40);
 
-  line_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar4),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("line"), NULL,
-                                NULL, NULL, NULL);
+  toolitem9 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem9, "toolitem9");
+  gtk_widget_show (toolitem9);
+  gtk_container_add (GTK_CONTAINER (toolbar4), toolitem9);
+
+  line_button = gtk_toggle_button_new_with_mnemonic (_("line"));
   gtk_widget_set_name (line_button, "line_button");
-  gtk_widget_ref (line_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "line_button", line_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (line_button);
+  gtk_container_add (GTK_CONTAINER (toolitem9), line_button);
+  gtk_widget_set_size_request (line_button, 40, 40);
 
-  multiline_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar4),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("polyline"), NULL,
-                                NULL, NULL, NULL);
+  toolitem10 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem10, "toolitem10");
+  gtk_widget_show (toolitem10);
+  gtk_container_add (GTK_CONTAINER (toolbar4), toolitem10);
+
+  multiline_button = gtk_toggle_button_new_with_mnemonic (_("multiline"));
   gtk_widget_set_name (multiline_button, "multiline_button");
-  gtk_widget_ref (multiline_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "multiline_button", multiline_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (multiline_button);
+  gtk_container_add (GTK_CONTAINER (toolitem10), multiline_button);
+  gtk_widget_set_size_request (multiline_button, 40, 40);
 
-  rectangle_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar4),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("rectangle"), NULL,
-                                NULL, NULL, NULL);
+  toolitem11 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem11, "toolitem11");
+  gtk_widget_show (toolitem11);
+  gtk_container_add (GTK_CONTAINER (toolbar4), toolitem11);
+
+  rectangle_button = gtk_toggle_button_new_with_mnemonic (_("rectangle"));
   gtk_widget_set_name (rectangle_button, "rectangle_button");
-  gtk_widget_ref (rectangle_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "rectangle_button", rectangle_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (rectangle_button);
+  gtk_container_add (GTK_CONTAINER (toolitem11), rectangle_button);
+  gtk_widget_set_size_request (rectangle_button, 40, 40);
 
-  closed_freehand_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar4),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("closed freehand"), NULL,
-                                NULL, NULL, NULL);
+  toolitem12 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem12, "toolitem12");
+  gtk_widget_show (toolitem12);
+  gtk_container_add (GTK_CONTAINER (toolbar4), toolitem12);
+
+  closed_freehand_button = gtk_toggle_button_new_with_mnemonic (_("freehand"));
   gtk_widget_set_name (closed_freehand_button, "closed_freehand_button");
-  gtk_widget_ref (closed_freehand_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "closed_freehand_button", closed_freehand_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (closed_freehand_button);
+  gtk_container_add (GTK_CONTAINER (toolitem12), closed_freehand_button);
+  gtk_widget_set_size_request (closed_freehand_button, 40, 40);
 
-  toolbar5 = gtk_toolbar_new (GTK_ORIENTATION_VERTICAL, GTK_TOOLBAR_ICONS);
+  toolbar5 = gtk_toolbar_new ();
   gtk_widget_set_name (toolbar5, "toolbar5");
-  gtk_widget_ref (toolbar5);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "toolbar5", toolbar5,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (toolbar5);
   gtk_table_attach (GTK_TABLE (table4), toolbar5, 1, 2, 0, 1,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (toolbar5), 1);
-  gtk_toolbar_set_space_style (GTK_TOOLBAR (toolbar5), GTK_TOOLBAR_SPACE_LINE);
+  gtk_widget_set_size_request (toolbar5, 40, 287);
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar5), GTK_TOOLBAR_BOTH);
+  gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar5), GTK_ORIENTATION_VERTICAL);
+  tmp_toolbar_icon_size = gtk_toolbar_get_icon_size (GTK_TOOLBAR (toolbar5));
 
-  pen_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar5),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("pen"), NULL,
-                                NULL, NULL, NULL);
+  toolitem4 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem4, "toolitem4");
+  gtk_widget_show (toolitem4);
+  gtk_container_add (GTK_CONTAINER (toolbar5), toolitem4);
+
+  pen_button = gtk_toggle_button_new_with_mnemonic (_("pen"));
   gtk_widget_set_name (pen_button, "pen_button");
-  gtk_widget_ref (pen_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "pen_button", pen_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (pen_button);
+  gtk_container_add (GTK_CONTAINER (toolitem4), pen_button);
+  gtk_widget_set_size_request (pen_button, 40, 40);
 
-  polselect_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar5),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("polygon select"), NULL,
-                                NULL, NULL, NULL);
+  toolitem6 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem6, "toolitem6");
+  gtk_widget_show (toolitem6);
+  gtk_container_add (GTK_CONTAINER (toolbar5), toolitem6);
+
+  polselect_button = gtk_toggle_button_new_with_mnemonic (_("polyselect"));
   gtk_widget_set_name (polselect_button, "polselect_button");
-  gtk_widget_ref (polselect_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "polselect_button", polselect_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (polselect_button);
+  gtk_container_add (GTK_CONTAINER (toolitem6), polselect_button);
+  gtk_widget_set_size_request (polselect_button, 40, 40);
 
-  text_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar5),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("text"), NULL,
-                                NULL, NULL, NULL);
+  toolitem8 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem8, "toolitem8");
+  gtk_widget_show (toolitem8);
+  gtk_container_add (GTK_CONTAINER (toolbar5), toolitem8);
+
+  text_button = gtk_toggle_button_new_with_mnemonic (_("text"));
   gtk_widget_set_name (text_button, "text_button");
-  gtk_widget_ref (text_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "text_button", text_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (text_button);
+  gtk_container_add (GTK_CONTAINER (toolitem8), text_button);
+  gtk_widget_set_size_request (text_button, 40, 40);
 
-  arc_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar5),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("arc"), NULL,
-                                NULL, NULL, NULL);
+  toolitem13 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem13, "toolitem13");
+  gtk_widget_show (toolitem13);
+  gtk_container_add (GTK_CONTAINER (toolbar5), toolitem13);
+
+  arc_button = gtk_toggle_button_new_with_mnemonic (_("arc"));
   gtk_widget_set_name (arc_button, "arc_button");
-  gtk_widget_ref (arc_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "arc_button", arc_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (arc_button);
+  gtk_container_add (GTK_CONTAINER (toolitem13), arc_button);
+  gtk_widget_set_size_request (arc_button, 40, 40);
 
-  curve_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar5),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("curve"), NULL,
-                                NULL, NULL, NULL);
+  toolitem14 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem14, "toolitem14");
+  gtk_widget_show (toolitem14);
+  gtk_container_add (GTK_CONTAINER (toolbar5), toolitem14);
+
+  curve_button = gtk_toggle_button_new_with_mnemonic (_("curve"));
   gtk_widget_set_name (curve_button, "curve_button");
-  gtk_widget_ref (curve_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "curve_button", curve_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (curve_button);
-  gtk_widget_set_sensitive (curve_button, FALSE);
+  gtk_container_add (GTK_CONTAINER (toolitem14), curve_button);
+  gtk_widget_set_size_request (curve_button, 40, 40);
 
-  oval_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar5),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("oval"), NULL,
-                                NULL, NULL, NULL);
+  toolitem15 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem15, "toolitem15");
+  gtk_widget_show (toolitem15);
+  gtk_container_add (GTK_CONTAINER (toolbar5), toolitem15);
+
+  oval_button = gtk_toggle_button_new_with_mnemonic (_("oval"));
   gtk_widget_set_name (oval_button, "oval_button");
-  gtk_widget_ref (oval_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "oval_button", oval_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (oval_button);
+  gtk_container_add (GTK_CONTAINER (toolitem15), oval_button);
+  gtk_widget_set_size_request (oval_button, 40, 40);
 
-  brush_button = gtk_toolbar_append_element (GTK_TOOLBAR (toolbar5),
-                                GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-                                NULL,
-                                "",
-                                _("brush"), NULL,
-                                NULL, NULL, NULL);
+  toolitem16 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_set_name (toolitem16, "toolitem16");
+  gtk_widget_show (toolitem16);
+  gtk_container_add (GTK_CONTAINER (toolbar5), toolitem16);
+
+  brush_button = gtk_toggle_button_new_with_mnemonic (_("brush"));
   gtk_widget_set_name (brush_button, "brush_button");
-  gtk_widget_ref (brush_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "brush_button", brush_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (brush_button);
+  gtk_container_add (GTK_CONTAINER (toolitem16), brush_button);
+  gtk_widget_set_size_request (brush_button, 40, 40);
 
-  filled_button = gtk_toggle_button_new_with_label ("");
+  filled_button = gtk_toggle_button_new_with_mnemonic ("");
   gtk_widget_set_name (filled_button, "filled_button");
-  gtk_widget_ref (filled_button);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "filled_button", filled_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (filled_button);
   gtk_table_attach (GTK_TABLE (table4), filled_button, 0, 2, 1, 2,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
+  gtk_widget_set_size_request (filled_button, 40, 33);
   gtk_container_set_border_width (GTK_CONTAINER (filled_button), 3);
   GTK_WIDGET_UNSET_FLAGS (filled_button, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, filled_button, _("fill"), NULL);
 
-  scroll_frame = create_dreawing_area_in_scroll_frame ("scroll_frame", "", NULL, 0, 0);
+  scroll_frame = create_drawing_area_in_scroll_frame ("scroll_frame", "", "", 0, 0);
   gtk_widget_set_name (scroll_frame, "scroll_frame");
-  gtk_widget_ref (scroll_frame);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "scroll_frame", scroll_frame,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scroll_frame);
   gnome_app_set_contents (GNOME_APP (mainwindow), scroll_frame);
   GTK_WIDGET_SET_FLAGS (scroll_frame, GTK_CAN_FOCUS);
@@ -1920,627 +1440,602 @@ create_mainwindow (void)
 
   appbar1 = gnome_appbar_new (TRUE, TRUE, GNOME_PREFERENCES_NEVER);
   gtk_widget_set_name (appbar1, "appbar1");
-  gtk_widget_ref (appbar1);
-  gtk_object_set_data_full (GTK_OBJECT (mainwindow), "appbar1", appbar1,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (appbar1);
   gnome_app_set_statusbar (GNOME_APP (mainwindow), appbar1);
 
-  gtk_signal_connect (GTK_OBJECT (mainwindow), "realize",
-                      GTK_SIGNAL_FUNC (on_mainwindow_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (mainwindow), "delete_event",
-                      GTK_SIGNAL_FUNC (on_mainwindow_delete_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (mainwindow), "focus_in_event",
-                      GTK_SIGNAL_FUNC (on_mainwindow_focus_in_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (mainwindow), "focus_out_event",
-                      GTK_SIGNAL_FUNC (on_mainwindow_focus_out_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (mainwindow), "set_focus_child",
-                      GTK_SIGNAL_FUNC (on_mainwindow_set_focus_child),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (mainwindow), "set_focus",
-                      GTK_SIGNAL_FUNC (on_mainwindow_set_focus),
-                      NULL);
-  gnome_app_install_menu_hints (GNOME_APP (mainwindow), rotate_by_menu_uiinfo);
-  gtk_signal_connect (GTK_OBJECT (fontpicker), "font_set",
-                      GTK_SIGNAL_FUNC (on_fontpicker_font_set),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (fontpicker), "map",
-                      GTK_SIGNAL_FUNC (on_fontpicker_map),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (fontpicker), "map_event",
-                      GTK_SIGNAL_FUNC (on_fontpicker_map_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (bold_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_bold_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (italic_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_italic_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (underline_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_underline_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (Line_Width), "realize",
-                      GTK_SIGNAL_FUNC (on_small_label_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (line_width_combo), "add",
-                      GTK_SIGNAL_FUNC (on_line_width_combo_add),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (line_width_combo), "check_resize",
-                      GTK_SIGNAL_FUNC (on_line_width_combo_check_resize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (line_width_combo_combo_entry), "changed",
-                      GTK_SIGNAL_FUNC (on_line_width_combo_combo_entry_changed),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (new_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_new_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (open_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_open_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (save_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_save_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (save_as_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_save_as_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (print_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_print_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (background_color_picker), "color_set",
-                      GTK_SIGNAL_FUNC (on_background_color_picker_color_set),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (background_color_picker), "realize",
-                      GTK_SIGNAL_FUNC (on_background_color_picker_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (background_color_picker), "map",
-                      GTK_SIGNAL_FUNC (on_background_color_picker_map),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (background_color_picker), "map_event",
-                      GTK_SIGNAL_FUNC (on_background_color_picker_map_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (foreground_color_picker), "color_set",
-                      GTK_SIGNAL_FUNC (on_foreground_color_picker_color_set),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (foreground_color_picker), "realize",
-                      GTK_SIGNAL_FUNC (on_foreground_color_picker_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (foreground_color_picker), "map",
-                      GTK_SIGNAL_FUNC (on_foreground_color_picker_map),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (foreground_color_picker), "map_event",
-                      GTK_SIGNAL_FUNC (on_foreground_color_picker_map_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (foreground_color_picker), "clicked",
-                      GTK_SIGNAL_FUNC (on_foreground_color_picker_color_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (foreground_color_picker), "pressed",
-                      GTK_SIGNAL_FUNC (on_foreground_color_picker_color_pressed),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (foreground_color_picker), "released",
-                      GTK_SIGNAL_FUNC (on_foreground_color_picker_color_released),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry14), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry14), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry14), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry14), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry14), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry0), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry0), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry0), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry0), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry0), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry1), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry1), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry1), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry1), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry1), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry15), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry15), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry15), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry15), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry15), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry2), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry2), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry2), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry2), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry2), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry16), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry16), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry16), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry16), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry16), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry3), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry3), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry3), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry3), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry3), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry17), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry17), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry17), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry17), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry17), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry4), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry4), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry4), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry4), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry4), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry18), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry18), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry18), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry18), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry18), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry5), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry5), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry5), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry5), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry5), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry19), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry19), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry19), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry19), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry19), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry6), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry6), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry6), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry6), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry6), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry20), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry20), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry20), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry20), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry20), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry7), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry7), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry7), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry7), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry7), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry21), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry21), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry21), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry21), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry21), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry8), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry8), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry8), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry8), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry8), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry22), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry22), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry22), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry22), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry22), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry9), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry9), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry9), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry9), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry9), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry23), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry23), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry23), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry23), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry23), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry10), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry10), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry10), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry10), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry10), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry24), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry24), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry24), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry24), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry24), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry11), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry11), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry11), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry11), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry11), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry25), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry25), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry25), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry25), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry25), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry12), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry12), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry12), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry12), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry12), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry26), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry26), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry26), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry26), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry26), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry13), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry13), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry13), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry13), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry13), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry27), "button_press_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_press_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry27), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry27), "draw",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_draw),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry27), "expose_event",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_expose_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (color_palette_entry27), "realize",
-                      GTK_SIGNAL_FUNC (on_color_palette_entry_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (erase_button), "realize",
-                      GTK_SIGNAL_FUNC (on_erase_button_realize),
-                      eraseOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (erase_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_erase_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (lasso_button), "realize",
-                      GTK_SIGNAL_FUNC (on_lasso_button_realize),
-                      lassoOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (lasso_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_lasso_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (fill_button), "realize",
-                      GTK_SIGNAL_FUNC (on_fill_button_realize),
-                      fillOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (fill_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_fill_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (line_button), "realize",
-                      GTK_SIGNAL_FUNC (on_line_button_realize),
-                      lineOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (line_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_line_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (multiline_button), "realize",
-                      GTK_SIGNAL_FUNC (on_multiline_button_realize),
-                      clineOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (multiline_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_multiline_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (rectangle_button), "realize",
-                      GTK_SIGNAL_FUNC (on_rectangle_button_realize),
-                      boxOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (rectangle_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_rectangle_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (closed_freehand_button), "realize",
-                      GTK_SIGNAL_FUNC (on_closed_freehand_button_realize),
-                      freehandOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (closed_freehand_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_closed_freehand_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (pen_button), "realize",
-                      GTK_SIGNAL_FUNC (on_pen_button_realize),
-                      pencilOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (pen_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_pen_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (polselect_button), "realize",
-                      GTK_SIGNAL_FUNC (on_polselect_button_realize),
-                      selpolyOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (polselect_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_polselect_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (text_button), "realize",
-                      GTK_SIGNAL_FUNC (on_text_button_realize),
-                      textOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (text_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_text_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (arc_button), "realize",
-                      GTK_SIGNAL_FUNC (on_arc_button_realize),
-                      arcOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (arc_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_arc_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (curve_button), "realize",
-                      GTK_SIGNAL_FUNC (on_curve_button_realize),
-                      curveOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (curve_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_curve_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (oval_button), "realize",
-                      GTK_SIGNAL_FUNC (on_oval_button_realize),
-                      ovalOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (oval_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_oval_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (brush_button), "realize",
-                      GTK_SIGNAL_FUNC (on_brush_button_realize),
-                      brushOp_xpm);
-  gtk_signal_connect (GTK_OBJECT (brush_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_brush_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (filled_button), "realize",
-                      GTK_SIGNAL_FUNC (on_filled_button_realize),
-                      unfilled_xpm);
-  gtk_signal_connect (GTK_OBJECT (filled_button), "toggled",
-                      GTK_SIGNAL_FUNC (on_filled_button_toggled),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (scroll_frame), "realize",
-                      GTK_SIGNAL_FUNC (on_scroll_frame_realize),
-                      mainwindow);
-  gtk_signal_connect (GTK_OBJECT (scroll_frame), "map",
-                      GTK_SIGNAL_FUNC (on_scroll_frame_map),
-                      mainwindow);
+  g_signal_connect ((gpointer) mainwindow, "realize",
+                    G_CALLBACK (on_mainwindow_realize),
+                    NULL);
+  g_signal_connect ((gpointer) mainwindow, "delete_event",
+                    G_CALLBACK (on_mainwindow_delete_event),
+                    NULL);
+  g_signal_connect ((gpointer) mainwindow, "focus_in_event",
+                    G_CALLBACK (on_mainwindow_focus_in_event),
+                    NULL);
+  g_signal_connect ((gpointer) mainwindow, "focus_out_event",
+                    G_CALLBACK (on_mainwindow_focus_out_event),
+                    NULL);
+  g_signal_connect ((gpointer) mainwindow, "set_focus_child",
+                    G_CALLBACK (on_mainwindow_set_focus_child),
+                    NULL);
+  g_signal_connect ((gpointer) mainwindow, "set_focus",
+                    G_CALLBACK (on_mainwindow_set_focus),
+                    NULL);
+  g_signal_connect ((gpointer) mainwindow, "destroy",
+                    G_CALLBACK (on_mainwindow_destroy),
+                    NULL);
+  gnome_app_install_menu_hints (GNOME_APP (mainwindow), main_menu_uiinfo);
+  g_signal_connect ((gpointer) new_button, "clicked",
+                    G_CALLBACK (on_new_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) open_button, "clicked",
+                    G_CALLBACK (on_open_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) save_button, "clicked",
+                    G_CALLBACK (on_save_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) save_as_button, "clicked",
+                    G_CALLBACK (on_save_as_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) print_button, "clicked",
+                    G_CALLBACK (on_print_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) fontpicker, "font_set",
+                    G_CALLBACK (on_fontpicker_font_set),
+                    NULL);
+  g_signal_connect ((gpointer) fontpicker, "map",
+                    G_CALLBACK (on_fontpicker_map),
+                    NULL);
+  g_signal_connect ((gpointer) fontpicker, "map_event",
+                    G_CALLBACK (on_fontpicker_map_event),
+                    NULL);
+  g_signal_connect ((gpointer) bold_button, "clicked",
+                    G_CALLBACK (on_bold_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) italic_button, "clicked",
+                    G_CALLBACK (on_italic_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) underline_button, "clicked",
+                    G_CALLBACK (on_underline_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) Line_Width, "realize",
+                    G_CALLBACK (on_small_label_realize),
+                    NULL);
+  g_signal_connect ((gpointer) line_width_combo, "add",
+                    G_CALLBACK (on_line_width_combo_add),
+                    NULL);
+  g_signal_connect ((gpointer) line_width_combo, "check_resize",
+                    G_CALLBACK (on_line_width_combo_check_resize),
+                    NULL);
+  g_signal_connect ((gpointer) line_width_combo_combo_entry, "changed",
+                    G_CALLBACK (on_line_width_combo_combo_entry_changed),
+                    NULL);
+  g_signal_connect ((gpointer) background_color_picker, "color_set",
+                    G_CALLBACK (on_background_color_picker_color_set),
+                    NULL);
+  g_signal_connect ((gpointer) background_color_picker, "realize",
+                    G_CALLBACK (on_background_color_picker_realize),
+                    NULL);
+  g_signal_connect ((gpointer) foreground_color_picker, "color_set",
+                    G_CALLBACK (on_foreground_color_picker_color_set),
+                    NULL);
+  g_signal_connect ((gpointer) foreground_color_picker, "realize",
+                    G_CALLBACK (on_foreground_color_picker_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry14, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry14, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry14, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry0, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry0, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry0, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry1, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry1, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry1, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry15, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry15, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry15, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry2, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry2, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry2, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry16, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry16, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry16, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry3, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry3, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry3, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry17, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry17, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry17, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry4, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry4, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry4, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry18, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry18, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry18, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry5, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry5, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry5, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry19, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry19, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry19, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry6, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry6, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry6, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry20, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry20, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry20, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry7, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry7, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry7, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry21, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry21, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry21, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry8, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry8, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry8, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry22, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry22, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry22, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry9, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry9, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry9, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry23, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry23, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry23, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry10, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry10, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry10, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry24, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry24, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry24, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry11, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry11, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry11, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry25, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry25, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry25, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry12, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry12, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry12, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry26, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry26, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry26, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry13, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry13, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry13, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry27, "button_press_event",
+                    G_CALLBACK (on_color_palette_entry_button_press_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry27, "expose_event",
+                    G_CALLBACK (on_color_palette_entry_expose_event),
+                    NULL);
+  g_signal_connect ((gpointer) color_palette_entry27, "realize",
+                    G_CALLBACK (on_color_palette_entry_realize),
+                    NULL);
+  g_signal_connect ((gpointer) erase_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) erase_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) lasso_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) lasso_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) fill_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) fill_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) line_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) line_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) multiline_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) multiline_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) rectangle_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) rectangle_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) closed_freehand_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) closed_freehand_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) pen_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) pen_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) polselect_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) polselect_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) text_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) text_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) arc_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) arc_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) curve_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) curve_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) oval_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) oval_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) brush_button, "clicked",
+                    G_CALLBACK (on_tool_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) brush_button, "realize",
+                    G_CALLBACK (on_tool_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) filled_button, "realize",
+                    G_CALLBACK (on_filled_button_realize),
+                    NULL);
+  g_signal_connect ((gpointer) filled_button, "toggled",
+                    G_CALLBACK (on_filled_button_toggled),
+                    NULL);
 
-  gtk_object_set_data (GTK_OBJECT (mainwindow), "tooltips", tooltips);
+  /* Store pointers to all widgets, for use by lookup_widget(). */
+  GLADE_HOOKUP_OBJECT_NO_REF (mainwindow, mainwindow, "mainwindow");
+  GLADE_HOOKUP_OBJECT (mainwindow, dock1, "dock1");
+  GLADE_HOOKUP_OBJECT (mainwindow, main_menu_uiinfo[0].widget, "file_menu_item");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[0].widget, "new_file_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[1].widget, "open_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[2].widget, "save_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[3].widget, "save_as_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[4].widget, "separator1");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[5].widget, "print_preview");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[6].widget, "print_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[7].widget, "separator6");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[8].widget, "exit_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, file_menu_item_menu_uiinfo[9].widget, "quit_menu_item");
+  GLADE_HOOKUP_OBJECT (mainwindow, main_menu_uiinfo[1].widget, "edit_menu_item");
+  GLADE_HOOKUP_OBJECT (mainwindow, edit_menu_item_menu_uiinfo[0].widget, "cut_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, edit_menu_item_menu_uiinfo[1].widget, "copy_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, edit_menu_item_menu_uiinfo[2].widget, "paste_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, edit_menu_item_menu_uiinfo[3].widget, "clear_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, edit_menu_item_menu_uiinfo[4].widget, "separator10");
+  GLADE_HOOKUP_OBJECT (mainwindow, edit_menu_item_menu_uiinfo[5].widget, "select_all");
+  GLADE_HOOKUP_OBJECT (mainwindow, main_menu_uiinfo[2].widget, "image_menu_item");
+  GLADE_HOOKUP_OBJECT (mainwindow, image_menu_item_menu_uiinfo[0].widget, "desktop_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, desktop_menu_menu_uiinfo[0].widget, "get_desktop");
+  GLADE_HOOKUP_OBJECT (mainwindow, desktop_menu_menu_uiinfo[1].widget, "set_as_background_titled");
+  GLADE_HOOKUP_OBJECT (mainwindow, image_menu_item_menu_uiinfo[1].widget, "flip_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, flip_menu_menu_uiinfo[0].widget, "flip_x_axis_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, flip_menu_menu_uiinfo[1].widget, "flip_y_axis_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, image_menu_item_menu_uiinfo[2].widget, "rotate_by_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, rotate_by_menu_menu_uiinfo[0].widget, "rotate_p90_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, rotate_by_menu_menu_uiinfo[1].widget, "rotate_n90_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, image_menu_item_menu_uiinfo[3].widget, "effects_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[0].widget, "invert_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[1].widget, "sharpen");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[2].widget, "separator4");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[3].widget, "smooth");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[4].widget, "directional_smooth");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[5].widget, "despeckle");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[6].widget, "separator7");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[7].widget, "edge_detect");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[8].widget, "emboss");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[9].widget, "oil_paint");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[10].widget, "add_noise");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[11].widget, "spread");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[12].widget, "pixelize");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[13].widget, "blend");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[14].widget, "solarize");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[15].widget, "separator8");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[16].widget, "normalize_contrast");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[17].widget, "quantize_color");
+  GLADE_HOOKUP_OBJECT (mainwindow, effects_menu_menu_uiinfo[18].widget, "convert_to_greyscale");
+  GLADE_HOOKUP_OBJECT (mainwindow, main_menu_uiinfo[3].widget, "windows_menu_item");
+  GLADE_HOOKUP_OBJECT (mainwindow, windows_menu_item_menu_uiinfo[0].widget, "create_new_window");
+  GLADE_HOOKUP_OBJECT (mainwindow, windows_menu_item_menu_uiinfo[1].widget, "close_this_window");
+  GLADE_HOOKUP_OBJECT (mainwindow, main_menu_uiinfo[4].widget, "help_menu_item");
+  GLADE_HOOKUP_OBJECT (mainwindow, help_menu_item_menu_uiinfo[0].widget, "about_menu");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolbar1, "toolbar1");
+  GLADE_HOOKUP_OBJECT (mainwindow, new_button, "new_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, open_button, "open_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, save_button, "save_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, save_as_button, "save_as_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, separatortoolitem1, "separatortoolitem1");
+  GLADE_HOOKUP_OBJECT (mainwindow, print_button, "print_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolbar6, "toolbar6");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem1, "toolitem1");
+  GLADE_HOOKUP_OBJECT (mainwindow, fontpicker, "fontpicker");
+  GLADE_HOOKUP_OBJECT (mainwindow, bold_button, "bold_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, italic_button, "italic_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, underline_button, "underline_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem2, "toolitem2");
+  GLADE_HOOKUP_OBJECT (mainwindow, table5, "table5");
+  GLADE_HOOKUP_OBJECT (mainwindow, Line_Width, "Line_Width");
+  GLADE_HOOKUP_OBJECT (mainwindow, line_width_combo, "line_width_combo");
+  GLADE_HOOKUP_OBJECT (mainwindow, line_width_combo_combo_entry, "line_width_combo_combo_entry");
+  GLADE_HOOKUP_OBJECT (mainwindow, table8, "table8");
+  GLADE_HOOKUP_OBJECT (mainwindow, fixed1, "fixed1");
+  GLADE_HOOKUP_OBJECT (mainwindow, background_color_picker, "background_color_picker");
+  GLADE_HOOKUP_OBJECT (mainwindow, foreground_color_picker, "foreground_color_picker");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame2, "frame2");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry14, "color_palette_entry14");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame3, "frame3");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry0, "color_palette_entry0");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame4, "frame4");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry1, "color_palette_entry1");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame5, "frame5");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry15, "color_palette_entry15");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame6, "frame6");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry2, "color_palette_entry2");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame7, "frame7");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry16, "color_palette_entry16");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame8, "frame8");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry3, "color_palette_entry3");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame9, "frame9");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry17, "color_palette_entry17");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame10, "frame10");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry4, "color_palette_entry4");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame11, "frame11");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry18, "color_palette_entry18");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame12, "frame12");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry5, "color_palette_entry5");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame13, "frame13");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry19, "color_palette_entry19");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame14, "frame14");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry6, "color_palette_entry6");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame15, "frame15");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry20, "color_palette_entry20");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame16, "frame16");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry7, "color_palette_entry7");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame17, "frame17");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry21, "color_palette_entry21");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame18, "frame18");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry8, "color_palette_entry8");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame19, "frame19");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry22, "color_palette_entry22");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame20, "frame20");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry9, "color_palette_entry9");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame21, "frame21");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry23, "color_palette_entry23");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame22, "frame22");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry10, "color_palette_entry10");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame23, "frame23");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry24, "color_palette_entry24");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame24, "frame24");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry11, "color_palette_entry11");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame25, "frame25");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry25, "color_palette_entry25");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame26, "frame26");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry12, "color_palette_entry12");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame27, "frame27");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry26, "color_palette_entry26");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame28, "frame28");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry13, "color_palette_entry13");
+  GLADE_HOOKUP_OBJECT (mainwindow, frame29, "frame29");
+  GLADE_HOOKUP_OBJECT (mainwindow, color_palette_entry27, "color_palette_entry27");
+  GLADE_HOOKUP_OBJECT (mainwindow, tool_palette_toolbar, "tool_palette_toolbar");
+  GLADE_HOOKUP_OBJECT (mainwindow, tool_palette_tool_item, "tool_palette_tool_item");
+  GLADE_HOOKUP_OBJECT (mainwindow, table4, "table4");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolbar4, "toolbar4");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem3, "toolitem3");
+  GLADE_HOOKUP_OBJECT (mainwindow, erase_button, "erase_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem5, "toolitem5");
+  GLADE_HOOKUP_OBJECT (mainwindow, lasso_button, "lasso_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem7, "toolitem7");
+  GLADE_HOOKUP_OBJECT (mainwindow, fill_button, "fill_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem9, "toolitem9");
+  GLADE_HOOKUP_OBJECT (mainwindow, line_button, "line_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem10, "toolitem10");
+  GLADE_HOOKUP_OBJECT (mainwindow, multiline_button, "multiline_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem11, "toolitem11");
+  GLADE_HOOKUP_OBJECT (mainwindow, rectangle_button, "rectangle_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem12, "toolitem12");
+  GLADE_HOOKUP_OBJECT (mainwindow, closed_freehand_button, "closed_freehand_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolbar5, "toolbar5");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem4, "toolitem4");
+  GLADE_HOOKUP_OBJECT (mainwindow, pen_button, "pen_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem6, "toolitem6");
+  GLADE_HOOKUP_OBJECT (mainwindow, polselect_button, "polselect_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem8, "toolitem8");
+  GLADE_HOOKUP_OBJECT (mainwindow, text_button, "text_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem13, "toolitem13");
+  GLADE_HOOKUP_OBJECT (mainwindow, arc_button, "arc_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem14, "toolitem14");
+  GLADE_HOOKUP_OBJECT (mainwindow, curve_button, "curve_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem15, "toolitem15");
+  GLADE_HOOKUP_OBJECT (mainwindow, oval_button, "oval_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, toolitem16, "toolitem16");
+  GLADE_HOOKUP_OBJECT (mainwindow, brush_button, "brush_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, filled_button, "filled_button");
+  GLADE_HOOKUP_OBJECT (mainwindow, scroll_frame, "scroll_frame");
+  GLADE_HOOKUP_OBJECT (mainwindow, appbar1, "appbar1");
+  GLADE_HOOKUP_OBJECT_NO_REF (mainwindow, tooltips, "tooltips");
 
   return mainwindow;
 }
@@ -2554,10 +2049,8 @@ create_new_canvas_window (void)
   GtkWidget *table6;
   GtkWidget *new_canvas_width_text_entry;
   GtkWidget *new_canvas_height_text_entry;
-  GtkWidget *new_canvas_zoom_text_entry;
   GtkWidget *label3;
   GtkWidget *label4;
-  GtkWidget *label5;
   GtkWidget *label7;
   GtkWidget *label6;
   GtkWidget *alignment2;
@@ -2567,35 +2060,24 @@ create_new_canvas_window (void)
 
   new_canvas_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (new_canvas_window, "new_canvas_window");
-  gtk_object_set_data (GTK_OBJECT (new_canvas_window), "new_canvas_window", new_canvas_window);
   gtk_window_set_title (GTK_WINDOW (new_canvas_window), _("New Canvas"));
-  gtk_window_set_position (GTK_WINDOW (new_canvas_window), GTK_WIN_POS_MOUSE);
   gtk_window_set_modal (GTK_WINDOW (new_canvas_window), TRUE);
 
   vbox1 = gtk_vbox_new (FALSE, 5);
   gtk_widget_set_name (vbox1, "vbox1");
-  gtk_widget_ref (vbox1);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "vbox1", vbox1,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox1);
   gtk_container_add (GTK_CONTAINER (new_canvas_window), vbox1);
 
   _ = gtk_label_new (_("Enter the desired image size:"));
   gtk_widget_set_name (_, "_");
-  gtk_widget_ref (_);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "_", _,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (_);
   gtk_box_pack_start (GTK_BOX (vbox1), _, FALSE, TRUE, 0);
   gtk_label_set_justify (GTK_LABEL (_), GTK_JUSTIFY_FILL);
   gtk_misc_set_alignment (GTK_MISC (_), 1.49012e-08, 0.5);
   gtk_misc_set_padding (GTK_MISC (_), 14, 4);
 
-  table6 = gtk_table_new (3, 4, FALSE);
+  table6 = gtk_table_new (2, 4, FALSE);
   gtk_widget_set_name (table6, "table6");
-  gtk_widget_ref (table6);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "table6", table6,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (table6);
   gtk_box_pack_start (GTK_BOX (vbox1), table6, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (table6), 3);
@@ -2603,9 +2085,6 @@ create_new_canvas_window (void)
 
   new_canvas_width_text_entry = gtk_entry_new ();
   gtk_widget_set_name (new_canvas_width_text_entry, "new_canvas_width_text_entry");
-  gtk_widget_ref (new_canvas_width_text_entry);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "new_canvas_width_text_entry", new_canvas_width_text_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (new_canvas_width_text_entry);
   gtk_table_attach (GTK_TABLE (table6), new_canvas_width_text_entry, 2, 3, 0, 1,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -2613,125 +2092,87 @@ create_new_canvas_window (void)
 
   new_canvas_height_text_entry = gtk_entry_new ();
   gtk_widget_set_name (new_canvas_height_text_entry, "new_canvas_height_text_entry");
-  gtk_widget_ref (new_canvas_height_text_entry);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "new_canvas_height_text_entry", new_canvas_height_text_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (new_canvas_height_text_entry);
   gtk_table_attach (GTK_TABLE (table6), new_canvas_height_text_entry, 2, 3, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
 
-  new_canvas_zoom_text_entry = gtk_entry_new ();
-  gtk_widget_set_name (new_canvas_zoom_text_entry, "new_canvas_zoom_text_entry");
-  gtk_widget_ref (new_canvas_zoom_text_entry);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "new_canvas_zoom_text_entry", new_canvas_zoom_text_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (new_canvas_zoom_text_entry);
-  gtk_table_attach (GTK_TABLE (table6), new_canvas_zoom_text_entry, 2, 3, 2, 3,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (new_canvas_zoom_text_entry, FALSE);
-
   label3 = gtk_label_new (_("Width: "));
   gtk_widget_set_name (label3, "label3");
-  gtk_widget_ref (label3);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "label3", label3,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label3);
   gtk_table_attach (GTK_TABLE (table6), label3, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_label_set_justify (GTK_LABEL (label3), GTK_JUSTIFY_LEFT);
   gtk_misc_set_alignment (GTK_MISC (label3), 0, 0.5);
 
   label4 = gtk_label_new (_("Height: "));
   gtk_widget_set_name (label4, "label4");
-  gtk_widget_ref (label4);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "label4", label4,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label4);
   gtk_table_attach (GTK_TABLE (table6), label4, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_label_set_justify (GTK_LABEL (label4), GTK_JUSTIFY_LEFT);
   gtk_misc_set_alignment (GTK_MISC (label4), 0, 0.5);
-
-  label5 = gtk_label_new (_("Zoom:"));
-  gtk_widget_set_name (label5, "label5");
-  gtk_widget_ref (label5);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "label5", label5,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label5);
-  gtk_table_attach (GTK_TABLE (table6), label5, 1, 2, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (label5, FALSE);
-  gtk_label_set_justify (GTK_LABEL (label5), GTK_JUSTIFY_LEFT);
-  gtk_misc_set_alignment (GTK_MISC (label5), 0, 0.5);
 
   label7 = gtk_label_new ("");
   gtk_widget_set_name (label7, "label7");
-  gtk_widget_ref (label7);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "label7", label7,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label7);
   gtk_table_attach (GTK_TABLE (table6), label7, 3, 4, 0, 1,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_usize (label7, 10, -2);
+  gtk_label_set_justify (GTK_LABEL (label7), GTK_JUSTIFY_CENTER);
 
   label6 = gtk_label_new ("");
   gtk_widget_set_name (label6, "label6");
-  gtk_widget_ref (label6);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "label6", label6,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label6);
   gtk_table_attach (GTK_TABLE (table6), label6, 0, 1, 0, 1,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_usize (label6, 10, -2);
   gtk_label_set_justify (GTK_LABEL (label6), GTK_JUSTIFY_FILL);
   gtk_misc_set_alignment (GTK_MISC (label6), 0, 0.5);
 
   alignment2 = gtk_alignment_new (0.5, 0.5, 0.8, 1);
   gtk_widget_set_name (alignment2, "alignment2");
-  gtk_widget_ref (alignment2);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "alignment2", alignment2,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (alignment2);
   gtk_box_pack_start (GTK_BOX (vbox1), alignment2, FALSE, FALSE, 0);
 
   hbox2 = gtk_hbox_new (FALSE, 12);
   gtk_widget_set_name (hbox2, "hbox2");
-  gtk_widget_ref (hbox2);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "hbox2", hbox2,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox2);
   gtk_container_add (GTK_CONTAINER (alignment2), hbox2);
   gtk_container_set_border_width (GTK_CONTAINER (hbox2), 2);
 
-  new_canvas_ok_button = gnome_stock_button (GNOME_STOCK_BUTTON_OK);
+  new_canvas_ok_button = gtk_button_new_from_stock ("gtk-ok");
   gtk_widget_set_name (new_canvas_ok_button, "new_canvas_ok_button");
-  gtk_widget_ref (new_canvas_ok_button);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "new_canvas_ok_button", new_canvas_ok_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (new_canvas_ok_button);
   gtk_box_pack_start (GTK_BOX (hbox2), new_canvas_ok_button, FALSE, FALSE, 0);
 
-  new_canvas_cancel_button = gnome_stock_button (GNOME_STOCK_BUTTON_CANCEL);
+  new_canvas_cancel_button = gtk_button_new_from_stock ("gtk-cancel");
   gtk_widget_set_name (new_canvas_cancel_button, "new_canvas_cancel_button");
-  gtk_widget_ref (new_canvas_cancel_button);
-  gtk_object_set_data_full (GTK_OBJECT (new_canvas_window), "new_canvas_cancel_button", new_canvas_cancel_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (new_canvas_cancel_button);
   gtk_box_pack_start (GTK_BOX (hbox2), new_canvas_cancel_button, FALSE, FALSE, 0);
 
-  gtk_signal_connect (GTK_OBJECT (new_canvas_ok_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_new_canvas_ok_button_clicked),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (new_canvas_cancel_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_new_canvas_cancel_button_clicked),
-                      NULL);
+  g_signal_connect ((gpointer) new_canvas_ok_button, "clicked",
+                    G_CALLBACK (on_new_canvas_ok_button_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) new_canvas_cancel_button, "clicked",
+                    G_CALLBACK (on_new_canvas_cancel_button_clicked),
+                    NULL);
+
+  /* Store pointers to all widgets, for use by lookup_widget(). */
+  GLADE_HOOKUP_OBJECT_NO_REF (new_canvas_window, new_canvas_window, "new_canvas_window");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, vbox1, "vbox1");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, _, "_");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, table6, "table6");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, new_canvas_width_text_entry, "new_canvas_width_text_entry");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, new_canvas_height_text_entry, "new_canvas_height_text_entry");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, label3, "label3");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, label4, "label4");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, label7, "label7");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, label6, "label6");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, alignment2, "alignment2");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, hbox2, "hbox2");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, new_canvas_ok_button, "new_canvas_ok_button");
+  GLADE_HOOKUP_OBJECT (new_canvas_window, new_canvas_cancel_button, "new_canvas_cancel_button");
 
   return new_canvas_window;
 }
@@ -2752,34 +2193,25 @@ create_about_dialog (void)
 
   about_dialog = gtk_dialog_new ();
   gtk_widget_set_name (about_dialog, "about_dialog");
-  gtk_object_set_data (GTK_OBJECT (about_dialog), "about_dialog", about_dialog);
   GTK_WIDGET_SET_FLAGS (about_dialog, GTK_CAN_FOCUS);
   gtk_widget_set_events (about_dialog, GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_extension_events (about_dialog, GDK_EXTENSION_EVENTS_ALL);
   gtk_window_set_title (GTK_WINDOW (about_dialog), _("about"));
-  gtk_window_set_position (GTK_WINDOW (about_dialog), GTK_WIN_POS_CENTER);
   gtk_window_set_modal (GTK_WINDOW (about_dialog), TRUE);
-  gtk_window_set_policy (GTK_WINDOW (about_dialog), TRUE, TRUE, FALSE);
+  gtk_window_set_type_hint (GTK_WINDOW (about_dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 
   dialog_vbox1 = GTK_DIALOG (about_dialog)->vbox;
   gtk_widget_set_name (dialog_vbox1, "dialog_vbox1");
-  gtk_object_set_data (GTK_OBJECT (about_dialog), "dialog_vbox1", dialog_vbox1);
   gtk_widget_show (dialog_vbox1);
 
   table7 = gtk_table_new (5, 1, FALSE);
   gtk_widget_set_name (table7, "table7");
-  gtk_widget_ref (table7);
-  gtk_object_set_data_full (GTK_OBJECT (about_dialog), "table7", table7,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (table7);
   gtk_box_pack_start (GTK_BOX (dialog_vbox1), table7, TRUE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table7), 5);
 
-  about_dialog_pixmap = create_pixmap (about_dialog, NULL, FALSE);
+  about_dialog_pixmap = create_pixmap (about_dialog, NULL);
   gtk_widget_set_name (about_dialog_pixmap, "about_dialog_pixmap");
-  gtk_widget_ref (about_dialog_pixmap);
-  gtk_object_set_data_full (GTK_OBJECT (about_dialog), "about_dialog_pixmap", about_dialog_pixmap,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (about_dialog_pixmap);
   gtk_table_attach (GTK_TABLE (table7), about_dialog_pixmap, 0, 1, 0, 1,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -2787,76 +2219,69 @@ create_about_dialog (void)
 
   about_dialog_version_label = gtk_label_new ("");
   gtk_widget_set_name (about_dialog_version_label, "about_dialog_version_label");
-  gtk_widget_ref (about_dialog_version_label);
-  gtk_object_set_data_full (GTK_OBJECT (about_dialog), "about_dialog_version_label", about_dialog_version_label,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (about_dialog_version_label);
   gtk_table_attach (GTK_TABLE (table7), about_dialog_version_label, 0, 1, 1, 2,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (about_dialog_version_label), GTK_JUSTIFY_CENTER);
 
   label10 = gtk_label_new (_("This program is free software; you may redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2, or (at your opinion) any later version.\n"));
   gtk_widget_set_name (label10, "label10");
-  gtk_widget_ref (label10);
-  gtk_object_set_data_full (GTK_OBJECT (about_dialog), "label10", label10,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label10);
   gtk_table_attach (GTK_TABLE (table7), label10, 0, 1, 4, 5,
                     (GtkAttachOptions) (0),
                     (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label10), GTK_JUSTIFY_CENTER);
   gtk_label_set_line_wrap (GTK_LABEL (label10), TRUE);
 
   label11 = gtk_label_new (_("based on xpaint, by David Koblas and Torsten Martinsen \nCopyright 1992--1996"));
   gtk_widget_set_name (label11, "label11");
-  gtk_widget_ref (label11);
-  gtk_object_set_data_full (GTK_OBJECT (about_dialog), "label11", label11,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label11);
   gtk_table_attach (GTK_TABLE (table7), label11, 0, 1, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
+  gtk_label_set_justify (GTK_LABEL (label11), GTK_JUSTIFY_CENTER);
 
   label9 = gtk_label_new (_("Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\nCopyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "));
   gtk_widget_set_name (label9, "label9");
-  gtk_widget_ref (label9);
-  gtk_object_set_data_full (GTK_OBJECT (about_dialog), "label9", label9,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (label9);
   gtk_table_attach (GTK_TABLE (table7), label9, 0, 1, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_usize (label9, 323, -2);
+  gtk_label_set_justify (GTK_LABEL (label9), GTK_JUSTIFY_CENTER);
 
   dialog_action_area1 = GTK_DIALOG (about_dialog)->action_area;
   gtk_widget_set_name (dialog_action_area1, "dialog_action_area1");
-  gtk_object_set_data (GTK_OBJECT (about_dialog), "dialog_action_area1", dialog_action_area1);
   gtk_widget_show (dialog_action_area1);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog_action_area1), 10);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area1), GTK_BUTTONBOX_END);
 
-  about_dialog_ok_button = gnome_stock_button (GNOME_STOCK_BUTTON_OK);
+  about_dialog_ok_button = gtk_button_new_from_stock ("gtk-ok");
   gtk_widget_set_name (about_dialog_ok_button, "about_dialog_ok_button");
-  gtk_widget_ref (about_dialog_ok_button);
-  gtk_object_set_data_full (GTK_OBJECT (about_dialog), "about_dialog_ok_button", about_dialog_ok_button,
-                            (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (about_dialog_ok_button);
-  gtk_box_pack_start (GTK_BOX (dialog_action_area1), about_dialog_ok_button, FALSE, FALSE, 0);
+  gtk_dialog_add_action_widget (GTK_DIALOG (about_dialog), about_dialog_ok_button, 0);
   GTK_WIDGET_SET_FLAGS (about_dialog_ok_button, GTK_CAN_DEFAULT);
 
-  gtk_signal_connect (GTK_OBJECT (about_dialog), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_about_dialog_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (table7), "button_release_event",
-                      GTK_SIGNAL_FUNC (on_about_dialog_button_release_event),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (about_dialog_pixmap), "realize",
-                      GTK_SIGNAL_FUNC (on_about_dialog_pixmap_realize),
-                      about_pict_xpm);
-  gtk_signal_connect (GTK_OBJECT (about_dialog_version_label), "realize",
-                      GTK_SIGNAL_FUNC (on_about_dialog_version_label_realize),
-                      NULL);
-  gtk_signal_connect (GTK_OBJECT (about_dialog_ok_button), "clicked",
-                      GTK_SIGNAL_FUNC (on_about_dialog_ok_button_clicked),
-                      NULL);
+  g_signal_connect ((gpointer) about_dialog_pixmap, "realize",
+                    G_CALLBACK (on_about_dialog_pixmap_realize),
+                    NULL);
+  g_signal_connect ((gpointer) about_dialog_version_label, "realize",
+                    G_CALLBACK (on_about_dialog_version_label_realize),
+                    NULL);
+  g_signal_connect ((gpointer) about_dialog_ok_button, "clicked",
+                    G_CALLBACK (on_about_dialog_ok_button_clicked),
+                    NULL);
+
+  /* Store pointers to all widgets, for use by lookup_widget(). */
+  GLADE_HOOKUP_OBJECT_NO_REF (about_dialog, about_dialog, "about_dialog");
+  GLADE_HOOKUP_OBJECT_NO_REF (about_dialog, dialog_vbox1, "dialog_vbox1");
+  GLADE_HOOKUP_OBJECT (about_dialog, table7, "table7");
+  GLADE_HOOKUP_OBJECT (about_dialog, about_dialog_pixmap, "about_dialog_pixmap");
+  GLADE_HOOKUP_OBJECT (about_dialog, about_dialog_version_label, "about_dialog_version_label");
+  GLADE_HOOKUP_OBJECT (about_dialog, label10, "label10");
+  GLADE_HOOKUP_OBJECT (about_dialog, label11, "label11");
+  GLADE_HOOKUP_OBJECT (about_dialog, label9, "label9");
+  GLADE_HOOKUP_OBJECT_NO_REF (about_dialog, dialog_action_area1, "dialog_action_area1");
+  GLADE_HOOKUP_OBJECT (about_dialog, about_dialog_ok_button, "about_dialog_ok_button");
 
   gtk_widget_grab_default (about_dialog_ok_button);
   return about_dialog;

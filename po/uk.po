@@ -1,0 +1,439 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+#. Display the filename in the title bar.
+#: src/drawing.c:304
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-01-31 21:49-0500\n"
+"PO-Revision-Date: 2003-02-24 15:46--500\n"
+"Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
+"Language-Team: Ukrainian <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/ui.c:31
+#, fuzzy
+msgid "_New"
+msgstr "Новий"
+
+#: src/ui.c:37 src/ui.c:38
+msgid "Print Preview"
+msgstr "Зразок друку"
+
+#: src/ui.c:64
+msgid "Get Snapshot of Desktop"
+msgstr "Взяти знімок екрана"
+
+#: src/ui.c:71
+msgid "Set Desktop Background"
+msgstr "Зробити тлом стільниці"
+
+#: src/ui.c:83
+msgid "Left to Right"
+msgstr "Зліва направо"
+
+#: src/ui.c:90
+msgid "Top to Bottom"
+msgstr "Зверху вниз"
+
+#: src/ui.c:102
+msgid "Clockwise"
+msgstr ""
+
+#: src/ui.c:109
+msgid "Counter Clockwise"
+msgstr ""
+
+#: src/ui.c:121
+#, fuzzy
+msgid "_Invert"
+msgstr "_Відновити"
+
+#: src/ui.c:128
+msgid "_Sharpen"
+msgstr "_Чіткіше"
+
+#: src/ui.c:136
+msgid "S_mooth"
+msgstr "З_гладити"
+
+#: src/ui.c:143
+msgid "_Directional Smooth"
+msgstr "Згладити _напрямлено"
+
+#: src/ui.c:150
+msgid "Despeckle"
+msgstr "Знешумити"
+
+#: src/ui.c:158
+msgid "_Edge Detect"
+msgstr "Виділені _краї"
+
+#: src/ui.c:165
+msgid "Emboss"
+msgstr "Рельєф"
+
+#: src/ui.c:172
+msgid "_Oil Paint"
+msgstr "_Олійні фарби"
+
+#: src/ui.c:179
+msgid "_Add Noise"
+msgstr "_Додати шум"
+
+#: src/ui.c:186
+msgid "Spread"
+msgstr "Розсіювання"
+
+#: src/ui.c:193
+msgid "_Pixelize"
+msgstr "_Пікселізація"
+
+#: src/ui.c:200
+msgid "_Blend"
+msgstr "З_лиття"
+
+#: src/ui.c:207
+msgid "Solarize"
+msgstr "Освітлення"
+
+#: src/ui.c:215
+msgid "_Normalize Contrast"
+msgstr "_Нормалізувати контрастність"
+
+#: src/ui.c:222
+msgid "_Quantize Color"
+msgstr "_Квантувати колір"
+
+#: src/ui.c:229
+msgid "Convert to _Greyscale"
+msgstr "Перетворити у _градації сірого"
+
+#: src/ui.c:241
+msgid "Desktop"
+msgstr "Стільниця"
+
+#: src/ui.c:248
+msgid "Flip"
+msgstr "Віддзеркалити"
+
+#: src/ui.c:255
+msgid "Rotate"
+msgstr "Повернути"
+
+#: src/ui.c:262
+msgid "_Effects"
+msgstr "_Ефекти"
+
+#: src/ui.c:287
+#, fuzzy
+msgid "_File"
+msgstr "_Новий файл"
+
+#: src/ui.c:294
+msgid "_Edit"
+msgstr ""
+
+#: src/ui.c:301
+msgid "_Image"
+msgstr "_Зображення"
+
+#: src/ui.c:309
+msgid "_Help"
+msgstr ""
+
+#: src/ui.c:444
+msgid "gpaint"
+msgstr "Малювання"
+
+#: src/ui.c:572
+msgid "New"
+msgstr "Новий"
+
+#: src/ui.c:576
+msgid "New File"
+msgstr "Новий файл"
+
+#: src/ui.c:580
+msgid "Open"
+msgstr "Відкрити"
+
+#: src/ui.c:584
+msgid "Open File"
+msgstr "Відкрити файл"
+
+#: src/ui.c:588
+msgid "Save"
+msgstr "Зберегти"
+
+#: src/ui.c:592
+msgid "Save File"
+msgstr "Зберегти файл"
+
+#: src/ui.c:596
+msgid "Save As"
+msgstr "Зберегти як"
+
+#: src/ui.c:600
+msgid "Save File As"
+msgstr "Зберегти файл з іншою назвою"
+
+#: src/ui.c:609 src/ui.c:613
+msgid "Print"
+msgstr "Надрукувати"
+
+#: src/ui.c:639
+msgid "Bold"
+msgstr "Жирний"
+
+#: src/ui.c:644
+msgid "bold text"
+msgstr "жирний текст"
+
+#: src/ui.c:648
+msgid "Italic"
+msgstr "Курсив"
+
+#: src/ui.c:653
+msgid "italic text"
+msgstr "курсивний текст"
+
+#: src/ui.c:657
+msgid "Underline"
+msgstr "Підкреслений"
+
+#: src/ui.c:662
+msgid "underline text"
+msgstr "підкреслений текст"
+
+#: src/ui.c:674 src/ui.c:705
+msgid "line width"
+msgstr "товщина лінії"
+
+#: src/ui.c:692
+msgid "1"
+msgstr "1"
+
+#: src/ui.c:693
+msgid "2"
+msgstr "2"
+
+#: src/ui.c:694
+msgid "3"
+msgstr "3"
+
+#: src/ui.c:695
+msgid "4"
+msgstr "4"
+
+#: src/ui.c:696
+msgid "6"
+msgstr "6"
+
+#: src/ui.c:697
+msgid "8"
+msgstr "8"
+
+#: src/ui.c:731
+msgid "background color"
+msgstr "колір тла"
+
+#: src/ui.c:732
+msgid "Background color"
+msgstr "Колір тла"
+
+#: src/ui.c:739
+msgid "foreground color"
+msgstr "колір переднього плану"
+
+#: src/ui.c:740
+msgid "Foreground color"
+msgstr "Колір переднього плану"
+
+#: src/ui.c:1263
+msgid "erase"
+msgstr "витерти"
+
+#: src/ui.c:1274
+msgid "lasso"
+msgstr "ласо"
+
+#: src/ui.c:1285 src/ui.c:1432
+msgid "fill"
+msgstr "заповнити"
+
+#: src/ui.c:1296
+msgid "line"
+msgstr "лінія"
+
+#: src/ui.c:1307
+#, fuzzy
+msgid "multiline"
+msgstr "лінія"
+
+#: src/ui.c:1318
+msgid "rectangle"
+msgstr "прямокутник"
+
+#: src/ui.c:1329
+#, fuzzy
+msgid "freehand"
+msgstr "закрита ручна крива"
+
+#: src/ui.c:1351
+msgid "pen"
+msgstr "олівець"
+
+#: src/ui.c:1362
+#, fuzzy
+msgid "polyselect"
+msgstr "виділити багатокутник"
+
+#: src/ui.c:1373
+msgid "text"
+msgstr "текст"
+
+#: src/ui.c:1384
+msgid "arc"
+msgstr "дуга"
+
+#: src/ui.c:1395
+msgid "curve"
+msgstr "крива"
+
+#: src/ui.c:1406
+msgid "oval"
+msgstr "овал"
+
+#: src/ui.c:1417
+msgid "brush"
+msgstr "пензель"
+
+#: src/ui.c:2063
+msgid "New Canvas"
+msgstr "Нове полотно"
+
+#: src/ui.c:2071
+msgid "Enter the desired image size:"
+msgstr "Введіть розміри зображення:"
+
+#: src/ui.c:2100
+msgid "Width: "
+msgstr "Ширина:"
+
+#: src/ui.c:2108
+msgid "Height: "
+msgstr "Висота:"
+
+#: src/ui.c:2199
+msgid "about"
+msgstr "про"
+
+#: src/ui.c:2228
+msgid ""
+"This program is free software; you may redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 2, or (at your opinion) any later "
+"version.\n"
+msgstr ""
+"Ця програма є вільним програмним забезпеченням. Ви можете розповсюджувати і "
+"модифікувати її згідно з умовами ліцензії GNU General Public License "
+"опублікованої Фундаціїєю вільного програмного забезпечення, або версії 2, "
+"або (за вашим бажанням) будь якої пізнішої версії.\n"
+
+#: src/ui.c:2237
+msgid ""
+"based on xpaint, by David Koblas and Torsten Martinsen \n"
+"Copyright 1992--1996"
+msgstr ""
+"засновано на xpaint, авторами якого є David Koblas і Torsten Martinsen\n"
+"Авторське право © 1992 — 1996"
+
+#: src/ui.c:2245
+msgid ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+msgstr ""
+"Авторське право © 2000 — 2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Авторське право © 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+
+#: src/support.c:60 src/support.c:85
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr "Не вдалося знайти файл зображення: %s"
+
+#. default filename
+#: src/drawing.c:44
+msgid "untitled.png"
+msgstr ""
+
+#: src/drawing.c:219
+#, c-format
+msgid ""
+"The file %s already exists.\n"
+"\n"
+"Do you want to overwrite it?"
+msgstr ""
+
+#: src/drawing.c:259
+#, c-format
+msgid ""
+"Failed to save file %s.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: src/drawing.c:307
+msgid "Untitled"
+msgstr ""
+
+#: src/drawing.c:323
+msgid " (modified)"
+msgstr ""
+
+#: src/drawing.c:325
+#, fuzzy
+msgid " - gpaint"
+msgstr "Малювання"
+
+#: src/drawing.c:425
+#, c-format
+msgid ""
+"Do you want to save the changes you made to \"%s\"?\n"
+"Your changes will be lost if you don't save them."
+msgstr ""
+
+#~ msgid "+90"
+#~ msgstr "+90"
+
+#~ msgid "+45"
+#~ msgstr "+45"
+
+#~ msgid "-45"
+#~ msgstr "-45"
+
+#~ msgid "-90"
+#~ msgstr "-90"
+
+#~ msgid "+180"
+#~ msgstr "+180"
+
+#~ msgid "About G_NOME"
+#~ msgstr "Про G_NOME"
+
+#~ msgid "About _GNU"
+#~ msgstr "Про _GNU"
+
+#~ msgid "polyline"
+#~ msgstr "багатокутник"
+
+#~ msgid "Zoom:"
+#~ msgstr "Масштаб:"
+
+#~ msgid "Couldn't create pixmap from file: %s"
+#~ msgstr "Не вдалося створити зображення з файла: %s"
