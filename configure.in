@@ -17,7 +17,7 @@ GNOME_COMPILE_WARNINGS
 GNOME_X_CHECKS
 
 dnl Add the languages which your application supports here.
-ALL_LINGUAS=""
+ALL_LINGUAS="pt_BR"
 AM_GNU_GETTEXT
 
 AM_PATH_GDK_PIXBUF(0.9.0, ,AC_MSG_ERROR([Need gdk-pixbuf-0.9.0 or later!]))

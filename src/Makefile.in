@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p4 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -117,22 +117,15 @@ ZVT_LIBS = @ZVT_LIBS@
 cflags_set = @cflags_set@
 cxxflags_set = @cxxflags_set@
 
-INCLUDES = \
-	-I$(top_srcdir)/intl \
-	$(GNOME_INCLUDEDIR)
+INCLUDES =  	-I$(top_srcdir)/intl 	$(GNOME_INCLUDEDIR)
 
 
 bin_PROGRAMS = gpaint
 
-gpaint_SOURCES = main.c \
-	support.c support.h version.h\
-	ui.c ui.h \
-	callbacks.c callbacks.h pixmaps.c pixmaps.h image_buf.c image_buf.h rgb.c rgb.h util.c util.h \
-	gtkscrollframe.c gtkscrollframe.h fileio.c fileio.h image_processing.c image_processing.h\
-	clipboard.c clipboard.h print.c print.h
+gpaint_SOURCES = main.c 	support.c support.h version.h 	ui.c ui.h 	callbacks.c callbacks.h pixmaps.c pixmaps.h image_buf.c image_buf.h rgb.c rgb.h util.c util.h 	gtkscrollframe.c gtkscrollframe.h fileio.c fileio.h image_processing.c image_processing.h 	clipboard.c clipboard.h print.c print.h
 
 
-gpaint_CFLAGS =  $(EXTRA_GNOME_CFLAGS)
+CFLAGS =  $(EXTRA_GNOME_CFLAGS)
 gpaint_LDADD = $(GNOME_LIBDIR) $(GNOMEUI_LIBS) $(INTLLIBS) $(EXTRA_GNOME_LIBS)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
@@ -149,7 +142,6 @@ image_buf.o rgb.o util.o gtkscrollframe.o fileio.o image_processing.o \
 clipboard.o print.o
 gpaint_DEPENDENCIES = 
 gpaint_LDFLAGS = 
-CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
@@ -158,8 +150,12 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
+DEP_FILES =  .deps/callbacks.P .deps/clipboard.P .deps/fileio.P \
+.deps/gtkscrollframe.P .deps/image_buf.P .deps/image_processing.P \
+.deps/main.P .deps/pixmaps.P .deps/print.P .deps/rgb.P .deps/support.P \
+.deps/ui.P .deps/util.P
 SOURCES = $(gpaint_SOURCES)
 OBJECTS = $(gpaint_OBJECTS)
 
@@ -167,9 +163,9 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps src/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -198,9 +194,6 @@ uninstall-binPROGRAMS:
 	list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	done
-
-.c.o:
-	$(COMPILE) -c $<
 
 .s.o:
 	$(COMPILE) -c $<
@@ -256,6 +249,11 @@ distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 subdir = src
 
 distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
@@ -266,51 +264,38 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-callbacks.o: callbacks.c ../config.h callbacks.h pixmaps.h ui.h \
-	support.h image_buf.h rgb.h util.h fileio.h version.h \
-	image_processing.h clipboard.h print.h
-clipboard.o: clipboard.c util.h image_buf.h fileio.h clipboard.h
-fileio.o: fileio.c fileio.h image_buf.h util.h
-gtkscrollframe.o: gtkscrollframe.c ../config.h gtkscrollframe.h
-image_buf.o: image_buf.c image_buf.h support.h ui.h util.h fileio.h \
-	version.h
-image_processing.o: image_processing.c util.h image_buf.h fileio.h \
-	image_processing.h
-main.o: main.c ../config.h ui.h support.h util.h image_buf.h fileio.h
-pixmaps.o: pixmaps.c pixmaps.h ../pixmaps/about_pict.xpm \
-	../pixmaps/arcOp.xpm ../pixmaps/arrow.xpm \
-	../pixmaps/babygnu_l.xpm ../pixmaps/boxOp.xpm \
-	../pixmaps/brushOp.xpm ../pixmaps/clineOp.xpm \
-	../pixmaps/curveOp.xpm ../pixmaps/dotPenOp.xpm \
-	../pixmaps/dynPenOp.xpm ../pixmaps/eraseOp.xpm \
-	../pixmaps/fboxOp.xpm ../pixmaps/ffillOp.xpm \
-	../pixmaps/ffreehandOp.xpm ../pixmaps/filled.xpm \
-	../pixmaps/fillOp.xpm ../pixmaps/fovalOp.xpm \
-	../pixmaps/fpolyOp.xpm ../pixmaps/freehandOp.xpm \
-	../pixmaps/lassoOp.xpm ../pixmaps/lineOp.xpm \
-	../pixmaps/ovalOp.xpm ../pixmaps/paintA.xpm \
-	../pixmaps/paintB.xpm ../pixmaps/paintC.xpm \
-	../pixmaps/paintD.xpm ../pixmaps/paintE.xpm \
-	../pixmaps/paintF.xpm ../pixmaps/paintG.xpm \
-	../pixmaps/paintH.xpm ../pixmaps/paintI.xpm \
-	../pixmaps/paintJ.xpm ../pixmaps/paintK.xpm \
-	../pixmaps/paintL.xpm ../pixmaps/paintM.xpm \
-	../pixmaps/paintN.xpm ../pixmaps/paintO.xpm \
-	../pixmaps/paintP.xpm ../pixmaps/paintQ.xpm \
-	../pixmaps/paintR.xpm ../pixmaps/paintS.xpm \
-	../pixmaps/paintT.xpm ../pixmaps/pencilOp.xpm \
-	../pixmaps/polyOp.xpm ../pixmaps/rayOp.xpm \
-	../pixmaps/selectOp.xpm ../pixmaps/selpolyOp.xpm \
-	../pixmaps/smearOp.xpm ../pixmaps/sprayOp.xpm \
-	../pixmaps/textOp.xpm ../pixmaps/tfillOp.xpm \
-	../pixmaps/unfilled.xpm
-print.o: print.c print.h image_buf.h
-rgb.o: rgb.c rgb.h image_buf.h
-support.o: support.c ../config.h support.h
-ui.o: ui.c ../config.h callbacks.h pixmaps.h ui.h support.h
-util.o: util.c util.h image_buf.h fileio.h support.h ui.h callbacks.h \
-	pixmaps.h gtkscrollframe.h clipboard.h image_processing.h
 
+DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
+
+-include $(DEP_FILES)
+
+mostlyclean-depend:
+
+clean-depend:
+
+distclean-depend:
+	-rm -rf .deps
+
+maintainer-clean-depend:
+
+%.o: %.c
+	@echo '$(COMPILE) -c $<'; \
+	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-cp .deps/$(*F).pp .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm .deps/$(*F).pp
+
+%.lo: %.c
+	@echo '$(LTCOMPILE) -c $<'; \
+	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
+	  < .deps/$(*F).pp > .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm -f .deps/$(*F).pp
 info-am:
 info: info-am
 dvi-am:
@@ -348,23 +333,24 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
-		mostlyclean-tags mostlyclean-generic
+		mostlyclean-tags mostlyclean-depend mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-binPROGRAMS clean-compile clean-tags clean-generic \
-		mostlyclean-am
+clean-am:  clean-binPROGRAMS clean-compile clean-tags clean-depend \
+		clean-generic mostlyclean-am
 
 clean: clean-am
 
 distclean-am:  distclean-binPROGRAMS distclean-compile distclean-tags \
-		distclean-generic clean-am
+		distclean-depend distclean-generic clean-am
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-binPROGRAMS \
 		maintainer-clean-compile maintainer-clean-tags \
-		maintainer-clean-generic distclean-am
+		maintainer-clean-depend maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -374,12 +360,13 @@ maintainer-clean: maintainer-clean-am
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir info-am info dvi-am dvi check \
-check-am installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+clean-tags maintainer-clean-tags distdir mostlyclean-depend \
+distclean-depend clean-depend maintainer-clean-depend info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

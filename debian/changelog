@@ -1,0 +1,42 @@
+gpaint (0.2.2-1) unstable; urgency=low
+
+  * New upstream release.
+  * Change dependecies so gnom2 users can install it.
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Sun, 17 Mar 2002 12:27:19 -0300
+
+gpaint (0.2.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * New maintainer. (closes: #136670, #138499)
+  * Added pt_BR locale.
+  * Modified Makefiles to avoid installing pixmaps/*.pl files into 
+    /usr/share/pixmaps.
+  * Modified Makefiles to accept DESTDIR as an indication of where is 
+    the base of the instalation tree.
+
+ -- Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>  Sat, 16 Mar 2002 15:20:28 -0300
+
+gpaint (0.2-3) unstable; urgency=low
+
+  * Removed over-colourful menu icon.			(closes: #100359)
+
+ -- Robert McQueen <robot101@debian.org>  Tue, 12 Jun 2001 19:52:37 +0100
+
+gpaint (0.2-2) unstable; urgency=low
+
+  * Added libxml-dev build dep.
+  * Added manpage.
+  * Thanks to Stephen Stafford <stephen@clothcat.demon.co.uk> for
+    these two fixes.
+
+ -- Robert McQueen <robot101@debian.org>  Fri,  8 Jun 2001 19:09:40 +0100
+
+gpaint (0.2-1) unstable; urgency=low
+
+  * Initial release.					(closes: #98377)
+  * Made gpaint.1 undocumented until a manpage is written.
+
+ -- Robert McQueen <robot101@debian.org>  Thu,  7 Jun 2001 01:20:01 +0100
+
+

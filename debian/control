@@ -1,0 +1,24 @@
+Source: gpaint
+Section: graphics
+Priority: optional
+Maintainer: Goedson Teixeira Paixao <gopaixao@dcc.ufmg.br>
+Build-Depends: debhelper, libgnome-dev, zlib1g-dev, libxml-dev, libgnomeprint-dev
+Standards-Version: 3.5.2
+
+Package: gpaint
+Architecture: any
+Depends: ${shlibs:Depends}, gnome-panel-data | gnome-desktop-data
+Description: GNU Paint - a small, easy to use paint program for GNOME
+ This is gpaint (GNU Paint), a small-scale painting program for GNOME,
+ the GNU Desktop Environment. gpaint does not attempt to compete with
+ GIMP, it is just a simple drawing package based on xpaint, along the
+ lines of 'Paintbrush' from a popular non-free operating system.
+ .
+ Currently gpaint has the following features:
+   * Drawing tools such as ovals, freehand, polygon and text, with
+     fill or shadow for polygons and closed freehand shapes.
+   * Cut and paste by selecting irregular regions or polygons.
+   * Preliminary print support using gnome-print.
+   * Modern, ease-to-use user interface with tool and color palettes.
+   * Multiple-image editing in a single instance of the program.
+   * All the image processing features present in xpaint.

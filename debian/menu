@@ -1,0 +1,3 @@
+?package(gpaint):needs=X11 section=Apps/Graphics \
+  title="GNU Paint" command="/usr/bin/gpaint"
+

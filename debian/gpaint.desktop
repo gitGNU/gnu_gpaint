@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=GNU Paint
+Comment=A small, easy to use paint program
+Exec=/usr/bin/gpaint 
+Icon=/usr/share/pixmaps/gnome-graphics.png
+Terminal=false
+MultipleArgs=false
+Type=Application
