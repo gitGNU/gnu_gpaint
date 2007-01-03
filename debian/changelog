@@ -1,3 +1,10 @@
+gpaint (0.2.4+0.3.0pre5-3) unstable; urgency=low
+
+  * Added German translation.
+  * Bumped Standards-Version to 3.7.2, no changes needed.
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Wed,  3 Jan 2007 15:48:59 -0200
+
 gpaint (0.2.4+0.3.0pre5-2) unstable; urgency=low
 
   * Use the new menu scheme. Thanks to Adam

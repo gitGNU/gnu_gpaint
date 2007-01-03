@@ -3,7 +3,7 @@ Section: gnome
 Priority: optional
 Maintainer: Goedson Teixeira Paixao <goedson@debian.org>
 Build-Depends: debhelper (>= 4.1.46), libgnomeui-dev, zlib1g-dev, libxml2-dev, libgnomeprint2.2-dev, libgnomeprintui2.2-dev, autotools-dev, dpatch, cdbs
-Standards-Version: 3.6.1
+Standards-Version: 3.7.2
 
 Package: gpaint
 Architecture: any
