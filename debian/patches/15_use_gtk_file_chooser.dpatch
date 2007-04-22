@@ -1,0 +1,239 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 15_use_gtk_file_chooser.dpatch by Goedson Teixeira Paixao <goedson@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Use GtkFileChooser for the open and save dialogs
+
+@DPATCH@
+diff -urNad gpaint-0.2.4+0.3.0pre5~/src/file.c gpaint-0.2.4+0.3.0pre5/src/file.c
+--- gpaint-0.2.4+0.3.0pre5~/src/file.c	2007-04-22 15:35:33.000000000 -0300
++++ gpaint-0.2.4+0.3.0pre5/src/file.c	2007-04-22 15:38:41.000000000 -0300
+@@ -43,88 +43,6 @@
+     gpaint_canvas *canvas;
+ } gpaint_new_drawing_dialog;
+ 
+-/*
+- * A filename for the image was selected. Save the name and the file.
+- */
+-static void
+-on_save_filename_selected(GtkFileSelection *dialog)
+-{
+-    gpaint_canvas *canvas;
+-    const gchar *filename;
+-    
+-    debug_fn();
+-    filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION(dialog));
+-    debug1("filename: %s", filename);  
+-    canvas = (gpaint_canvas*)gtk_object_get_user_data(GTK_OBJECT(dialog));
+-    
+-    /* dismiss the dialog. flush gtk events to avoid double select */
+-    gtk_widget_destroy(GTK_WIDGET(dialog));
+-    while (gtk_events_pending())
+-    {
+-        gtk_main_iteration();
+-    }
+-
+-    /* Do not clobber existing file without consent. */
+-    if (g_file_test(filename, G_FILE_TEST_EXISTS))
+-    {
+-        GtkWidget *dialog;
+-        gint result;
+-        dialog = gtk_message_dialog_new(
+-                    GTK_WINDOW(canvas->top_level), 
+-                    GTK_DIALOG_MODAL, 
+-                    GTK_MESSAGE_QUESTION, 
+-                    GTK_BUTTONS_YES_NO, 
+-                    _("The file %s already exists.\n\nDo you want to overwrite it?"),
+-                    filename);
+-        result = gtk_dialog_run(GTK_DIALOG(dialog));
+-        gtk_widget_destroy(GTK_WIDGET(dialog));
+-        if (result==GTK_RESPONSE_NO)
+-        {
+-            return;
+-        }
+-    }
+-   
+-    drawing_save_as(canvas->drawing, filename);
+-}
+-
+-/*
+- * Open the image file selected in the open file dialog.
+- */
+-static void 
+-on_open_filename_selected(GtkFileSelection *dialog)
+-{
+-    gpaint_canvas *canvas = (gpaint_canvas*)gtk_object_get_user_data(GTK_OBJECT(dialog));
+-    gpaint_drawing *new_drawing;
+-
+-    /* save the result before the widget is destroyed */
+-    GString *filename = g_string_new(gtk_file_selection_get_filename(GTK_FILE_SELECTION(dialog)));
+-    
+-    /* dismiss the dialog. flush gtk events to avoid double select */
+-    gtk_widget_destroy(GTK_WIDGET(dialog));
+-    while (gtk_events_pending())
+-    {
+-        gtk_main_iteration();
+-    }
+-  
+-    new_drawing = drawing_new_from_file(canvas->drawing_area, canvas->gc, filename->str);
+-    if (new_drawing)
+-    {
+-        canvas_set_drawing(canvas, new_drawing);
+-    }
+-    else
+-    {
+-        GtkWidget *msgbox;
+-        msgbox = gnome_message_box_new(
+-                _("Cannot open file."), 
+-                GNOME_MESSAGE_BOX_ERROR, 
+-                _(" OK "), NULL);
+-        gtk_window_set_modal(GTK_WINDOW(msgbox), TRUE);
+-        gtk_window_set_transient_for (GTK_WINDOW(msgbox), GTK_WINDOW(canvas->top_level));
+-        gtk_window_set_position(GTK_WINDOW(msgbox), GTK_WIN_POS_CENTER);
+-        gnome_dialog_run(GNOME_DIALOG(msgbox));
+-    }
+-    g_string_free(filename, TRUE);
+-}
+ 
+ void
+ file_save_as_dialog(gpaint_canvas *canvas)
+@@ -132,31 +50,37 @@
+     GtkWidget *dialog;
+     gpaint_drawing *drawing = canvas->drawing;
+     
+-    dialog = gtk_file_selection_new(_("Save as"));
++    dialog = gtk_file_chooser_dialog_new(_("Save as"),
++                                         GTK_WINDOW(canvas->top_level),
++                                         GTK_FILE_CHOOSER_ACTION_SAVE,
++                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
++                                         GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
++                                         NULL);
++
+     g_assert(dialog);
+ 
+-    /* Set as modal, and mark it as a transient dialog */
+-    gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
+-    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(canvas->top_level));
+-    gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+-    
++    gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
++
++
+     g_assert(drawing);
+     g_assert(drawing->filename); 
+     g_assert(drawing->filename->len);
+-    gtk_file_selection_set_filename(GTK_FILE_SELECTION(dialog), drawing->filename->str);
+-    
+-    gtk_signal_connect_object(GTK_OBJECT(GTK_FILE_SELECTION(dialog)->ok_button),
+-                              "clicked",
+-                              GTK_SIGNAL_FUNC(on_save_filename_selected),
+-                              GTK_OBJECT(dialog));
+-    
+-    gtk_signal_connect_object(GTK_OBJECT(GTK_FILE_SELECTION(dialog)->cancel_button),
+-                              "clicked",
+-                              GTK_SIGNAL_FUNC(gtk_widget_destroy),
+-                              GTK_OBJECT(dialog));
++    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), drawing->filename->str);
+     
+-    gtk_object_set_user_data(GTK_OBJECT(dialog), canvas);
+-    gtk_widget_show(dialog);
++    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
++        char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
++        debug1("filename: %s", filename);
++
++        /* dismiss the dialog. flush gtk events to avoid double select */
++        gtk_widget_destroy(GTK_WIDGET(dialog));
++        while (gtk_events_pending())
++        {
++            gtk_main_iteration();
++        }
++        drawing_save_as(canvas->drawing, filename);
++    } else {
++        gtk_widget_destroy(GTK_WIDGET(dialog));
++    }
+ }
+ 
+ void
+@@ -168,13 +92,14 @@
+     gpaint_drawing *drawing;
+      
+     g_assert(canvas);
+-    dialog = gtk_file_selection_new(_("Open image"));
++    dialog = gtk_file_chooser_dialog_new(_("Open image"),
++                                         GTK_WINDOW(canvas->top_level),
++                                         GTK_FILE_CHOOSER_ACTION_OPEN,
++                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
++                                         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
++                                         NULL);
+     g_assert(dialog);
+-   
+-    gtk_window_set_modal (GTK_WINDOW(dialog),TRUE);
+-    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(canvas->top_level));
+-    gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+-
++    
+     drawing = canvas->drawing;
+     if (drawing->untitled)
+     {
+@@ -186,25 +111,44 @@
+         g_assert(drawing->filename->str);
+         dir = g_dirname(drawing->filename->str);
+     }
+-    filename = g_string_new(dir);
+-    g_string_append_c(filename, G_DIR_SEPARATOR);
+-    g_string_append(filename, "*.*");
+-    gtk_file_selection_set_filename(GTK_FILE_SELECTION(dialog), filename->str);
+-    g_string_free(filename, TRUE);
++    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
++
+     g_free(dir);
+-   
+-    gtk_signal_connect_object(GTK_OBJECT(GTK_FILE_SELECTION(dialog)->ok_button),
+-                              "clicked",
+-                              GTK_SIGNAL_FUNC(on_open_filename_selected),
+-                              GTK_OBJECT(dialog));
+-    
+-    gtk_signal_connect_object(GTK_OBJECT(GTK_FILE_SELECTION(dialog)->cancel_button),
+-                              "clicked",
+-                              GTK_SIGNAL_FUNC(gtk_widget_destroy),
+-                              GTK_OBJECT(dialog));
++
++    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
++
++        gpaint_drawing *new_drawing;
++
++        /* save the result before the widget is destroyed */
++        GString *filename = g_string_new(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)));
+     
+-    gtk_object_set_user_data(GTK_OBJECT(dialog), canvas);
+-    gtk_widget_show(dialog);
++        /* dismiss the dialog. flush gtk events to avoid double select */
++        gtk_widget_destroy(GTK_WIDGET(dialog));
++        while (gtk_events_pending())
++        {
++            gtk_main_iteration();
++        }
++        
++        new_drawing = drawing_new_from_file(canvas->drawing_area, canvas->gc, filename->str);
++        if (new_drawing)
++          {
++            canvas_set_drawing(canvas, new_drawing);
++          }
++        else
++          {
++            GtkWidget *msgbox;
++            msgbox = gtk_message_dialog_new(canvas->top_level,
++                                            GTK_DIALOG_MODAL,
++                                            GTK_MESSAGE_ERROR,
++                                            GTK_BUTTONS_OK,
++                                            _("Cannot open file."),
++                                            NULL);
++            gtk_dialog_run(GTK_DIALOG(msgbox));
++          }
++        g_string_free(filename, TRUE);
++    } else {
++      gtk_widget_destroy(dialog);
++    }
+ }
+ 
+ void

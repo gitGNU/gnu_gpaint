@@ -10,3 +10,6 @@
 10_fix_gcc_warnings
 11_update_pt_BR_translation
 12_add_de_translation
+13_add_rectangular_select_tool
+14_fix_window_title
+15_use_gtk_file_chooser

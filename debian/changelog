@@ -1,3 +1,16 @@
+gpaint (0.2.4+0.3.0pre5-5) unstable; urgency=low
+
+  * debian/patches/13_add_rectangular_select_tool.dpatch:
+    implement rectangular selection tool (Closes: #419765)
+  * debian/patches/14_fix_window_title.dpatch: fix a bug that would display 
+    the .po file header as the window title. Thanks Yavor Doganov for 
+    the patch.
+  * debian/patches/15_use_gtk_file_chooser.dpatch:
+    use GtkFileChooser instead of GtkFileSelection to implement the 
+    open and save dialogs. (Closes: #419768)
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Sun, 22 Apr 2007 15:35:25 -0300
+
 gpaint (0.2.4+0.3.0pre5-4) unstable; urgency=low
 
   * debian/patches/12_add_de_translation.dpatch: removed autom4te.cache 
