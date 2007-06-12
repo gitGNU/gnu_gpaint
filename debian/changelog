@@ -1,3 +1,20 @@
+gpaint (0.3.1-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/patches: Removed patches that were applied upstream
+    - 10_fix_gcc_warnings
+    - 11_update_pt_BR_translation
+    - 12_add_de_translation
+    - 13_add_rectangular_Select_tool
+    - 14_fix_window_title
+    - 15_use_gtk_file_chooser
+  * debian/patches/01_fix_color_palette_button_sizes.dpatch: makes the
+    color palette buttons fixed width.
+  * debian/rules: remove po/*.gmo files in the clean target (Closes: #424364)
+  * Added debian/watch file.
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Mon, 11 Jun 2007 22:37:02 -0300
+
 gpaint (0.2.4+0.3.0pre5-5) unstable; urgency=low
 
   * debian/patches/13_add_rectangular_select_tool.dpatch:

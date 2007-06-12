@@ -1,7 +1,7 @@
 /* $Id: pixmaps.c,v 1.4 2004/03/13 03:49:19 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -41,5 +41,6 @@
 #include "../pixmaps/ovalOp.xpm"
 #include "../pixmaps/pencilOp.xpm"
 #include "../pixmaps/selpolyOp.xpm"
+#include "../pixmaps/selrectOp.xpm"
 #include "../pixmaps/textOp.xpm"
 #include "../pixmaps/unfilled.xpm"

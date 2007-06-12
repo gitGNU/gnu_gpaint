@@ -4,7 +4,8 @@
 INCLUDES = \
         -DPACKAGE_DATA_DIR=\""$(datadir)"\" \
         -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
-        @GPAINT_CFLAGS@
+        @GUI_CFLAGS@ \
+        @PRINT_CFLAGS@
 
 
 bin_PROGRAMS = gpaint-2
@@ -47,6 +48,8 @@ pixmaps.c \
 pixmaps.h \
 polyselect.c \
 polyselect.h \
+rectselect.c \
+rectselect.h \
 print.c \
 print.h \
 selection.c \
@@ -65,5 +68,5 @@ version.h
 
 
 gpaint_2_CFLAGS = -I$(srcdir)
-gpaint_2_LDADD = $(GPAINT_LIBS)
+gpaint_2_LDADD = $(GUI_LIBS) $(PRINT_LIBS)
 

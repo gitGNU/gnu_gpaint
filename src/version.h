@@ -1,7 +1,7 @@
 /* $Id: version.h,v 1.7 2005/01/27 02:53:32 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 #ifdef VERSION
 # define VERSION_STRING VERSION
 #else
-# define VERSION_STRING "0.3"
+# define VERSION_STRING "0.3.1"
 #endif
 
 #endif

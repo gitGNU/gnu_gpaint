@@ -1,7 +1,7 @@
 /* $Id: main.c,v 1.9 2004/12/25 04:41:58 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
 #  include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include "ui.h"
 #include "debug.h"
 #include "canvas.h"
@@ -44,7 +44,7 @@ static void create_window();
 int
 main (int argc, char *argv[])
 {
-    GnomeProgram *program;
+    
 
     debug_fn();
 #ifdef ENABLE_NLS
@@ -53,10 +53,8 @@ main (int argc, char *argv[])
     textdomain (GETTEXT_PACKAGE);
 #endif
 
-    program = gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE,
-                      argc, argv,
-                      GNOME_PARAM_APP_DATADIR, PACKAGE_DATA_DIR,
-                      NULL);
+    
+    gtk_init(&argc, &argv);
     
     canvas_init(argc, argv);
     create_window();
@@ -69,7 +67,7 @@ main (int argc, char *argv[])
 static void
 create_window()
 {
-    GtkWidget *main_window = create_mainwindow();
+    GtkWidget *main_window = create_main_window();
     debug_fn1("main_window = %p", main_window);
 
     gtk_window_set_default_size(GTK_WINDOW(main_window), WIDTH, HEIGHT);

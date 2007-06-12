@@ -1,7 +1,7 @@
 /* $Id: color_palette.c,v 1.5 2004/12/03 23:06:33 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  * Copyright 2003       Michael A. Meffie
  *
  * This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 #include "callbacks.h"
 #include "support.h"
 #include "debug.h"
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 /*
  * Initial Palette colors. Red/Green/Blue values, 0 to 255.
@@ -139,8 +139,7 @@ on_foreground_color_picker_realize     (GtkWidget       *widget,
 {
     GdkColor black; 
     gdk_color_black(gdk_colormap_get_system(), &black);
-    gnome_color_picker_set_i16(GNOME_COLOR_PICKER(widget),
-            black.red, black.green, black.blue, black.pixel);
+    gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &black);
 }
 
 /*
@@ -152,8 +151,8 @@ on_background_color_picker_realize     (GtkWidget       *widget,
 {
     GdkColor white; 
     gdk_color_white(gdk_colormap_get_system(), &white);
-    gnome_color_picker_set_i16(GNOME_COLOR_PICKER(widget),
-            white.red, white.green, white.blue, white.pixel);
+    gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),
+            &white);
 }
 
 /*
@@ -340,10 +339,12 @@ on_color_selector_cancel_button_clicked (GtkButton  *button,
 static void
 change_color(gpaint_color_swatch *swatch, gpaint_color_mode mode)
 {
-    GnomeColorPicker *picker;
+    GtkColorButton *picker;
     GdkGCValues      gcvalues;
     gpaint_canvas    *canvas;
-    
+    GdkColor color = {0, swatch->color.red, 
+                swatch->color.green, 
+                swatch->color.blue} ;
     g_assert(swatch);
     canvas = canvas_lookup(swatch->widget);
     gdk_gc_get_values(swatch->gc, &gcvalues);
@@ -351,29 +352,26 @@ change_color(gpaint_color_swatch *swatch, gpaint_color_mode mode)
     if (mode==FOREGROUND)
     {
         change_foreground_color(canvas, &(gcvalues.foreground));
-        picker = (GnomeColorPicker*)lookup_widget(
+        picker = (GtkColorButton*)lookup_widget(
                 swatch->widget, "foreground_color_picker");
     }
     else
     {
         change_background_color(canvas, &(gcvalues.foreground));
-        picker = (GnomeColorPicker*)lookup_widget(
+        picker = (GtkColorButton*)lookup_widget(
                 swatch->widget, "background_color_picker");
     }
     g_assert(picker);
-    gnome_color_picker_set_i16(
+    gtk_color_button_set_color(
                 picker, 
-                swatch->color.red, 
-                swatch->color.green, 
-                swatch->color.blue, 
-                0 );
+                &color);
 }
 
 /*
  * Set the canvas foreground color from the color picker selection.
  */
 void
-on_foreground_color_picker_color_set   (GnomeColorPicker *gnomecolorpicker,
+on_foreground_color_picker_color_set   (GtkColorButton *gnomecolorpicker,
                                         guint            arg1,
                                         guint            arg2,
                                         guint            arg3,
@@ -391,7 +389,7 @@ on_foreground_color_picker_color_set   (GnomeColorPicker *gnomecolorpicker,
  * Set the canvas background color from the color picker selection.
  */
 void
-on_background_color_picker_color_set   (GnomeColorPicker *gnomecolorpicker,
+on_background_color_picker_color_set   (GtkColorButton *gnomecolorpicker,
                                         guint            arg1,
                                         guint            arg2,
                                         guint            arg3,

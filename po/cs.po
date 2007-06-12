@@ -3,13 +3,11 @@
 # This file is distributed under the same license as the gpaint package.
 # Miloslav Trmac <mitr@volny.cz>
 #
-#. Display the filename in the title bar.
-#: src/drawing.c:304
 msgid ""
 msgstr ""
 "Project-Id-Version: gpaint VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-31 21:49-0500\n"
+"POT-Creation-Date: 2007-06-11 01:43-0700\n"
 "PO-Revision-Date: 2003-02-22 23:47+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -17,325 +15,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/ui.c:31
-#, fuzzy
-msgid "_New"
-msgstr "Nový"
-
-#: src/ui.c:37 src/ui.c:38
-msgid "Print Preview"
-msgstr "Náhled před tiskem"
-
-#: src/ui.c:64
-msgid "Get Snapshot of Desktop"
-msgstr "Získat snímek obrazovky"
-
-#: src/ui.c:71
-msgid "Set Desktop Background"
-msgstr "Nastavit jako pozadí plochy"
-
-#: src/ui.c:83
-msgid "Left to Right"
-msgstr "Zleva doprava"
-
-#: src/ui.c:90
-msgid "Top to Bottom"
-msgstr "Shora dolů"
-
-#: src/ui.c:102
-msgid "Clockwise"
-msgstr ""
-
-#: src/ui.c:109
-msgid "Counter Clockwise"
-msgstr ""
-
-#: src/ui.c:121
-#, fuzzy
-msgid "_Invert"
-msgstr "_Vrátit zpět"
-
-#: src/ui.c:128
-msgid "_Sharpen"
-msgstr "_Zaostřit"
-
-#: src/ui.c:136
-msgid "S_mooth"
-msgstr "_Vyhladit"
-
-#: src/ui.c:143
-msgid "_Directional Smooth"
-msgstr "Vyhladit ve _směru"
-
-#: src/ui.c:150
-msgid "Despeckle"
-msgstr "Vyčistit"
-
-#: src/ui.c:158
-msgid "_Edge Detect"
-msgstr "Detekce _hran"
-
-#: src/ui.c:165
-msgid "Emboss"
-msgstr "Reliéf"
-
-#: src/ui.c:172
-msgid "_Oil Paint"
-msgstr "_Olejomalba"
-
-#: src/ui.c:179
-msgid "_Add Noise"
-msgstr "_Přidat šum"
-
-#: src/ui.c:186
-msgid "Spread"
-msgstr "Rozprostřít"
-
-#: src/ui.c:193
-msgid "_Pixelize"
-msgstr "_Pixelizovat"
-
-#: src/ui.c:200
-msgid "_Blend"
-msgstr "_Smísit"
-
-#: src/ui.c:207
-msgid "Solarize"
-msgstr "Solarizovat"
-
-#: src/ui.c:215
-msgid "_Normalize Contrast"
-msgstr "_Normalizovat kontrast"
-
-#: src/ui.c:222
-msgid "_Quantize Color"
-msgstr "_Kvantovat barvy"
-
-#: src/ui.c:229
-msgid "Convert to _Greyscale"
-msgstr "Převést na _stupně šedi"
-
-#: src/ui.c:241
-msgid "Desktop"
-msgstr "Pracovní plocha"
-
-#: src/ui.c:248
-msgid "Flip"
-msgstr "Zrcadlit"
-
-#: src/ui.c:255
-msgid "Rotate"
-msgstr "Rotovat"
-
-#: src/ui.c:262
-msgid "_Effects"
-msgstr "_Efekty"
-
-#: src/ui.c:287
-#, fuzzy
-msgid "_File"
-msgstr "_Nový soubor"
-
-#: src/ui.c:294
-msgid "_Edit"
-msgstr ""
-
-#: src/ui.c:301
-msgid "_Image"
-msgstr "_Obrázek"
-
-#: src/ui.c:309
-msgid "_Help"
-msgstr ""
-
-#: src/ui.c:444
-msgid "gpaint"
-msgstr "gpaint"
-
-#: src/ui.c:572
-msgid "New"
-msgstr "Nový"
-
-#: src/ui.c:576
-msgid "New File"
-msgstr "Nový soubor"
-
-#: src/ui.c:580
-msgid "Open"
-msgstr "Otevřít"
-
-#: src/ui.c:584
-msgid "Open File"
-msgstr "Otevřít soubor"
-
-#: src/ui.c:588
-msgid "Save"
-msgstr "Uložit"
-
-#: src/ui.c:592
-msgid "Save File"
-msgstr "Uložit soubor"
-
-#: src/ui.c:596
-msgid "Save As"
-msgstr "Uložit jako"
-
-#: src/ui.c:600
-msgid "Save File As"
-msgstr "Uložit soubor jako"
-
-#: src/ui.c:609 src/ui.c:613
-msgid "Print"
-msgstr "Vytisknout"
-
-#: src/ui.c:639
-msgid "Bold"
-msgstr "Tučný"
-
-#: src/ui.c:644
-msgid "bold text"
-msgstr "tučný text"
-
-#: src/ui.c:648
-msgid "Italic"
-msgstr "Kurzíva"
-
-#: src/ui.c:653
-msgid "italic text"
-msgstr "text kurzívou"
-
-#: src/ui.c:657
-msgid "Underline"
-msgstr "Podtržený"
-
-#: src/ui.c:662
-msgid "underline text"
-msgstr "podtržený text"
-
-#: src/ui.c:674 src/ui.c:705
-msgid "line width"
-msgstr "šířka řádku"
-
-#: src/ui.c:692
-msgid "1"
-msgstr "1"
-
-#: src/ui.c:693
-msgid "2"
-msgstr "2"
-
-#: src/ui.c:694
-msgid "3"
-msgstr "3"
-
-#: src/ui.c:695
-msgid "4"
-msgstr "4"
-
-#: src/ui.c:696
-msgid "6"
-msgstr "6"
-
-#: src/ui.c:697
-msgid "8"
-msgstr "8"
-
-#: src/ui.c:731
-msgid "background color"
-msgstr "barva pozadí"
-
-#: src/ui.c:732
-msgid "Background color"
-msgstr "Barva pozadí"
-
-#: src/ui.c:739
-msgid "foreground color"
-msgstr "barva popředí"
-
-#: src/ui.c:740
-msgid "Foreground color"
-msgstr "Barva popředí"
-
-#: src/ui.c:1263
-msgid "erase"
-msgstr "vymazat"
-
-#: src/ui.c:1274
-msgid "lasso"
-msgstr "laso"
-
-#: src/ui.c:1285 src/ui.c:1432
-msgid "fill"
-msgstr "vyplnit"
-
-#: src/ui.c:1296
-msgid "line"
-msgstr "úsečka"
-
-#: src/ui.c:1307
-#, fuzzy
-msgid "multiline"
-msgstr "úsečka"
-
-#: src/ui.c:1318
-msgid "rectangle"
-msgstr "obdélník"
-
-#: src/ui.c:1329
-#, fuzzy
-msgid "freehand"
-msgstr "uzavřená volná kresba"
-
-#: src/ui.c:1351
-msgid "pen"
-msgstr "pero"
-
-#: src/ui.c:1362
-#, fuzzy
-msgid "polyselect"
-msgstr "výběr polygonu"
-
-#: src/ui.c:1373
-msgid "text"
-msgstr "text"
-
-#: src/ui.c:1384
-msgid "arc"
-msgstr "oblouk"
-
-#: src/ui.c:1395
-msgid "curve"
-msgstr "křivka"
-
-#: src/ui.c:1406
-msgid "oval"
-msgstr "ovál"
-
-#: src/ui.c:1417
-msgid "brush"
-msgstr "štětec"
-
-#: src/ui.c:2063
+#: src/ui.c:49
 msgid "New Canvas"
 msgstr "Nové plátno"
 
-#: src/ui.c:2071
+#: src/ui.c:57
 msgid "Enter the desired image size:"
 msgstr "Zadejte požadovanou velikost obrázku:"
 
-#: src/ui.c:2100
+#: src/ui.c:86
 msgid "Width: "
 msgstr "Šířka: "
 
-#: src/ui.c:2108
+#: src/ui.c:94
 msgid "Height: "
 msgstr "Výška: "
 
-#: src/ui.c:2199
+#: src/ui.c:185
 msgid "about"
 msgstr "o programu"
 
-#: src/ui.c:2228
+#: src/ui.c:214
 msgid ""
 "This program is free software; you may redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -347,7 +47,7 @@ msgstr ""
 "Software Foundation, buď verze 2, nebo (podle vašeho rozhodnutí) libovolné "
 "pozdější verze.\n"
 
-#: src/ui.c:2237
+#: src/ui.c:223
 msgid ""
 "based on xpaint, by David Koblas and Torsten Martinsen \n"
 "Copyright 1992--1996"
@@ -355,25 +55,388 @@ msgstr ""
 "založeno na xpaint od David Koblas a Torsten Martinsen \n"
 "Copyright 1992--1996"
 
-#: src/ui.c:2245
+#: src/ui.c:231
+#, fuzzy
 msgid ""
-"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2000--2003, 2007  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
 "Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
 msgstr ""
 "Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
 "Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
 
-#: src/support.c:60 src/support.c:85
+#: src/ui.c:489
+msgid "gpaint"
+msgstr "gpaint"
+
+#: src/ui.c:506
+#, fuzzy
+msgid "_File"
+msgstr "_Nový soubor"
+
+#: src/ui.c:515
+#, fuzzy
+msgid "_New"
+msgstr "Nový"
+
+#: src/ui.c:525
+#, fuzzy
+msgid "_Open"
+msgstr "Otevřít"
+
+#: src/ui.c:535
+#, fuzzy
+msgid "_Save"
+msgstr "Uložit"
+
+#: src/ui.c:545
+#, fuzzy
+msgid "Save _As"
+msgstr "Uložit jako"
+
+#: src/ui.c:561 src/ui.c:566
+msgid "Print Preview"
+msgstr "Náhled před tiskem"
+
+#: src/ui.c:573
+#, fuzzy
+msgid "_Print"
+msgstr "Vytisknout"
+
+#: src/ui.c:590
+msgid "_Close"
+msgstr ""
+
+#: src/ui.c:600
+msgid "_Quit"
+msgstr ""
+
+#: src/ui.c:610
+msgid "_Edit"
+msgstr ""
+
+#: src/ui.c:619
+msgid "Cu_t"
+msgstr ""
+
+#: src/ui.c:629
+msgid "_Copy"
+msgstr ""
+
+#: src/ui.c:639
+msgid "_Paste"
+msgstr ""
+
+#: src/ui.c:649
+msgid "Clear"
+msgstr ""
+
+#: src/ui.c:665
+msgid "_Select All"
+msgstr ""
+
+#: src/ui.c:670
+msgid "_Image"
+msgstr "_Obrázek"
+
+#: src/ui.c:679
+msgid "Desktop"
+msgstr "Pracovní plocha"
+
+#: src/ui.c:688
+msgid "Get Snapshot of Desktop"
+msgstr "Získat snímek obrazovky"
+
+#: src/ui.c:693
+msgid "Set Desktop Background"
+msgstr "Nastavit jako pozadí plochy"
+
+#: src/ui.c:704
+#, fuzzy
+msgid "Rotate Right"
+msgstr "Rotovat"
+
+#: src/ui.c:708
+msgid "Rotate 90 degrees Clockwise"
+msgstr ""
+
+#: src/ui.c:713
+#, fuzzy
+msgid "Rotate Left"
+msgstr "Rotovat"
+
+#: src/ui.c:717
+msgid "Rotate 90 degrees Anticlockwise"
+msgstr ""
+
+#: src/ui.c:728
+#, fuzzy
+msgid "Flip Left to Right"
+msgstr "Zleva doprava"
+
+#: src/ui.c:732
+#, fuzzy
+msgid "Mirror Left to Right"
+msgstr "Zleva doprava"
+
+#: src/ui.c:737
+#, fuzzy
+msgid "Flip Top to Bottom"
+msgstr "Shora dolů"
+
+#: src/ui.c:745
+#, fuzzy
+msgid "Effec_ts"
+msgstr "_Efekty"
+
+#: src/ui.c:754
+#, fuzzy
+msgid "_Invert"
+msgstr "_Vrátit zpět"
+
+#: src/ui.c:759
+msgid "_Sharpen"
+msgstr "_Zaostřit"
+
+#: src/ui.c:770
+msgid "S_mooth"
+msgstr "_Vyhladit"
+
+#: src/ui.c:775
+msgid "_Directional Smooth"
+msgstr "Vyhladit ve _směru"
+
+#: src/ui.c:780
+msgid "Despeckle"
+msgstr "Vyčistit"
+
+#: src/ui.c:791
+msgid "_Edge Detect"
+msgstr "Detekce _hran"
+
+#: src/ui.c:796
+msgid "Emboss"
+msgstr "Reliéf"
+
+#: src/ui.c:801
+msgid "_Oil Paint"
+msgstr "_Olejomalba"
+
+#: src/ui.c:806
+msgid "_Add Noise"
+msgstr "_Přidat šum"
+
+#: src/ui.c:811
+msgid "Spread"
+msgstr "Rozprostřít"
+
+#: src/ui.c:816
+msgid "_Pixelize"
+msgstr "_Pixelizovat"
+
+#: src/ui.c:821
+msgid "_Blend"
+msgstr "_Smísit"
+
+#: src/ui.c:826
+msgid "Solarize"
+msgstr "Solarizovat"
+
+#: src/ui.c:837
+msgid "_Normalize Contrast"
+msgstr "_Normalizovat kontrast"
+
+#: src/ui.c:842
+msgid "_Quantize Color"
+msgstr "_Kvantovat barvy"
+
+#: src/ui.c:847
+msgid "Convert to _Greyscale"
+msgstr "Převést na _stupně šedi"
+
+#: src/ui.c:852
+msgid "_Windows"
+msgstr ""
+
+#: src/ui.c:861
+msgid "Create _New Window"
+msgstr ""
+
+#: src/ui.c:866
+msgid "_Close This Window"
+msgstr ""
+
+#: src/ui.c:871
+msgid "_Help"
+msgstr ""
+
+#: src/ui.c:880
+#, fuzzy
+msgid "_About"
+msgstr "o programu"
+
+#: src/ui.c:905
+msgid "New"
+msgstr "Nový"
+
+#: src/ui.c:909
+msgid "New File"
+msgstr "Nový soubor"
+
+#: src/ui.c:913
+msgid "Open"
+msgstr "Otevřít"
+
+#: src/ui.c:917
+msgid "Open File"
+msgstr "Otevřít soubor"
+
+#: src/ui.c:921
+msgid "Save"
+msgstr "Uložit"
+
+#: src/ui.c:925
+msgid "Save File"
+msgstr "Uložit soubor"
+
+#: src/ui.c:929
+msgid "Save As"
+msgstr "Uložit jako"
+
+#: src/ui.c:933
+msgid "Save File As"
+msgstr "Uložit soubor jako"
+
+#: src/ui.c:942 src/ui.c:947
+msgid "Print"
+msgstr "Vytisknout"
+
+#: src/ui.c:974
+msgid "Bold"
+msgstr "Tučný"
+
+#: src/ui.c:979
+msgid "bold text"
+msgstr "tučný text"
+
+#: src/ui.c:983
+msgid "Italic"
+msgstr "Kurzíva"
+
+#: src/ui.c:988
+msgid "italic text"
+msgstr "text kurzívou"
+
+#: src/ui.c:992
+msgid "Underline"
+msgstr "Podtržený"
+
+#: src/ui.c:997
+msgid "underline text"
+msgstr "podtržený text"
+
+#: src/ui.c:1009 src/ui.c:1040
+msgid "line width"
+msgstr "šířka řádku"
+
+#: src/ui.c:1027
+msgid "1"
+msgstr "1"
+
+#: src/ui.c:1028
+msgid "2"
+msgstr "2"
+
+#: src/ui.c:1029
+msgid "3"
+msgstr "3"
+
+#: src/ui.c:1030
+msgid "4"
+msgstr "4"
+
+#: src/ui.c:1031
+msgid "6"
+msgstr "6"
+
+#: src/ui.c:1032
+msgid "8"
+msgstr "8"
+
+#: src/ui.c:1091
+msgid "erase"
+msgstr "vymazat"
+
+#: src/ui.c:1102
+msgid "lasso"
+msgstr "laso"
+
+#: src/ui.c:1113
+#, fuzzy
+msgid "rectselect"
+msgstr "obdélník"
+
+#: src/ui.c:1124 src/ui.c:1272
+msgid "fill"
+msgstr "vyplnit"
+
+#: src/ui.c:1135
+msgid "line"
+msgstr "úsečka"
+
+#: src/ui.c:1146
+#, fuzzy
+msgid "multiline"
+msgstr "úsečka"
+
+#: src/ui.c:1157
+msgid "rectangle"
+msgstr "obdélník"
+
+#: src/ui.c:1168
+#, fuzzy
+msgid "freehand"
+msgstr "uzavřená volná kresba"
+
+#: src/ui.c:1190
+msgid "pen"
+msgstr "pero"
+
+#: src/ui.c:1201
+#, fuzzy
+msgid "polyselect"
+msgstr "výběr polygonu"
+
+#: src/ui.c:1213
+msgid "text"
+msgstr "text"
+
+#: src/ui.c:1224
+msgid "arc"
+msgstr "oblouk"
+
+#: src/ui.c:1235
+msgid "curve"
+msgstr "křivka"
+
+#: src/ui.c:1246
+msgid "oval"
+msgstr "ovál"
+
+#: src/ui.c:1257
+msgid "brush"
+msgstr "štětec"
+
+#: src/support.c:90 src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Nemohu najít soubor pixmapy: %s"
 
 #. default filename
-#: src/drawing.c:44
+#: src/drawing.c:48
 msgid "untitled.png"
 msgstr ""
 
-#: src/drawing.c:219
+#: src/drawing.c:221
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -381,7 +444,7 @@ msgid ""
 "Do you want to overwrite it?"
 msgstr ""
 
-#: src/drawing.c:259
+#: src/drawing.c:261
 #, c-format
 msgid ""
 "Failed to save file %s.\n"
@@ -389,25 +452,40 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/drawing.c:307
+#: src/drawing.c:309
 msgid "Untitled"
 msgstr ""
 
-#: src/drawing.c:323
+#: src/drawing.c:325
 msgid " (modified)"
 msgstr ""
 
-#: src/drawing.c:325
+#: src/drawing.c:327
 #, fuzzy
 msgid " - gpaint"
 msgstr "gpaint"
 
-#: src/drawing.c:425
+#: src/drawing.c:427
 #, c-format
 msgid ""
 "Do you want to save the changes you made to \"%s\"?\n"
 "Your changes will be lost if you don't save them."
 msgstr ""
+
+#~ msgid "Flip"
+#~ msgstr "Zrcadlit"
+
+#~ msgid "background color"
+#~ msgstr "barva pozadí"
+
+#~ msgid "Background color"
+#~ msgstr "Barva pozadí"
+
+#~ msgid "foreground color"
+#~ msgstr "barva popředí"
+
+#~ msgid "Foreground color"
+#~ msgstr "Barva popředí"
 
 #~ msgid "+90"
 #~ msgstr "+90"

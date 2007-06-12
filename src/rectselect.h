@@ -1,9 +1,9 @@
-/* $Id: file.h,v 1.2 2004/03/13 03:28:17 meffie Exp $
+/* $Id$
  *
- * GNU Paint 
+ * GNU Paint
  * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
- * Authors: Li-Cheng (Andy) Tai
+ * Authors: Li-Cheng (Andy) Tai <atai@gnu.org>
  *          Michael A. Meffie III <meffiem@neo.rr.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,11 +22,11 @@
  * Boston, MA 02111-1307 USA
  */
 
-#ifndef __FILE_H__
-#define __FILE_H__
+#ifndef __RECT_SELECT_H__
+#define __RECT_SELECT_H__
 
-void file_save_as_dialog(gpaint_canvas *canvas);
-void file_open_dialog(gpaint_canvas *canvas);
-void file_new_dialog(gpaint_canvas *canvas);
+#include "canvas.h"
+
+gpaint_tool* rectangle_select_create(const char *name);
 
 #endif

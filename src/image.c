@@ -1,7 +1,7 @@
 /* $Id: image.c,v 1.7 2005/02/01 02:42:50 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,10 @@
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
+#endif
+
+#ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
 #endif
 
 #include "image.h"

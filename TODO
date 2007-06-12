@@ -1,8 +1,8 @@
 
 TODO for gpaint 
-Version 0.3.0 
+Working toward version 0.4.0
 
-$Id: TODO,v 1.8 2005/01/27 02:55:44 meffie Exp $
+$Id: TODO,v 1.9 2005/03/07 03:08:15 meffie Exp $
 
 
 =========================================================================
@@ -108,4 +108,5 @@ Future Release
 
 * Drag and drop support
 
+* libglade support (?)
 

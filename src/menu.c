@@ -1,7 +1,7 @@
 /* $Id: menu.c,v 1.10 2005/01/27 02:54:21 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -31,8 +31,11 @@
 #include "image.h"
 #include "image_processing.h"
 #include "tool_palette.h"
+#include "menu.h"
+#include "print.h"
+#include "file.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 
 /*
@@ -200,12 +203,12 @@ on_print(GtkWidget *widget, gboolean preview)
     if (preview)
     {
         debug("starting do_print_preview()");
-        do_print_preview(image, image, drawing->filename);
+        do_print_preview(image, drawing->filename->str);
         debug("done do_print_preview()");
     }
     else
     {
-        do_print(image, image, drawing->filename);
+        do_print(image, drawing->filename->str);
     }
     image_free(image);
     canvas_end_busy_cursor(canvas);
@@ -315,14 +318,14 @@ on_fontpicker_realize                  (GtkWidget       *widget,
 }
 
 void
-on_fontpicker_font_set                 (GnomeFontPicker *fontpicker,
+on_fontpicker_font_set                 (GtkFontButton *fontpicker,
                                         gchar *arg1,
                                         gpointer         user_data)
 {
-    GdkFont     *font = gnome_font_picker_get_font(fontpicker);
+    GdkFont     *font = gdk_font_load(gtk_font_button_get_font_name(fontpicker));
     gpaint_tool *tool = tool_palette_get_tool(GTK_WIDGET(fontpicker), "text");
 
-    const gchar* name = gnome_font_picker_get_font_name(fontpicker);
+    const gchar* name = gtk_font_button_get_font_name(fontpicker);
     debug1("font name = %s", name);
     //GdkFont *font = gdk_font_load(name);
     debug1("font=%p", font);

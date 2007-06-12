@@ -1,7 +1,7 @@
 /* $Id: selection.h,v 1.2 2004/03/13 03:32:27 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai <atai@gnu.org>
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -85,5 +85,7 @@ void selection_close_loop(gpaint_selection *selection);
 void selection_move(gpaint_selection *selection, int x, int y);
 void selection_clear_flash(gpaint_selection *selection);
 void selection_draw_flash(gpaint_selection *selection);
+void selection_enable_flash(gpaint_selection *selection);
+void selection_disable_flash(gpaint_selection *selection);
 
 #endif

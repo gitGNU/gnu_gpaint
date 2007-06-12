@@ -1,7 +1,7 @@
 /* $Id: callbacks.c,v 1.14 2005/01/03 19:33:22 meffie Exp $
  *
  * GNU Paint
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,3 +77,10 @@ on_invert_menu_activate                (GtkMenuItem     *menuitem,
 }
 
 
+
+void
+on_windows_menu_item_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+
+}

@@ -1,7 +1,7 @@
 /* $Id: fill.c,v 1.3 2004/12/25 04:41:58 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai
  *          Michael A. Meffie III <meffiem@neo.rr.com>

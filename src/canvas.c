@@ -1,7 +1,7 @@
 /* $Id: canvas.c,v 1.6 2005/01/07 02:50:52 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai <atai@gnu.org>
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -34,7 +34,7 @@
 #include "image.h"
 #include "image_processing.h"
 #include "paste.h"
-
+#include "selection.h"
 
 /* Single clipboard to share selections between canvases. */
 static gpaint_clipboard *clipboard = NULL;
@@ -95,7 +95,6 @@ create_drawing_area_in_scroll_frame (
         gint width,
         gint height)
 {
-    gpaint_canvas *canvas;
     GtkWidget     *scrolledwindow;
     GtkWidget     *viewport;
     GtkWidget     *drawing_area;
@@ -304,7 +303,6 @@ on_drawing_area_focus_in_event          (GtkWidget       *widget,
                                         GdkEventFocus   *event,
                                         gpointer         user_data)
 {
-    gpaint_tool *tool = ACTIVE_TOOL(user_data);
     gpaint_canvas *canvas = CANVAS(user_data);
     debug_fn1("canvas=%p", canvas);
     canvas_focus_gained(canvas);
@@ -319,7 +317,6 @@ on_drawing_area_focus_out_event         (GtkWidget       *widget,
                                         GdkEventFocus   *event,
                                         gpointer         user_data)
 {
-    gpaint_tool *tool = ACTIVE_TOOL(user_data);
     gpaint_canvas *canvas = CANVAS(user_data);
     debug_fn1("canvas=%p", canvas);
     canvas_focus_lost(canvas);
@@ -643,7 +640,6 @@ canvas_copy(gpaint_canvas *canvas)
 void
 canvas_clear(gpaint_canvas *canvas)
 {
-    GdkRectangle rect;
     if (canvas_has_selection(canvas))
     {
         selection_disable_flash(canvas->selection);

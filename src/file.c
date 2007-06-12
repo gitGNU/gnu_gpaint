@@ -1,7 +1,7 @@
 /* $Id: file.c,v 1.5 2005/01/27 02:54:37 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -26,6 +26,7 @@
 #  include <config.h>
 #endif
 
+#include <string.h>
 #include "canvas.h"
 #include "image.h"
 #include "debug.h"
@@ -51,7 +52,6 @@ on_save_filename_selected(GtkFileSelection *dialog)
 {
     gpaint_canvas *canvas;
     const gchar *filename;
-    gpaint_image* image;
     
     debug_fn();
     filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION(dialog));
@@ -94,7 +94,6 @@ on_save_filename_selected(GtkFileSelection *dialog)
 static void 
 on_open_filename_selected(GtkFileSelection *dialog)
 {
-    GdkRectangle drawable_rect;
     gpaint_canvas *canvas = (gpaint_canvas*)gtk_object_get_user_data(GTK_OBJECT(dialog));
     gpaint_drawing *new_drawing;
 
@@ -116,14 +115,14 @@ on_open_filename_selected(GtkFileSelection *dialog)
     else
     {
         GtkWidget *msgbox;
-        msgbox = gnome_message_box_new(
-                _("Cannot open file."), 
-                GNOME_MESSAGE_BOX_ERROR, 
-                _(" OK "), NULL);
-        gtk_window_set_modal(GTK_WINDOW(msgbox), TRUE);
-        gtk_window_set_transient_for (GTK_WINDOW(msgbox), GTK_WINDOW(canvas->top_level));
-        gtk_window_set_position(GTK_WINDOW(msgbox), GTK_WIN_POS_CENTER);
-        gnome_dialog_run(GNOME_DIALOG(msgbox));
+        msgbox = gtk_message_dialog_new(GTK_WINDOW(canvas->top_level), GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                 GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+                _("Cannot open file %s."), filename->str);
+   
+       
+        
+        gtk_dialog_run(GTK_DIALOG(msgbox));
+        gtk_widget_destroy(msgbox);
     }
     g_string_free(filename, TRUE);
 }
@@ -134,31 +133,37 @@ file_save_as_dialog(gpaint_canvas *canvas)
     GtkWidget *dialog;
     gpaint_drawing *drawing = canvas->drawing;
     
-    dialog = gtk_file_selection_new(_("Save as"));
+    dialog = gtk_file_chooser_dialog_new(_("Save as"),
+                                         GTK_WINDOW(canvas->top_level),
+                                         GTK_FILE_CHOOSER_ACTION_SAVE,
+                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                         GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                                         NULL);
+
     g_assert(dialog);
 
-    /* Set as modal, and mark it as a transient dialog */
-    gtk_window_set_modal(GTK_WINDOW(dialog),TRUE);
-    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(canvas->top_level));
-    gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
-    
+    gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+
+
     g_assert(drawing);
     g_assert(drawing->filename); 
     g_assert(drawing->filename->len);
-    gtk_file_selection_set_filename(GTK_FILE_SELECTION(dialog), drawing->filename->str);
+    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), drawing->filename->str);
     
-    gtk_signal_connect_object(GTK_OBJECT(GTK_FILE_SELECTION(dialog)->ok_button),
-                              "clicked",
-                              GTK_SIGNAL_FUNC(on_save_filename_selected),
-                              GTK_OBJECT(dialog));
-    
-    gtk_signal_connect_object(GTK_OBJECT(GTK_FILE_SELECTION(dialog)->cancel_button),
-                              "clicked",
-                              GTK_SIGNAL_FUNC(gtk_widget_destroy),
-                              GTK_OBJECT(dialog));
-    
-    gtk_object_set_user_data(GTK_OBJECT(dialog), canvas);
-    gtk_widget_show(dialog);
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
+        char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        debug1("filename: %s", filename);
+
+        /* dismiss the dialog. flush gtk events to avoid double select */
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+        while (gtk_events_pending())
+        {
+            gtk_main_iteration();
+        }
+        drawing_save_as(canvas->drawing, filename);
+    } else {
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+    }
 }
 
 void
@@ -170,13 +175,14 @@ file_open_dialog(gpaint_canvas *canvas)
     gpaint_drawing *drawing;
      
     g_assert(canvas);
-    dialog = gtk_file_selection_new(_("Open image"));
+    dialog = gtk_file_chooser_dialog_new(_("Open image"),
+                                         GTK_WINDOW(canvas->top_level),
+                                         GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                         NULL);
     g_assert(dialog);
-   
-    gtk_window_set_modal (GTK_WINDOW(dialog),TRUE);
-    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(canvas->top_level));
-    gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
-
+    
     drawing = canvas->drawing;
     if (drawing->untitled)
     {
@@ -188,25 +194,45 @@ file_open_dialog(gpaint_canvas *canvas)
         g_assert(drawing->filename->str);
         dir = g_dirname(drawing->filename->str);
     }
-    filename = g_string_new(dir);
-    g_string_append_c(filename, G_DIR_SEPARATOR);
-    g_string_append(filename, "*.*");
-    gtk_file_selection_set_filename(GTK_FILE_SELECTION(dialog), filename->str);
-    g_string_free(filename, TRUE);
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
+
     g_free(dir);
-   
-    gtk_signal_connect_object(GTK_OBJECT(GTK_FILE_SELECTION(dialog)->ok_button),
-                              "clicked",
-                              GTK_SIGNAL_FUNC(on_open_filename_selected),
-                              GTK_OBJECT(dialog));
+
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
+
+        gpaint_drawing *new_drawing;
+
+        /* save the result before the widget is destroyed */
+        GString *filename = g_string_new(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)));
     
-    gtk_signal_connect_object(GTK_OBJECT(GTK_FILE_SELECTION(dialog)->cancel_button),
-                              "clicked",
-                              GTK_SIGNAL_FUNC(gtk_widget_destroy),
-                              GTK_OBJECT(dialog));
-    
-    gtk_object_set_user_data(GTK_OBJECT(dialog), canvas);
-    gtk_widget_show(dialog);
+        /* dismiss the dialog. flush gtk events to avoid double select */
+        gtk_widget_destroy(GTK_WIDGET(dialog));
+        while (gtk_events_pending())
+        {
+            gtk_main_iteration();
+        }
+        
+        new_drawing = drawing_new_from_file(canvas->drawing_area, canvas->gc, filename->str);
+        if (new_drawing)
+          {
+            canvas_set_drawing(canvas, new_drawing);
+          }
+        else
+          {
+            GtkWidget *msgbox;
+            msgbox = gtk_message_dialog_new(GTK_WINDOW(canvas->top_level),
+                                            GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                                            GTK_MESSAGE_ERROR,
+                                            GTK_BUTTONS_OK,
+                                            _("Cannot open file %s."),
+                                            filename->str);
+            gtk_dialog_run(GTK_DIALOG(msgbox));
+            gtk_widget_destroy(msgbox);
+          }
+        g_string_free(filename, TRUE);
+    } else {
+      gtk_widget_destroy(dialog);
+    }
 }
 
 void
@@ -236,12 +262,14 @@ on_new_canvas_ok_button_clicked        (GtkButton       *button,
     }
     else
     {
-        GtkWidget *msgbox = gnome_message_box_new(
-              _("Invalid width or height values"), GNOME_MESSAGE_BOX_ERROR, _(" OK "), NULL);
+        GtkWidget *msgbox = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+                 GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+              _("Invalid width or height values"), NULL);
         gtk_window_set_modal(GTK_WINDOW(msgbox), TRUE);
         gtk_window_set_transient_for (GTK_WINDOW(msgbox), GTK_WINDOW(dialog->window));
         gtk_window_set_position(GTK_WINDOW(msgbox), GTK_WIN_POS_CENTER);
-        gnome_dialog_run(GNOME_DIALOG(msgbox));
+        gtk_dialog_run(GTK_DIALOG(msgbox));
+        gtk_widget_destroy(msgbox);
    }   
 }
 

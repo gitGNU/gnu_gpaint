@@ -1,7 +1,7 @@
 /* $Id: brush.c,v 1.3 2004/12/25 04:41:58 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,9 +291,6 @@ brush_button_release(gpaint_tool *tool, int x, int y)
 static void 
 brush_interpolate(gpaint_brush *brush, int x, int y)
 {
-    int    initial_x = x;
-    int    initial_y = y;
-
     double dx;         /* delta x */
     double dy;         /* delta y */
     double moved;      /* mouse movement */       

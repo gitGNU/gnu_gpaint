@@ -1,7 +1,7 @@
 /* $Id: pixmaps.h,v 1.5 2004/03/13 03:49:19 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -40,6 +40,7 @@ extern const char *lineOp_xpm[];
 extern const char *ovalOp_xpm[];
 extern const char *pencilOp_xpm[];
 extern const char *selpolyOp_xpm[];
+extern const char *selrectOp_xpm[];
 extern const char *textOp_xpm[];
 extern const char *unfilled_xpm[];
 

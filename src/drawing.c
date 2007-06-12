@@ -1,7 +1,7 @@
 /* $Id: drawing.c,v 1.8 2005/01/27 02:48:45 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai <atai@gnu.org>
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -24,6 +24,10 @@
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
+#endif
+
+#ifdef HAVE_STRING_H
+#  include <string.h>
 #endif
 
 #include "drawing.h"
@@ -93,7 +97,6 @@ drawing_new_from_file(GtkDrawingArea *drawing_area, GdkGC *gc, const gchar *file
 {
     gpaint_drawing *drawing = (gpaint_drawing*)g_new0(gpaint_drawing, 1);
     GtkWidget *widget = GTK_WIDGET(drawing_area); 
-    GtkWidget *top_level = gtk_widget_get_toplevel(widget);
     gpaint_image *image;
 
     g_assert(drawing);
@@ -135,7 +138,6 @@ drawing_new_from_desktop(GtkDrawingArea *drawing_area, GdkGC *gc)
 {
     gpaint_drawing *drawing = (gpaint_drawing*)g_new0(gpaint_drawing, 1);
     GtkWidget *widget = GTK_WIDGET(drawing_area); 
-    GtkWidget *top_level = gtk_widget_get_toplevel(widget);
     gpaint_image *image;
 
     g_assert(drawing);
@@ -301,7 +303,7 @@ drawing_update_title(gpaint_drawing *drawing)
     gchar *basename;
     
     /* Display the filename in the title bar. */
-    title = g_string_new(_(""));
+    title = g_string_new("");
     if (drawing->untitled)
     {
        g_string_append(title, _("Untitled"));     

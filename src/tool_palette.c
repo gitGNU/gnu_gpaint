@@ -1,7 +1,7 @@
 /* $Id: tool_palette.c,v 1.4 2004/11/22 02:59:53 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -26,6 +26,8 @@
 #  include <config.h>
 #endif
 
+#include <string.h>
+#include <stdlib.h>
 #include "tool_palette.h"
 #include "debug.h"
 #include "support.h"
@@ -42,6 +44,7 @@
 #include "shape.h"
 #include "lasso.h"
 #include "polyselect.h"
+#include "rectselect.h"
 #include "fill.h"
 #include "text.h"
 
@@ -101,6 +104,7 @@ static const gpaint_tool_create tool_table[] =
     {"closed_freehand_button",  "freehand",   freehandOp_xpm, closed_freehand_create},
     {"pen_button",              "pen",        pencilOp_xpm,   pen_create},
     {"polselect_button",        "polyselect", selpolyOp_xpm,  polygon_select_create},
+    {"rectselect_button",       "rectselect", selrectOp_xpm,  rectangle_select_create},
     {"text_button",             "text",       textOp_xpm,     text_create},
     {"arc_button",              "arc",        arcOp_xpm,      arc_shape_create},
     {"curve_button",            "",           curveOp_xpm,    NULL},
@@ -264,7 +268,6 @@ tool_button_destroy(gpaint_tool_button *tb)
     g_assert(tb);
     if (tb->tool) 
     {
-        GtkWidget *widget;
         gpaint_tool *tool = tb->tool;
         g_assert(tool->name);
         g_assert(tool->destroy);

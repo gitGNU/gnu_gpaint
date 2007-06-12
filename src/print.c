@@ -1,7 +1,7 @@
 /* $Id: print.c,v 1.10 2004/12/29 02:44:02 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #endif
 
 #include "print.h"
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <gtk/gtk.h>
 #include "debug.h"
 
@@ -106,8 +106,6 @@ do_print(gpaint_image * image, const gchar * name)
 int
 do_print_preview(gpaint_image * image, const gchar * name)
 {
-    GtkWidget *toplevel, *canvas, *sw;
-    GnomePrintContext *pc = 0;
     GnomePrintConfig *cfg = NULL;
     GnomePrintJob *job = NULL;
     GnomePrintJobPreview *pmp = NULL;

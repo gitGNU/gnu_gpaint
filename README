@@ -1,13 +1,22 @@
-Note to package maintainers: This version is not a drop-in replacement for the
-previous releases of gpaint, due to dependencies on different versions of GNOME
-platforms.  To avoid confusion, this release uses the name "gpaint-2"
 
-This is gpaint (GNU Paint), a small-scale painting program for GNOME, the GNU
-Desktop.  Gpaint does not attempt to compete with GIMP.  Think of GIMP is like
-Photoshop as gpaint is like Windows Paint.
+
+This is gpaint (GNU Paint) version 0.3.1, a small-scale painting program for
+GNOME, the GNU Desktop.  Gpaint does not attempt to compete with GIMP.  Think of
+GIMP is like Photoshop as gpaint is like Windows Paint.
 
 Gpaint is still work in progress and many features are still being developed. 
 However, gpaint is usable already for simple image editing..  
+
+
+Changes in this version:
+
+    * patch 3838 from Goedson Teixeira Paixao <goedson> for updated pt_BR translation
+    * patch 3839 from Goedson Teixeira Paixao <goedson> for eliminating gcc warnings
+    * patch 5700, from Yavor Doganov <yavor>, New Bulgarian (bg) translation
+    * patch 5746, from Goedson Teixeira Paixao <goedson> , German translation
+    * patch 5894, from Goedson Teixeira Paixao <goedson> for Use GtkFileChooser for the open and save dialogs; also some fix for the German translation
+    * patch 5895, from Goedson Teixeira Paixao <goedson> implementing rectangular selection
+    * patch from Yavor Doganov <yavor> fixing bug 18842; also fixing the modal dialog when opening a file fails
 
 Currently gpaint has the following features:
    * Drawing tools--ovals, freehand, polygon, text, with fill or shallow for 
@@ -19,12 +28,11 @@ Currently gpaint has the following features:
      of the image editor
    * All image processing features present in xpaint
 
-This version of gpaint requires the GNOME 2.0 environment. To allow concurrent
-installation of GNOME 1.4 and GNOME 2 versions of gpaint, the binary for
-this gpaint is named "gpaint-2." This version uses the gdk-pixbuf library to
-handle image loading and saving.  Currently gdk-pixbuf's image saving
-capabilities are limited, with BUGGY support for only JPEG and PNG formats.  So
-currently gpaint's image saving is subject to the same limitations.
+This version of gpaint requires the GNOME 2.0 environment.  This version uses
+the gdk-pixbuf library to handle image loading and saving.  Currently
+gdk-pixbuf's image saving capabilities are limited, with BUGGY support for only
+JPEG and PNG formats.  So currently gpaint's image saving is subject to the same
+limitations.
 
 A large part of gpaint is derived from xpaint 2.4.9, authored by David Koblas
 and later Torsten Martinsen.  
@@ -33,5 +41,20 @@ The gpaint project is hosted on the GNU Savannah project site.
 
    http://savannah.gnu.org/projects/gpaint/
 
-For bugs or general comments please send mail to Michael Meffie
-<meffiem@neo.rr.com>
+gpaint development utilizes the GNU Arch Revision Control System; The
+development source is hosted at
+
+Archive name: atai@gnu.org--gpaint
+        URL: http://arch.gnu.org/archives/gpaint/atai@gnu.org--gpaint/
+branch: atai@gnu.org--gpaint/gpaint--main--1.0
+
+For bugs report at https://savannah.gnu.org/bugs/?func=additem&group=gpaint
+
+Future development plans:
+
+I plan to incorporate the recent printing features of gtk+ and to move away from
+gnomeprint.  Utilizing libglade and pango are the immediate next steps.  Also
+planned is the incorporation of a small extension language in the code base to
+support high level app logic.
+
+For general comments please send mail to Andy Tai <atai@gnu.org>

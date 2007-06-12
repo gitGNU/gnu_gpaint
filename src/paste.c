@@ -1,7 +1,7 @@
 /* $Id: paste.c,v 1.4 2005/01/27 02:50:09 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * Authors: Li-Cheng (Andy) Tai <atai@gnu.org>
  *          Michael A. Meffie III <meffiem@neo.rr.com>
@@ -28,6 +28,7 @@
 
 #include "paste.h"
 #include "debug.h"
+#include "selection.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
@@ -148,7 +149,6 @@ static void
 paste_motion(gpaint_tool * tool, int x, int y)
 {
     gpaint_paste *paste = GPAINT_PASTE(tool);
-    int x1, y1;
     debug_fn();
     
     /*  Drag the image to be pasted into place. */
@@ -166,8 +166,6 @@ paste_button_release(gpaint_tool * tool, int x, int y)
 static void
 paste_key_release(gpaint_tool *tool, GdkEventKey *keyevent)
 {
-    gpaint_paste *paste = GPAINT_PASTE(tool);
-    int x1, y1;
     debug_fn();
     switch (keyevent->keyval)
     {

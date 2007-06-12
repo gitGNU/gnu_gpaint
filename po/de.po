@@ -1,39 +1,40 @@
-# gpaint Portuguese translation.
-# Copyright (C) 2003 gpaint
-# This file is distributed under the same license as the gpaint package.
-# Duarte Loreto <happyguy_pt@hotmail.com>, 2003.
+# German translations for gpaint-2 package.
+# Copyright (C) 2006 THE gpaint-2'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gpaint-2 package.
+# Christian Müller <cmue81@gmx.de>, 2006.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.2\n"
+"Project-Id-Version: gpaint-2 0.3.0-pre5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-11 01:43-0700\n"
-"PO-Revision-Date: 2003-03-01 20:50+0000\n"
-"Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
-"Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
+"PO-Revision-Date: 2006-12-29 08:38+0100\n"
+"Last-Translator: Christian Müller <cmue81@gmx.de>\n"
+"Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/ui.c:49
 msgid "New Canvas"
-msgstr "Nova Tela"
+msgstr "Neues Bild erstellen"
 
 #: src/ui.c:57
 msgid "Enter the desired image size:"
-msgstr "Introduza o tamanho desejado da imagem:"
+msgstr "Bitte die Bildgröße in pixel angeben:"
 
 #: src/ui.c:86
 msgid "Width: "
-msgstr "Largura: "
+msgstr "Breite: "
 
 #: src/ui.c:94
 msgid "Height: "
-msgstr "Altura: "
+msgstr "Höhe: "
 
 #: src/ui.c:185
 msgid "about"
-msgstr "sobre"
+msgstr "Über.."
 
 #: src/ui.c:214
 msgid ""
@@ -42,77 +43,68 @@ msgid ""
 "Software Foundation, either version 2, or (at your opinion) any later "
 "version.\n"
 msgstr ""
-"Esta aplicação é livre; pode redistribui-la e/ou modifica-la sob os termos "
-"da Licença Pública Geral GNU tal como publicado pela Free Software "
-"Foundation (Fundação Aplicações Livres), na versão 2 ou (à sua descrição) "
-"qualquer versão posterior.\n"
 
 #: src/ui.c:223
 msgid ""
 "based on xpaint, by David Koblas and Torsten Martinsen \n"
 "Copyright 1992--1996"
 msgstr ""
-"baseado no xpaint, por David Koblas e Torsten Martinsen \n"
-"Copyright 1992--1996"
 
 #: src/ui.c:231
-#, fuzzy
 msgid ""
 "Copyright 2000--2003, 2007  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
 "Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
 msgstr ""
-"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
-"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
 
 #: src/ui.c:489
 msgid "gpaint"
 msgstr "gpaint"
 
 #: src/ui.c:506
-#, fuzzy
 msgid "_File"
-msgstr "_Novo Ficheiro"
+msgstr "_Datei"
 
 #: src/ui.c:515
-#, fuzzy
 msgid "_New"
-msgstr "Novo"
+msgstr "_Neu"
 
 #: src/ui.c:525
 #, fuzzy
 msgid "_Open"
-msgstr "Abrir"
+msgstr "Öffnen"
 
 #: src/ui.c:535
 #, fuzzy
 msgid "_Save"
-msgstr "Gravar"
+msgstr "Speichern"
 
 #: src/ui.c:545
 #, fuzzy
 msgid "Save _As"
-msgstr "Gravar Como"
+msgstr "Speichern unter.."
 
 #: src/ui.c:561 src/ui.c:566
 msgid "Print Preview"
-msgstr "Antever Impressão"
+msgstr "Druck_vorschau"
 
 #: src/ui.c:573
 #, fuzzy
 msgid "_Print"
-msgstr "Imprimir"
+msgstr "Drucken.."
 
 #: src/ui.c:590
+#, fuzzy
 msgid "_Close"
-msgstr ""
+msgstr "_Im Uhrzeigersinn"
 
 #: src/ui.c:600
+#, fuzzy
 msgid "_Quit"
-msgstr ""
+msgstr "B_earbeiten"
 
 #: src/ui.c:610
 msgid "_Edit"
-msgstr ""
+msgstr "B_earbeiten"
 
 #: src/ui.c:619
 msgid "Cu_t"
@@ -136,33 +128,34 @@ msgstr ""
 
 #: src/ui.c:670
 msgid "_Image"
-msgstr "_Imagem"
+msgstr "_Bild"
 
 #: src/ui.c:679
 msgid "Desktop"
-msgstr "Ambiente Trabalho"
+msgstr "_Arbeitsfläche"
 
 #: src/ui.c:688
 msgid "Get Snapshot of Desktop"
-msgstr "Obter Captura Ecrã do Ambiente Trabalho"
+msgstr "_Schnappschuss machen"
 
 #: src/ui.c:693
 msgid "Set Desktop Background"
-msgstr "Definir Fundo Ambiente Trabalho"
+msgstr "_Hintergrundbild festlegen"
 
 #: src/ui.c:704
 #, fuzzy
 msgid "Rotate Right"
-msgstr "Rodar"
+msgstr "_Drehen"
 
 #: src/ui.c:708
+#, fuzzy
 msgid "Rotate 90 degrees Clockwise"
-msgstr ""
+msgstr "_Gegen den Uhrzeigersinn"
 
 #: src/ui.c:713
 #, fuzzy
 msgid "Rotate Left"
-msgstr "Rodar"
+msgstr "_Drehen"
 
 #: src/ui.c:717
 msgid "Rotate 90 degrees Anticlockwise"
@@ -171,87 +164,86 @@ msgstr ""
 #: src/ui.c:728
 #, fuzzy
 msgid "Flip Left to Right"
-msgstr "Esquerda para Direita"
+msgstr "_Horizontal"
 
 #: src/ui.c:732
 #, fuzzy
 msgid "Mirror Left to Right"
-msgstr "Esquerda para Direita"
+msgstr "_Horizontal"
 
 #: src/ui.c:737
 #, fuzzy
 msgid "Flip Top to Bottom"
-msgstr "Cima para Baixo"
+msgstr "_Vertikal"
 
 #: src/ui.c:745
 #, fuzzy
 msgid "Effec_ts"
-msgstr "_Efeitos"
+msgstr "_Effekte"
 
 #: src/ui.c:754
-#, fuzzy
 msgid "_Invert"
-msgstr "_Inverter"
+msgstr "Negat_iv"
 
 #: src/ui.c:759
 msgid "_Sharpen"
-msgstr "_Nitidez"
+msgstr "_Schärfen"
 
 #: src/ui.c:770
 msgid "S_mooth"
-msgstr "_Suavizar"
+msgstr "_Glätten"
 
 #: src/ui.c:775
 msgid "_Directional Smooth"
-msgstr "Suavização _Direccional"
+msgstr "Glätten in bestimmter _Richtung"
 
 #: src/ui.c:780
 msgid "Despeckle"
-msgstr "Retirar Manchas"
+msgstr "Rauschen min_dern"
 
 #: src/ui.c:791
 msgid "_Edge Detect"
-msgstr "Detectar _Margens"
+msgstr "Kant_en herauslösen"
 
 #: src/ui.c:796
 msgid "Emboss"
-msgstr "Relevo"
+msgstr "_Prägen"
 
 #: src/ui.c:801
 msgid "_Oil Paint"
-msgstr "Pintura Óle_o"
+msgstr "Ölen (_o)"
 
 #: src/ui.c:806
 msgid "_Add Noise"
-msgstr "_Adicionar Ruido"
+msgstr "R_auschen hinzufügen"
 
 #: src/ui.c:811
 msgid "Spread"
-msgstr "Espalhar"
+msgstr "_Verteilen"
 
 #: src/ui.c:816
 msgid "_Pixelize"
-msgstr "_Pixelizar"
+msgstr "Mosaiksteine, ver_pixeln"
 
 #: src/ui.c:821
 msgid "_Blend"
-msgstr "Mist_urar"
+msgstr "Aus der _Mitte aufhellen"
 
 #: src/ui.c:826
 msgid "Solarize"
-msgstr "Iluminar"
+msgstr "So_larisieren (Postereffekt)"
 
 #: src/ui.c:837
 msgid "_Normalize Contrast"
-msgstr "_Normalizar Contraste"
+msgstr "Ko_ntrast aussteuern"
 
 #: src/ui.c:842
 msgid "_Quantize Color"
-msgstr "_Quantificar Cor"
+msgstr "Farben _quantisieren"
 
 #: src/ui.c:847
 msgid "Convert to _Greyscale"
-msgstr "Converter Escala Cin_za"
+msgstr "Umwandeln in _Graustufen"
 
 #: src/ui.c:852
 msgid "_Windows"
@@ -267,174 +259,171 @@ msgstr ""
 
 #: src/ui.c:871
 msgid "_Help"
-msgstr ""
+msgstr "_Hilfe"
 
 #: src/ui.c:880
 #, fuzzy
 msgid "_About"
-msgstr "sobre"
+msgstr "Über.."
 
 #: src/ui.c:905
 msgid "New"
-msgstr "Novo"
+msgstr "Neu"
 
 #: src/ui.c:909
 msgid "New File"
-msgstr "Novo Ficheiro"
+msgstr "Neues Bild erstellen"
 
 #: src/ui.c:913
 msgid "Open"
-msgstr "Abrir"
+msgstr "Öffnen"
 
 #: src/ui.c:917
 msgid "Open File"
-msgstr "Abrir Ficheiro"
+msgstr "Bild aus Datei öffnen"
 
 #: src/ui.c:921
 msgid "Save"
-msgstr "Gravar"
+msgstr "Speichern"
 
 #: src/ui.c:925
 msgid "Save File"
-msgstr "Gravar Ficheiro"
+msgstr "Bild speichern"
 
 #: src/ui.c:929
 msgid "Save As"
-msgstr "Gravar Como"
+msgstr "Speichern unter.."
 
 #: src/ui.c:933
 msgid "Save File As"
-msgstr "Gravar Ficheiro Como"
+msgstr "Bild unter anderem Namen speichern"
 
 #: src/ui.c:942 src/ui.c:947
 msgid "Print"
-msgstr "Imprimir"
+msgstr "Drucken.."
 
 #: src/ui.c:974
 msgid "Bold"
-msgstr "Negrito"
+msgstr "Fett"
 
 #: src/ui.c:979
 msgid "bold text"
-msgstr "texto negrito"
+msgstr "Fettschrift"
 
 #: src/ui.c:983
 msgid "Italic"
-msgstr "Itálico"
+msgstr "Kursiv"
 
 #: src/ui.c:988
 msgid "italic text"
-msgstr "texto itálico"
+msgstr "Schrägschrift"
 
 #: src/ui.c:992
 msgid "Underline"
-msgstr "Sublinhado"
+msgstr "Unterstrichen"
 
 #: src/ui.c:997
 msgid "underline text"
-msgstr "texto sublinhado"
+msgstr "Unterstrichene Schrift"
 
 #: src/ui.c:1009 src/ui.c:1040
 msgid "line width"
-msgstr "largura linha"
+msgstr "Stiftbreite"
 
 #: src/ui.c:1027
 msgid "1"
-msgstr "1"
+msgstr "1 px"
 
 #: src/ui.c:1028
 msgid "2"
-msgstr "2"
+msgstr "2 px"
 
 #: src/ui.c:1029
 msgid "3"
-msgstr "3"
+msgstr "3 px"
 
 #: src/ui.c:1030
 msgid "4"
-msgstr "4"
+msgstr "4 px"
 
 #: src/ui.c:1031
 msgid "6"
-msgstr "6"
+msgstr "6 px"
 
 #: src/ui.c:1032
 msgid "8"
-msgstr "8"
+msgstr "8 px"
 
 #: src/ui.c:1091
 msgid "erase"
-msgstr "apagar"
+msgstr "Radieren"
 
 #: src/ui.c:1102
 msgid "lasso"
-msgstr "demarcar"
+msgstr ""
 
 #: src/ui.c:1113
 #, fuzzy
 msgid "rectselect"
-msgstr "rectângulo"
+msgstr "Rechteck zeichnen"
 
 #: src/ui.c:1124 src/ui.c:1272
 msgid "fill"
-msgstr "encher"
+msgstr "Farbeimer ausschütten"
 
 #: src/ui.c:1135
 msgid "line"
-msgstr "linha"
+msgstr "Linie zeichnen"
 
 #: src/ui.c:1146
-#, fuzzy
 msgid "multiline"
-msgstr "linha"
+msgstr ""
 
 #: src/ui.c:1157
 msgid "rectangle"
-msgstr "rectângulo"
+msgstr "Rechteck zeichnen"
 
 #: src/ui.c:1168
-#, fuzzy
 msgid "freehand"
-msgstr "livre fechado"
+msgstr "Freihand"
 
 #: src/ui.c:1190
 msgid "pen"
-msgstr "caneta"
+msgstr "Stift"
 
 #: src/ui.c:1201
-#, fuzzy
 msgid "polyselect"
-msgstr "selecção poligonal"
+msgstr "Polygonausschnitt festlegen"
 
 #: src/ui.c:1213
 msgid "text"
-msgstr "texto"
+msgstr "Text schreiben"
 
 #: src/ui.c:1224
 msgid "arc"
-msgstr "arco"
+msgstr "Bogen zeichnen"
 
 #: src/ui.c:1235
 msgid "curve"
-msgstr "curva"
+msgstr "Bezierkurve zeichnen"
 
 #: src/ui.c:1246
 msgid "oval"
-msgstr "oval"
+msgstr "Ellipse zeichnen"
 
 #: src/ui.c:1257
 msgid "brush"
-msgstr "pincel"
+msgstr "Pinsel"
 
 #: src/support.c:90 src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
-msgstr "Incapaz de encontrar ficheiro pixmap: %s"
+msgstr "Benötigte Programmresource nicht gefunden: %s"
 
 #. default filename
 #: src/drawing.c:48
 msgid "untitled.png"
-msgstr ""
+msgstr "neu.png"
 
 #: src/drawing.c:221
 #, c-format
@@ -443,6 +432,9 @@ msgid ""
 "\n"
 "Do you want to overwrite it?"
 msgstr ""
+"Diese Datei gibt es schon: %s\n"
+"\n"
+"Soll sie überschrieben werden?"
 
 #: src/drawing.c:261
 #, c-format
@@ -451,19 +443,21 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Die Datei %s konnte nicht gespeichert werden.\n"
+"\n"
+"%s"
 
 #: src/drawing.c:309
 msgid "Untitled"
-msgstr ""
+msgstr "Neu"
 
 #: src/drawing.c:325
 msgid " (modified)"
-msgstr ""
+msgstr " (geändert)"
 
 #: src/drawing.c:327
-#, fuzzy
 msgid " - gpaint"
-msgstr "gpaint"
+msgstr " - gpaint"
 
 #: src/drawing.c:427
 #, c-format
@@ -471,48 +465,20 @@ msgid ""
 "Do you want to save the changes you made to \"%s\"?\n"
 "Your changes will be lost if you don't save them."
 msgstr ""
+"Sollen die Änderungen an \"%s\" gespeichert werden?\n"
+"Alle Änderungen gehen verloren, falls nicht gespeichert wird."
 
 #~ msgid "Flip"
-#~ msgstr "Espelhar"
+#~ msgstr "_Spiegeln"
 
 #~ msgid "background color"
-#~ msgstr "cor fundo"
+#~ msgstr "Hintergrundfarbe"
 
 #~ msgid "Background color"
-#~ msgstr "Cor fundo"
+#~ msgstr "Hintergrundfarbe"
 
 #~ msgid "foreground color"
-#~ msgstr "cor primeiro plano"
+#~ msgstr "Farbe"
 
 #~ msgid "Foreground color"
-#~ msgstr "Cor primeiro plano"
-
-#~ msgid "+90"
-#~ msgstr "+90"
-
-#~ msgid "+45"
-#~ msgstr "+45"
-
-#~ msgid "-45"
-#~ msgstr "-45"
-
-#~ msgid "-90"
-#~ msgstr "-90"
-
-#~ msgid "+180"
-#~ msgstr "+180"
-
-#~ msgid "About G_NOME"
-#~ msgstr "Sobre G_NOME"
-
-#~ msgid "About _GNU"
-#~ msgstr "Sobe _GNU"
-
-#~ msgid "polyline"
-#~ msgstr "polígono"
-
-#~ msgid "Zoom:"
-#~ msgstr "Zoom:"
-
-#~ msgid "Couldn't create pixmap from file: %s"
-#~ msgstr "Incapaz de criar pixmap de ficheiro: %s"
+#~ msgstr "Vodergrundfarbe"

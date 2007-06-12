@@ -1,7 +1,7 @@
 /* $Id: image_processing.c,v 1.4 2004/03/13 03:49:19 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,10 @@
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
+#endif
+
+#ifdef HAVE_STRING_H
+#  include <string.h>
 #endif
 
 #include <stdio.h>
@@ -83,22 +87,22 @@ typedef struct _gpaint_image_effect
 gpaint_image_effect;
 
 const gpaint_image_effect effect_table[] = {
-    "sharpen", ImageSharpen,
-    "smooth", ImageSmooth,
-    "directional_smooth", ImageDirectionalFilter,
-    "despeckle", ImageDespeckle,
-    "edge_detect", ImageEdge,
-    "emboss", ImageEmbose,
-    "oil_paint", ImageOilPaint,
-    "add_noise", ImageAddNoise,
-    "spread", ImageSpread,
-    "pixelize", ImagePixelize,
-    "blend", ImageBlend,
-    "solarize", ImageSolarize,
-    "normalize_contrast", ImageNormContrast,
-    "quantize_color", ImageQuantize,
-    "convert_to_greyscale", ImageGrey,
-    0, NULL                     /* end sentinel */
+    {"sharpen", ImageSharpen},
+    {"smooth", ImageSmooth},
+    {"directional_smooth", ImageDirectionalFilter},
+    {"despeckle", ImageDespeckle},
+    {"edge_detect", ImageEdge},
+    {"emboss", ImageEmbose},
+    {"oil_paint", ImageOilPaint},
+    {"add_noise", ImageAddNoise},
+    {"spread", ImageSpread},
+    {"pixelize", ImagePixelize},
+    {"blend", ImageBlend},
+    {"solarize", ImageSolarize},
+    {"normalize_contrast", ImageNormContrast},
+    {"quantize_color", ImageQuantize},
+    {"convert_to_greyscale", ImageGrey},
+    {0, NULL}                     /* end sentinel */
         /*
          * TODO: Add the following functions.
          *   ImageInvert

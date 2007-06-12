@@ -2,8 +2,9 @@
 <!DOCTYPE glade-project SYSTEM "http://glade.gnome.org/glade-project-2.0.dtd">
 
 <glade-project>
-  <name>Gpaint_HEAD</name>
-  <program_name>gpaint_head</program_name>
+  <name>Gpaint</name>
+  <program_name>gpaint</program_name>
+  <gnome_support>FALSE</gnome_support>
   <use_widget_names>TRUE</use_widget_names>
   <main_source_file>ui.c</main_source_file>
   <main_header_file>ui.h</main_header_file>

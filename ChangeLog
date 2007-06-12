@@ -1,3 +1,14 @@
+
+June 11, 2007    Andy Tai <atai@gnu.org>
+
+    * patch 3838 from Goedson Teixeira Paixao <goedson> for updated pt_BR translation applied
+    * patch 3839 from Goedson Teixeira Paixao <goedson> for eliminating gcc warnings applied
+    * patch 5700, from Yavor Doganov <yavor>, New Bulgarian (bg) translation applied
+    * patch 5746, from Goedson Teixeira Paixao <goedson> , German translation, applied
+    * patch 5894, from Goedson Teixeira Paixao <goedson> for Use GtkFileChooser for the open and save dialogs applied; also some fix for the German translation
+    * patch 5895, from Goedson Teixeira Paixao <goedson> implementing rectangular selection applied
+    * patch from Yavor Doganov <yavor> fixing bug 18842 applied; also fixing the modal dialog when opening a file fails
+
 November 12, 2002       Andy Tai <atai@gnu.org>
 
    * Port to the GNOME 2 platform, also minor bug fixes

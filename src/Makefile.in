@@ -66,37 +66,93 @@ DATADIRNAME = @DATADIRNAME@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
-GPAINT_CFLAGS = @GPAINT_CFLAGS@
-GPAINT_LIBS = @GPAINT_LIBS@
-HAVE_LIB = @HAVE_LIB@
+GUI_CFLAGS = @GUI_CFLAGS@
+GUI_LIBS = @GUI_LIBS@
 INSTOBJEXT = @INSTOBJEXT@
 INTLLIBS = @INTLLIBS@
-LIB = @LIB@
-LTLIB = @LTLIB@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKINSTALLDIRS = @MKINSTALLDIRS@
+MSGFMT_OPTS = @MSGFMT_OPTS@
 PACKAGE = @PACKAGE@
 PKG_CONFIG = @PKG_CONFIG@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
 PO_IN_DATADIR_TRUE = @PO_IN_DATADIR_TRUE@
+PRINT_CFLAGS = @PRINT_CFLAGS@
+PRINT_LIBS = @PRINT_LIBS@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
-WARN_CFLAGS = @WARN_CFLAGS@
-WARN_CXXFLAGS = @WARN_CXXFLAGS@
 
-INCLUDES =          -DPACKAGE_DATA_DIR=\""$(datadir)"\"         -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"         @GPAINT_CFLAGS@
+INCLUDES = \
+        -DPACKAGE_DATA_DIR=\""$(datadir)"\" \
+        -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+        @GUI_CFLAGS@ \
+        @PRINT_CFLAGS@
 
 
 bin_PROGRAMS = gpaint-2
 
-gpaint_2_SOURCES =  about.c about.h brush.c brush.h callbacks.c callbacks.h canvas.c canvas.h color_palette.c color_palette.h debug.h drawing.c drawing.h file.c file.h fill.c fill.h freehand.c freehand.h gtkscrollframe.c gtkscrollframe.h image.c image.h image_processing.c image_processing.h lasso.c lasso.h main.c menu.c paste.c paste.h pen.c pen.h pixmaps.c pixmaps.h polyselect.c polyselect.h print.c print.h selection.c selection.h shape.c shape.h support.c support.h text.c text.h tool_palette.c tool_palette.h ui.c ui.h version.h
+gpaint_2_SOURCES = \
+about.c \
+about.h \
+brush.c \
+brush.h \
+callbacks.c \
+callbacks.h \
+canvas.c \
+canvas.h \
+color_palette.c \
+color_palette.h \
+debug.h \
+drawing.c \
+drawing.h \
+file.c \
+file.h \
+fill.c \
+fill.h \
+freehand.c \
+freehand.h \
+gtkscrollframe.c \
+gtkscrollframe.h \
+image.c \
+image.h \
+image_processing.c \
+image_processing.h \
+lasso.c \
+lasso.h \
+main.c \
+menu.c \
+paste.c \
+paste.h \
+pen.c \
+pen.h \
+pixmaps.c \
+pixmaps.h \
+polyselect.c \
+polyselect.h \
+rectselect.c \
+rectselect.h \
+print.c \
+print.h \
+selection.c \
+selection.h \
+shape.c \
+shape.h \
+support.c \
+support.h \
+text.c \
+text.h \
+tool_palette.c \
+tool_palette.h \
+ui.c \
+ui.h \
+version.h
 
 
 gpaint_2_CFLAGS = -I$(srcdir)
-gpaint_2_LDADD = $(GPAINT_LIBS)
+gpaint_2_LDADD = $(GUI_LIBS) $(PRINT_LIBS)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
 PROGRAMS =  $(bin_PROGRAMS)
@@ -109,7 +165,7 @@ LIBS = @LIBS@
 gpaint_2_OBJECTS =  about.o brush.o callbacks.o canvas.o color_palette.o \
 drawing.o file.o fill.o freehand.o gtkscrollframe.o image.o \
 image_processing.o lasso.o main.o menu.o paste.o pen.o pixmaps.o \
-polyselect.o print.o selection.o shape.o support.o text.o \
+polyselect.o rectselect.o print.o selection.o shape.o support.o text.o \
 tool_palette.o ui.o
 gpaint_2_DEPENDENCIES = 
 gpaint_2_LDFLAGS = 
@@ -122,7 +178,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 SOURCES = $(gpaint_2_SOURCES)
 OBJECTS = $(gpaint_2_OBJECTS)
@@ -204,7 +260,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	  awk '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || (cd $(srcdir) && etags -o $$here/TAGS $(ETAGS_ARGS) $$tags  $$unique $(LISP))
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
 
 mostlyclean-tags:
 
@@ -235,28 +291,24 @@ brush.o: brush.c brush.h canvas.h image.h selection.h drawing.h debug.h
 callbacks.o: callbacks.c debug.h
 canvas.o: canvas.c debug.h canvas.h image.h selection.h drawing.h \
 	support.h gtkscrollframe.h image_processing.h paste.h
-clipboard.o: clipboard.c
 color_palette.o: color_palette.c canvas.h image.h selection.h drawing.h \
 	callbacks.h pixmaps.h support.h debug.h
 drawing.o: drawing.c drawing.h image.h selection.h image_processing.h \
 	debug.h
 file.o: file.c canvas.h image.h selection.h drawing.h debug.h ui.h \
 	support.h
-fileio.o: fileio.c
 fill.o: fill.c fill.h canvas.h image.h selection.h drawing.h debug.h
 freehand.o: freehand.c freehand.h canvas.h image.h selection.h drawing.h \
 	debug.h
 gtkscrollframe.o: gtkscrollframe.c gtkscrollframe.h
 image.o: image.c image.h selection.h debug.h
-image_buf.o: image_buf.c
 image_processing.o: image_processing.c image.h selection.h debug.h \
 	image_processing.h
-interface.o: interface.c callbacks.h pixmaps.h interface.h support.h
 lasso.o: lasso.c lasso.h canvas.h image.h selection.h drawing.h debug.h
 main.o: main.c ui.h debug.h canvas.h image.h selection.h drawing.h \
 	tool_palette.h
 menu.o: menu.c debug.h canvas.h image.h selection.h drawing.h \
-	image_processing.h tool_palette.h
+	image_processing.h tool_palette.h print.h file.h
 paste.o: paste.c paste.h canvas.h image.h selection.h drawing.h debug.h
 pen.o: pen.c pen.h canvas.h image.h selection.h drawing.h debug.h
 pixmaps.o: pixmaps.c ../pixmaps/about_pict.xpm ../pixmaps/arcOp.xpm \
@@ -266,21 +318,22 @@ pixmaps.o: pixmaps.c ../pixmaps/about_pict.xpm ../pixmaps/arcOp.xpm \
 	../pixmaps/fillOp.xpm ../pixmaps/freehandOp.xpm \
 	../pixmaps/lassoOp.xpm ../pixmaps/lineOp.xpm \
 	../pixmaps/ovalOp.xpm ../pixmaps/pencilOp.xpm \
-	../pixmaps/selpolyOp.xpm ../pixmaps/textOp.xpm \
-	../pixmaps/unfilled.xpm
+	../pixmaps/selpolyOp.xpm ../pixmaps/selrectOp.xpm \
+	../pixmaps/textOp.xpm ../pixmaps/unfilled.xpm
 polyselect.o: polyselect.c polyselect.h canvas.h image.h selection.h \
 	drawing.h debug.h
 print.o: print.c print.h image.h selection.h debug.h
-rgb.o: rgb.c
+rectselect.o: rectselect.c rectselect.h canvas.h image.h selection.h \
+	drawing.h debug.h
 selection.o: selection.c selection.h debug.h
 shape.o: shape.c shape.h canvas.h image.h selection.h drawing.h debug.h
 support.o: support.c support.h
 text.o: text.c text.h canvas.h image.h selection.h drawing.h debug.h
 tool_palette.o: tool_palette.c tool_palette.h canvas.h image.h \
 	selection.h drawing.h debug.h support.h pixmaps.h pen.h \
-	freehand.h brush.h shape.h lasso.h polyselect.h fill.h text.h
+	freehand.h brush.h shape.h lasso.h polyselect.h rectselect.h \
+	fill.h text.h
 ui.o: ui.c callbacks.h pixmaps.h ui.h support.h
-util.o: util.c
 
 info-am:
 info: info-am

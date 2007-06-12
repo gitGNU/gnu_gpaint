@@ -1,7 +1,7 @@
 /* $Id: callbacks.h,v 1.12 2005/01/03 19:33:22 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
  */
 
 #include <gtk/gtk.h>
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include "pixmaps.h"
 
 void
@@ -355,12 +355,12 @@ on_scroll_frame_map                    (GtkWidget       *widget,
                                         gpointer         user_data);
 
 void
-on_fontpicker_font_set                 (GnomeFontPicker *gnomefontpicker,
+on_fontpicker_font_set                 (GtkFontButton *gnomefontpicker,
                                         gchar *arg1,
                                         gpointer         user_data);
 
 void
-on_foreground_color_picker_color_set   (GnomeColorPicker *gnomecolorpicker,
+on_foreground_color_picker_color_set   (GtkColorButton *gnomecolorpicker,
                                         guint            arg1,
                                         guint            arg2,
                                         guint            arg3,
@@ -368,7 +368,7 @@ on_foreground_color_picker_color_set   (GnomeColorPicker *gnomecolorpicker,
                                         gpointer         user_data);
 
 void
-on_background_color_picker_color_set   (GnomeColorPicker *gnomecolorpicker,
+on_background_color_picker_color_set   (GtkColorButton *gnomecolorpicker,
                                         guint            arg1,
                                         guint            arg2,
                                         guint            arg3,

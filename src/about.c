@@ -1,7 +1,7 @@
 /* $Id: about.c,v 1.4 2004/12/29 02:44:02 meffie Exp $
  *
  * GNU Paint 
- * Copyright 2000-2003  Li-Cheng (Andy) Tai
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ void
 on_about_gnome_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-    gnome_url_show("http://www.gnome.org/");
+    /*gnome_url_show("http://www.gnome.org/");*/
 }
 
 
@@ -114,7 +114,7 @@ void
 on_about_gnu_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-    gnome_url_show("http://www.gnu.org/");
+    /*gnome_url_show("http://www.gnu.org/");*/
 }
 
 /*
