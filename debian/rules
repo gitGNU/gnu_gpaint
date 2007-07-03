@@ -24,7 +24,7 @@ include /usr/share/cdbs/1/class/gnome.mk
 include /usr/share/dpatch/dpatch.make
 post-patches:: patch
 clean:: unpatch
-	rm po/*.gmo
+	-rm po/*.gmo
 
 install/gpaint::
 	# Rename executable

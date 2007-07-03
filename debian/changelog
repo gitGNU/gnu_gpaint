@@ -1,3 +1,10 @@
+gpaint (0.3.1-2) unstable; urgency=low
+
+  * Fix crash when copying the whole image (LP: #102539)
+  * Updated pt_BR translation
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Mon, 02 Jul 2007 23:03:52 -0300
+
 gpaint (0.3.1-1) unstable; urgency=low
 
   * New upstream release

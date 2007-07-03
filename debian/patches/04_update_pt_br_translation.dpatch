@@ -1,0 +1,192 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 04_update_pt_br_translation.dpatch by Goedson Teixeira Paixao <goedson@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Updates the Brazilian Portuguese translation.
+
+@DPATCH@
+diff -urNad gpaint-0.3.1~/po/pt_BR.po gpaint-0.3.1/po/pt_BR.po
+--- gpaint-0.3.1~/po/pt_BR.po	2007-06-11 05:43:39.000000000 -0300
++++ gpaint-0.3.1/po/pt_BR.po	2007-07-02 23:03:03.000000000 -0300
+@@ -7,7 +7,7 @@
+ "Project-Id-Version: gpaint 0.2.1POT-Creation-Date\n"
+ "Report-Msgid-Bugs-To: \n"
+ "POT-Creation-Date: 2007-06-11 01:43-0700\n"
+-"PO-Revision-Date: 2005-03-20 12:10-0300\n"
++"PO-Revision-Date: 2007-07-02 23:03-0300\n"
+ "Last-Translator: Goedson Teixeira Paixão <gopaixao@dcc.ufmg.br>\n"
+ "Language-Team: Portuguese/Brazil <debian-l10n-portuguese@lists.debian.org>\n"
+ "MIME-Version: (null)\n"
+@@ -55,7 +55,6 @@
+ "Copyright 1992--1996"
+ 
+ #: src/ui.c:231
+-#, fuzzy
+ msgid ""
+ "Copyright 2000--2003, 2007  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+ "Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+@@ -76,38 +75,32 @@
+ msgstr "_Novo"
+ 
+ #: src/ui.c:525
+-#, fuzzy
+ msgid "_Open"
+ msgstr "Abrir"
+ 
+ #: src/ui.c:535
+-#, fuzzy
+ msgid "_Save"
+-msgstr "Salvar"
++msgstr "_Salvar"
+ 
+ #: src/ui.c:545
+-#, fuzzy
+ msgid "Save _As"
+-msgstr "Salvar Como"
++msgstr "S_alvar Como"
+ 
+ #: src/ui.c:561 src/ui.c:566
+ msgid "Print Preview"
+ msgstr "Visualizar Impressão"
+ 
+ #: src/ui.c:573
+-#, fuzzy
+ msgid "_Print"
+-msgstr "Imprimir"
++msgstr "Im_primir"
+ 
+ #: src/ui.c:590
+-#, fuzzy
+ msgid "_Close"
+-msgstr "Sentido horário"
++msgstr "Fe_char"
+ 
+ #: src/ui.c:600
+-#, fuzzy
+ msgid "_Quit"
+-msgstr "_Editar"
++msgstr "Sair"
+ 
+ #: src/ui.c:610
+ msgid "_Edit"
+@@ -115,23 +108,23 @@
+ 
+ #: src/ui.c:619
+ msgid "Cu_t"
+-msgstr ""
++msgstr "Recor_tar"
+ 
+ #: src/ui.c:629
+ msgid "_Copy"
+-msgstr ""
++msgstr "_Copiar"
+ 
+ #: src/ui.c:639
+ msgid "_Paste"
+-msgstr ""
++msgstr "Colar"
+ 
+ #: src/ui.c:649
+ msgid "Clear"
+-msgstr ""
++msgstr "Limpar"
+ 
+ #: src/ui.c:665
+ msgid "_Select All"
+-msgstr ""
++msgstr "_Selecionar Tudo"
+ 
+ #: src/ui.c:670
+ msgid "_Image"
+@@ -150,43 +143,36 @@
+ msgstr "Colocar no fundo da tela"
+ 
+ #: src/ui.c:704
+-#, fuzzy
+ msgid "Rotate Right"
+-msgstr "Girar"
++msgstr "Girar para a Direita"
+ 
+ #: src/ui.c:708
+-#, fuzzy
+ msgid "Rotate 90 degrees Clockwise"
+-msgstr "Sentido anti-horário"
++msgstr "Gira 90 graus em sentido horário"
+ 
+ #: src/ui.c:713
+-#, fuzzy
+ msgid "Rotate Left"
+-msgstr "Girar"
++msgstr "Girar para a esquerda"
+ 
+ #: src/ui.c:717
+ msgid "Rotate 90 degrees Anticlockwise"
+-msgstr ""
++msgstr "Girar 90 graus em sentido anti-horário"
+ 
+ #: src/ui.c:728
+-#, fuzzy
+ msgid "Flip Left to Right"
+-msgstr "Esquerda para direita"
++msgstr "Inverter horizontalmente"
+ 
+ #: src/ui.c:732
+-#, fuzzy
+ msgid "Mirror Left to Right"
+-msgstr "Esquerda para direita"
++msgstr "Inverte a imagem na horizontal"
+ 
+ #: src/ui.c:737
+-#, fuzzy
+ msgid "Flip Top to Bottom"
+-msgstr "Topo para fundo"
++msgstr "Inverter verticalmente"
+ 
+ #: src/ui.c:745
+-#, fuzzy
+ msgid "Effec_ts"
+-msgstr "_Efeitos"
++msgstr "Efei_tos"
+ 
+ #: src/ui.c:754
+ msgid "_Invert"
+@@ -254,24 +240,23 @@
+ 
+ #: src/ui.c:852
+ msgid "_Windows"
+-msgstr ""
++msgstr "_Janelas"
+ 
+ #: src/ui.c:861
+ msgid "Create _New Window"
+-msgstr ""
++msgstr "Criar _Nova Janela"
+ 
+ #: src/ui.c:866
+ msgid "_Close This Window"
+-msgstr ""
++msgstr "Fe_char esta Janela"
+ 
+ #: src/ui.c:871
+ msgid "_Help"
+ msgstr "A_juda"
+ 
+ #: src/ui.c:880
+-#, fuzzy
+ msgid "_About"
+-msgstr "sobre"
++msgstr "Sobre"
+ 
+ #: src/ui.c:905
+ msgid "New"
+@@ -370,9 +355,8 @@
+ msgstr "laço"
+ 
+ #: src/ui.c:1113
+-#, fuzzy
+ msgid "rectselect"
+-msgstr "retângulo"
++msgstr "Seleção retangular"
+ 
+ #: src/ui.c:1124 src/ui.c:1272
+ msgid "fill"
