@@ -5,7 +5,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be
@@ -13,10 +13,8 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
@@ -56,7 +54,7 @@ main (int argc, char *argv[])
     
     gtk_init(&argc, &argv);
     
-    canvas_init(argc, argv);
+    canvas_init_arg(argc, argv);
     create_window();
 
     gtk_main();
@@ -96,6 +94,7 @@ on_mainwindow_delete_event             (GtkWidget       *widget,
      * chance to save their changes before the program exits! */
     debug_fn();
     canvas = canvas_lookup(widget);
+    canvas_commit_change(canvas);
     cancel_exit = drawing_prompt_to_save(canvas->drawing);
     debug1("cancel_exit is %d", cancel_exit);
 
@@ -193,6 +192,7 @@ on_close_window_activate(GtkMenuItem *menuitem, gpointer user_data)
     canvas = canvas_lookup(GTK_WIDGET(menuitem));
     top_level_widget = GTK_WIDGET(canvas->top_level);
     debug1("top_level_widget=%p", top_level_widget);
+    canvas_commit_change(canvas);
     
     cancel_exit = drawing_prompt_to_save(canvas->drawing);
     debug1("cancel_exit is %d", cancel_exit);
@@ -267,6 +267,7 @@ on_quit_menu_activate(GtkMenuItem *menuitem, gpointer user_data)
         g_assert(node->data);
         widget = GTK_WIDGET(node->data);
         canvas = canvas_lookup(widget);
+        canvas_commit_change(canvas);
         if (!drawing_prompt_to_save(canvas->drawing))
         {
             gtk_widget_destroy(widget);
@@ -276,5 +277,4 @@ on_quit_menu_activate(GtkMenuItem *menuitem, gpointer user_data)
         debug1("next node => %p", node);
     }
 }
-
 

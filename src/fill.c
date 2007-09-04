@@ -8,7 +8,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be
@@ -16,10 +16,8 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -55,11 +53,6 @@ struct fillpixelinfo
 
 
 #define GPAINT_FILL(tool)  ((gpaint_fill*)(tool))
-
-#define SHIFT_COLOR(NAME) \
- (color->pixel & visual->NAME##_mask) >> \
- visual->NAME##_shift << \
- (sizeof(unsigned char) * 8 - visual->NAME##_prec);
 
 #define PUSH(py, pxl, pxr, pdy) \
 { \
@@ -150,36 +143,6 @@ fill_bounded_area(gpaint_tool* tool, int x, int y)
 
     drawing_modified(drawing);
 }
-
-static void
-convert_color(const GdkColor *color, unsigned char *r, unsigned char *g, unsigned char *b)
-{
-    GdkColormap *cmap = gdk_rgb_get_cmap();
-    GdkVisual *visual = gdk_rgb_get_visual();
-    GdkColor *c;
-    switch(visual->type)
-    {
-        case GDK_VISUAL_STATIC_COLOR:
-        case GDK_VISUAL_PSEUDO_COLOR:
-            c = cmap->colors + color->pixel;
-            *r = c->red >> 8;
-            *g = c->green >> 8;
-            *b = c->blue >> 8;
-            break;
-
-        case GDK_VISUAL_TRUE_COLOR:
-        case GDK_VISUAL_DIRECT_COLOR:
-            *r = SHIFT_COLOR(red);
-            *g = SHIFT_COLOR(green);
-            *b = SHIFT_COLOR(blue);
-            break;
-   
-       default:
-            g_assert_not_reached();
-            break;
-    }
-}
-
 /*
  * algorithm based on SeedFill.c from GraphicsGems 1
  */

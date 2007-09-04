@@ -32,6 +32,8 @@
 #  define N_(String) (String)
 #endif
 
+static const guint8  MAX_8_BIT_COLOR  = 0xFF;
+static const guint16 MAX_16_BIT_COLOR = 0xFFFF;
 
 /*
  * Public Functions.
@@ -67,3 +69,14 @@ void        glade_set_atk_action_description (AtkAction       *action,
                                               const gchar     *action_name,
                                               const gchar     *description);
 
+/*
+ * Convert an 8 bit color [0,255] to a 16 bit color [0,65538].
+ */
+guint16
+color16(guint8 color);
+
+/*
+ * convert a GdkColor to its red, blue, green values
+ */
+void
+convert_color(const GdkColor *color, unsigned char *r, unsigned char *g, unsigned char *b);

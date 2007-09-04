@@ -1,8 +1,3 @@
-01_fix_color_palette_button_sizes
 02_remove_menu_h_reference
-03_fix_crash_on_copy
 04_update_pt_br_translation
 09_fix_menu_entry
-10_real_clipboard
-11_keyboard_accelerators
-12_fix_line_width

@@ -57,8 +57,6 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-host_alias = @host_alias@
-host_triplet = @host@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -73,7 +71,6 @@ INTLLIBS = @INTLLIBS@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKINSTALLDIRS = @MKINSTALLDIRS@
-MSGFMT_OPTS = @MSGFMT_OPTS@
 PACKAGE = @PACKAGE@
 PKG_CONFIG = @PKG_CONFIG@
 POFILES = @POFILES@
@@ -290,7 +287,7 @@ about.o: about.c ui.h version.h about.h
 brush.o: brush.c brush.h canvas.h image.h selection.h drawing.h debug.h
 callbacks.o: callbacks.c debug.h
 canvas.o: canvas.c debug.h canvas.h image.h selection.h drawing.h \
-	support.h gtkscrollframe.h image_processing.h paste.h
+	support.h gtkscrollframe.h image_processing.h paste.h text.h
 color_palette.o: color_palette.c canvas.h image.h selection.h drawing.h \
 	callbacks.h pixmaps.h support.h debug.h
 drawing.o: drawing.c drawing.h image.h selection.h image_processing.h \
@@ -308,7 +305,7 @@ lasso.o: lasso.c lasso.h canvas.h image.h selection.h drawing.h debug.h
 main.o: main.c ui.h debug.h canvas.h image.h selection.h drawing.h \
 	tool_palette.h
 menu.o: menu.c debug.h canvas.h image.h selection.h drawing.h \
-	image_processing.h tool_palette.h print.h file.h
+	image_processing.h tool_palette.h print.h file.h text.h
 paste.o: paste.c paste.h canvas.h image.h selection.h drawing.h debug.h
 pen.o: pen.c pen.h canvas.h image.h selection.h drawing.h debug.h
 pixmaps.o: pixmaps.c ../pixmaps/about_pict.xpm ../pixmaps/arcOp.xpm \
@@ -327,7 +324,7 @@ rectselect.o: rectselect.c rectselect.h canvas.h image.h selection.h \
 	drawing.h debug.h
 selection.o: selection.c selection.h debug.h
 shape.o: shape.c shape.h canvas.h image.h selection.h drawing.h debug.h
-support.o: support.c support.h
+support.o: support.c support.h debug.h
 text.o: text.c text.h canvas.h image.h selection.h drawing.h debug.h
 tool_palette.o: tool_palette.c tool_palette.h canvas.h image.h \
 	selection.h drawing.h debug.h support.h pixmaps.h pen.h \

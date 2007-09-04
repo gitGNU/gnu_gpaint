@@ -8,7 +8,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be
@@ -16,10 +16,8 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -88,6 +86,140 @@ paste_destroy(gpaint_tool *tool)
     g_free(tool);
 }
 
+static GdkAtom*
+paste_clipboard_wait_for_targets (gint *n_targets)
+{
+    GtkClipboard *gtk_clipboard;
+  
+    gtk_clipboard = gtk_clipboard_get_for_display (gdk_display_get_default (),
+	                                             GDK_SELECTION_CLIPBOARD);
+
+    if (gtk_clipboard)
+    {
+        GtkSelectionData *data;
+
+        data = gtk_clipboard_wait_for_contents (gtk_clipboard,
+                                              gdk_atom_intern ("TARGETS",
+                                                               FALSE));
+        if (data)
+        {
+            GdkAtom  *targets;
+            gboolean  success;
+
+            success = gtk_selection_data_get_targets (data, &targets, n_targets);
+
+            gtk_selection_data_free (data);
+
+            if (success)
+            {
+                gint i;
+
+                for (i = 0; i < *n_targets; i++)
+                    g_print ("offered type: %s\n", gdk_atom_name (targets[i]));
+
+                g_print ("\n");
+
+                return targets;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+static GdkAtom
+paste_clipboard_wait_for_buffer (gpaint_canvas *canvas)
+{
+    gpaint_clipboard *clipboard = canvas_clipboard(canvas);
+    GdkAtom *targets;
+    gint n_targets;
+    GdkAtom result = GDK_NONE;
+
+    targets = paste_clipboard_wait_for_targets (&n_targets);
+
+    if (targets)
+    {
+	GSList *list;
+
+        for (list = clipboard->pixbuf_formats; list; list = g_slist_next (list))
+        {
+          GdkPixbufFormat  *format = list->data;
+          gchar           **mime_types;
+          gchar           **type;
+
+          g_print ("checking pixbuf format '%s'\n",
+                   gdk_pixbuf_format_get_name (format));
+
+          mime_types = gdk_pixbuf_format_get_mime_types (format);
+
+          for (type = mime_types; *type; type++)
+          {
+              gchar   *mime_type = *type;
+              GdkAtom  atom      = gdk_atom_intern (mime_type, FALSE);
+              gint     i;
+
+              g_print (" - checking mime type '%s'\n", mime_type);
+
+              for (i = 0; i < n_targets; i++)
+              {
+                  if (targets[i] == atom)
+                  {
+                      result = atom;
+                      break;
+                  }
+              }
+
+              if (result != GDK_NONE)
+                break;
+          }
+
+          g_strfreev (mime_types);
+
+          if (result != GDK_NONE)
+              break;
+        }
+
+        g_free (targets);
+    }
+
+    return result;
+}
+
+GdkPixbuf*
+paste_selection_data_get_pixbuf (GtkSelectionData *selection)
+{
+    GdkPixbufLoader *loader;
+    GdkPixbuf       *pixbuf = NULL;
+    GError          *error  = NULL;
+  
+    g_return_val_if_fail (selection != NULL, NULL);
+  
+    if ((selection->format != 8) || (selection->length < 1))
+    {
+        g_warning ("Received invalid image data!");
+        return NULL;
+    }
+  
+    loader = gdk_pixbuf_loader_new ();
+  
+    if (gdk_pixbuf_loader_write (loader,
+                                 selection->data, selection->length, &error) &&
+                                 gdk_pixbuf_loader_close (loader, &error))
+    {
+        pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+        g_object_ref (pixbuf);
+    }
+    else
+    {
+        g_warning ("%s: %s", G_STRFUNC, error->message);
+        g_error_free (error);
+    }
+  
+    g_object_unref (loader);
+  
+    return pixbuf;
+}
+
 static void
 paste_select(gpaint_tool *tool)
 {
@@ -95,14 +227,66 @@ paste_select(gpaint_tool *tool)
     gpaint_canvas *canvas   = tool->canvas;
     gpaint_drawing *drawing = tool->drawing;
     gpaint_clipboard *clipboard = canvas_clipboard(tool->canvas);
+    GtkClipboard *gtk_clipboard;
  
     /* make a backup of the current drawing */
     paste->backup_image = drawing_create_image(drawing);
     
+ /* check for image data on real clipboard */
+     gtk_clipboard = gtk_clipboard_get_for_display (gdk_display_get_default(),
+ 							GDK_SELECTION_CLIPBOARD);
+     if (gtk_clipboard && gtk_clipboard_get_owner (gtk_clipboard) != G_OBJECT (canvas))
+     {
+ 	GdkAtom atom = paste_clipboard_wait_for_buffer (canvas);
+ 
+ 	if (atom != GDK_NONE)
+ 	{
+ 	    GtkSelectionData *data;
+ 
+ 	    data = gtk_clipboard_wait_for_contents (gtk_clipboard, atom);
+ 
+ 	    if (data)
+ 	    {
+ 		GdkPixbuf *pixbuf = paste_selection_data_get_pixbuf (data);
+ 
+ 		gtk_selection_data_free (data);
+ 
+ 		if (pixbuf)
+ 		{
+ 		    gpaint_point_array *clipboard_points;
+ 		    int width, height;
+ 		    GdkPixbuf** pixbufp = &pixbuf;
+ 
+ 		    if (clipboard->image)
+ 		    {
+ 			image_free(clipboard->image);
+ 		    }
+ 
+ 		    width = gdk_pixbuf_get_width (pixbuf);
+ 		    height = gdk_pixbuf_get_height (pixbuf);
+ 		    clipboard->image = image_new_copy ((gpaint_image*)pixbufp);
+ 
+ /* define clipboard points */
+ 		    point_array_remove_all (clipboard->points);
+ 		    point_array_append (clipboard->points, 0, 0);
+ 		    point_array_append (clipboard->points, width, 0);
+ 		    point_array_append (clipboard->points, width, height);
+ 		    point_array_append (clipboard->points, 0, height);
+ 		    point_array_append (clipboard->points, 0, 0);
+ 
+ 		    g_object_unref (pixbuf);
+ 		}
+ 	    }
+ 	}
+     }
+ 
+ /* check for invalid paste */
+     if (!point_array_size(clipboard->points))
+ 	return;
+     
     /* make a copy of the current clipboad contents and selection points */
     paste->overlay_image   = image_new_copy(clipboard->image);
     selection_set_points(canvas->selection, clipboard->points);
-    
     /* draw the overlay at the top left corner of the drawing */
     paste_move_overlay(paste, 0, 0);   
 }
@@ -112,7 +296,10 @@ paste_deselect(gpaint_tool *tool)
 {
     gpaint_paste *paste = GPAINT_PASTE(tool);
     selection_remove_points(tool->canvas->selection);
+    if (paste->overlay_image)
+    {
     image_free(paste->overlay_image);
+    }
     image_free(paste->backup_image);
     paste->offset_x = 0;
     paste->offset_y = 0;
@@ -235,15 +422,15 @@ paste_erase_overlay(gpaint_paste *paste)
 
     if (x + overlay_rect.width >= drawing->width)
     {
-        overlay_rect.width = drawing->width - x - 1;
+        overlay_rect.width = drawing->width - x;
     }
    
     if (y + overlay_rect.height >= drawing->height)
     {
-        overlay_rect.height = drawing->height - y - 1;
+        overlay_rect.height = drawing->height - y;
     }
       
-    if ((drawing->width - x - 1 < 0) || (drawing->height - y - 1 < 0))
+    if ((drawing->width - x < 0) || (drawing->height - y < 0))
     {
        return;
     }
@@ -286,14 +473,14 @@ paste_draw_overlay(gpaint_paste *paste, int x, int y)
    
     if (x + rect.width >= drawing->width)
     {
-        rect.width = drawing->width - x - 1;
+        rect.width = drawing->width - x;
     }
     if (y + rect.height >= drawing->height)
     {
-        rect.height = drawing->height - y - 1;
+        rect.height = drawing->height - y;
     }
     
-    if ((drawing->width - x - 1 < 0) || (drawing->height - y - 1 < 0))
+    if ((drawing->width - x < 0) || (drawing->height - y < 0))
     {
        return;
     }  

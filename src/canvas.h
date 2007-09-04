@@ -8,7 +8,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be
@@ -16,10 +16,8 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __CANVAS_H__
@@ -34,6 +32,7 @@
 #define DEFAULT_HEIGHT 480
 
 typedef struct _gpaint_canvas    gpaint_canvas;
+typedef struct _gpaint_canvas_class    gpaint_canvas_class;
 typedef struct _gpaint_tool      gpaint_tool;
 
 typedef enum _gpaint_attribute 
@@ -63,6 +62,8 @@ typedef void         (*ToolButtonPress)  (gpaint_tool*, int, int);
 typedef void         (*ToolMotion)       (gpaint_tool*, int, int); 
 typedef void         (*ToolButtonRelease)(gpaint_tool*, int, int); 
 typedef void         (*ToolKeyRelease)   (gpaint_tool*, GdkEventKey*);
+typedef void         (*ToolCurrentDraw)  (gpaint_tool *);
+typedef void         (*ToolCommitChange) (gpaint_tool *);
 
 struct _gpaint_tool
 {
@@ -79,6 +80,8 @@ struct _gpaint_tool
     ToolMotion        motion;
     ToolButtonRelease button_release;
     ToolKeyRelease    key_release;
+    ToolCurrentDraw   current_draw;
+    ToolCommitChange  commit_change;
 };
 
 /* cast macro */
@@ -88,10 +91,23 @@ typedef struct _gpaint_clipboard
 {
     gpaint_image       *image;
     gpaint_point_array *points;
+
+    GSList	       *pixbuf_formats;
+
+    GtkTargetEntry     *target_entries;
+    gint		n_target_entries;
+    gchar	      **savers;
 } gpaint_clipboard;
+
+struct _gpaint_canvas_class
+{
+    GObjectClass      parent;
+};
 
 struct _gpaint_canvas 
 {
+    GObject	      parent;
+
     /* public */
     GtkWidget        *top_level;       
     GtkDrawingArea   *drawing_area;
@@ -109,7 +125,7 @@ struct _gpaint_canvas
     gpaint_tool      *saved_tool;
 };
 
-void canvas_init(int argc, char *argv[]);
+void canvas_init_arg(int argc, char *argv[]);
 void canvas_destroy(gpaint_canvas *canvas);
 gpaint_canvas* canvas_lookup(GtkWidget *widget);
 
@@ -117,6 +133,7 @@ void canvas_set_drawing(gpaint_canvas *canvas, gpaint_drawing *drawing);
 void canvas_resize(gpaint_canvas *canvas);
 void canvas_set_tool(gpaint_canvas *canvas, gpaint_tool *new_tool);
 
+void canvas_commit_change(gpaint_canvas *canvas);
 void canvas_begin_busy_cursor(gpaint_canvas *canvas);
 void canvas_end_busy_cursor(gpaint_canvas *canvas);
 void canvas_focus_gained(gpaint_canvas *canvas);

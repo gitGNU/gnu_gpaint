@@ -26,7 +26,10 @@
 #define __TEXT_H__
 
 #include "canvas.h"
+#include <pango/pango.h>
+
 
 gpaint_tool* text_create(const char *name);
+
 
 #endif

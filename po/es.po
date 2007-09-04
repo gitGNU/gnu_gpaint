@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-11 01:43-0700\n"
+"POT-Creation-Date: 2007-09-01 17:49-0700\n"
 "PO-Revision-Date: 2003-02-05 12:01-0300\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -37,10 +37,11 @@ msgid "about"
 msgstr "acerca"
 
 #: src/ui.c:214
+#, fuzzy
 msgid ""
 "This program is free software; you may redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
-"Software Foundation, either version 2, or (at your opinion) any later "
+"Software Foundation, either version 3, or (at your opinion) any later "
 "version.\n"
 msgstr ""
 "Este programa es software libre; puede redistribuirlo y/o modificarlo bajo "
@@ -84,360 +85,360 @@ msgstr "Nuevo"
 msgid "_Open"
 msgstr "Abrir"
 
-#: src/ui.c:535
+#: src/ui.c:538
 #, fuzzy
 msgid "_Save"
 msgstr "Guardar"
 
-#: src/ui.c:545
+#: src/ui.c:551
 #, fuzzy
 msgid "Save _As"
 msgstr "Guardar como"
 
-#: src/ui.c:561 src/ui.c:566
+#: src/ui.c:567 src/ui.c:572
 msgid "Print Preview"
 msgstr "Vista previa de la impresión"
 
-#: src/ui.c:573
+#: src/ui.c:579
 #, fuzzy
 msgid "_Print"
 msgstr "Imprimir"
 
-#: src/ui.c:590
+#: src/ui.c:596
 msgid "_Close"
 msgstr ""
 
-#: src/ui.c:600
+#: src/ui.c:606
 msgid "_Quit"
 msgstr ""
 
-#: src/ui.c:610
+#: src/ui.c:619
 msgid "_Edit"
 msgstr ""
 
-#: src/ui.c:619
+#: src/ui.c:628
 msgid "Cu_t"
 msgstr ""
 
-#: src/ui.c:629
+#: src/ui.c:641
 msgid "_Copy"
 msgstr ""
 
-#: src/ui.c:639
+#: src/ui.c:654
 msgid "_Paste"
 msgstr ""
 
-#: src/ui.c:649
+#: src/ui.c:667
 msgid "Clear"
 msgstr ""
 
-#: src/ui.c:665
+#: src/ui.c:683
 msgid "_Select All"
 msgstr ""
 
-#: src/ui.c:670
+#: src/ui.c:691
 msgid "_Image"
 msgstr "_Imagen"
 
-#: src/ui.c:679
+#: src/ui.c:700
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: src/ui.c:688
+#: src/ui.c:709
 msgid "Get Snapshot of Desktop"
 msgstr "Capturar una imagen del escritorio"
 
-#: src/ui.c:693
+#: src/ui.c:714
 msgid "Set Desktop Background"
 msgstr "Establecer el fondo del escritorio"
 
-#: src/ui.c:704
+#: src/ui.c:725
 #, fuzzy
 msgid "Rotate Right"
 msgstr "Rotar"
 
-#: src/ui.c:708
+#: src/ui.c:729
 msgid "Rotate 90 degrees Clockwise"
 msgstr ""
 
-#: src/ui.c:713
+#: src/ui.c:734
 #, fuzzy
 msgid "Rotate Left"
 msgstr "Rotar"
 
-#: src/ui.c:717
+#: src/ui.c:738
 msgid "Rotate 90 degrees Anticlockwise"
 msgstr ""
 
-#: src/ui.c:728
+#: src/ui.c:749
 #, fuzzy
 msgid "Flip Left to Right"
 msgstr "Izquierda a derecha"
 
-#: src/ui.c:732
+#: src/ui.c:753
 #, fuzzy
 msgid "Mirror Left to Right"
 msgstr "Izquierda a derecha"
 
-#: src/ui.c:737
+#: src/ui.c:758
 #, fuzzy
 msgid "Flip Top to Bottom"
 msgstr "Arriba hacia abajo"
 
-#: src/ui.c:745
+#: src/ui.c:766
 #, fuzzy
 msgid "Effec_ts"
 msgstr "_Efectos"
 
-#: src/ui.c:754
+#: src/ui.c:775
 #, fuzzy
 msgid "_Invert"
 msgstr "Inve_rtir"
 
-#: src/ui.c:759
+#: src/ui.c:780
 msgid "_Sharpen"
 msgstr "_"
 
-#: src/ui.c:770
+#: src/ui.c:791
 msgid "S_mooth"
 msgstr "S_uavizar"
 
-#: src/ui.c:775
+#: src/ui.c:796
 msgid "_Directional Smooth"
 msgstr "Suavizado _direccional"
 
-#: src/ui.c:780
+#: src/ui.c:801
 msgid "Despeckle"
 msgstr "Desempolvar"
 
-#: src/ui.c:791
+#: src/ui.c:812
 msgid "_Edge Detect"
 msgstr "D_etección de borde"
 
-#: src/ui.c:796
+#: src/ui.c:817
 msgid "Emboss"
 msgstr "Resaltar"
 
-#: src/ui.c:801
+#: src/ui.c:822
 msgid "_Oil Paint"
 msgstr "P_intura al aceite"
 
-#: src/ui.c:806
+#: src/ui.c:827
 msgid "_Add Noise"
 msgstr "_Añadir ruido"
 
-#: src/ui.c:811
+#: src/ui.c:832
 msgid "Spread"
 msgstr "Desparramar"
 
-#: src/ui.c:816
+#: src/ui.c:837
 msgid "_Pixelize"
 msgstr "_Pixelar"
 
-#: src/ui.c:821
+#: src/ui.c:842
 msgid "_Blend"
 msgstr "C_ombinar"
 
-#: src/ui.c:826
+#: src/ui.c:847
 msgid "Solarize"
 msgstr "Solarización"
 
-#: src/ui.c:837
+#: src/ui.c:858
 msgid "_Normalize Contrast"
 msgstr "Contraste _normalizado"
 
-#: src/ui.c:842
+#: src/ui.c:863
 msgid "_Quantize Color"
 msgstr "_Cuantizar color"
 
-#: src/ui.c:847
+#: src/ui.c:868
 msgid "Convert to _Greyscale"
 msgstr "Convertir a escala de _grises"
 
-#: src/ui.c:852
+#: src/ui.c:873
 msgid "_Windows"
 msgstr ""
 
-#: src/ui.c:861
+#: src/ui.c:882
 msgid "Create _New Window"
 msgstr ""
 
-#: src/ui.c:866
+#: src/ui.c:890
 msgid "_Close This Window"
 msgstr ""
 
-#: src/ui.c:871
+#: src/ui.c:898
 msgid "_Help"
 msgstr ""
 
-#: src/ui.c:880
+#: src/ui.c:907
 #, fuzzy
 msgid "_About"
 msgstr "acerca"
 
-#: src/ui.c:905
+#: src/ui.c:932
 msgid "New"
 msgstr "Nuevo"
 
-#: src/ui.c:909
+#: src/ui.c:936
 msgid "New File"
 msgstr "Archivo nuevo"
 
-#: src/ui.c:913
+#: src/ui.c:940
 msgid "Open"
 msgstr "Abrir"
 
-#: src/ui.c:917
+#: src/ui.c:944
 msgid "Open File"
 msgstr "Abrir archivo"
 
-#: src/ui.c:921
+#: src/ui.c:948
 msgid "Save"
 msgstr "Guardar"
 
-#: src/ui.c:925
+#: src/ui.c:952
 msgid "Save File"
 msgstr "Guardar archivo"
 
-#: src/ui.c:929
+#: src/ui.c:956
 msgid "Save As"
 msgstr "Guardar como"
 
-#: src/ui.c:933
+#: src/ui.c:960
 msgid "Save File As"
 msgstr "Guardar archivo como"
 
-#: src/ui.c:942 src/ui.c:947
+#: src/ui.c:969 src/ui.c:974
 msgid "Print"
 msgstr "Imprimir"
 
-#: src/ui.c:974
+#: src/ui.c:1001
 msgid "Bold"
 msgstr "Negrita"
 
-#: src/ui.c:979
+#: src/ui.c:1006
 msgid "bold text"
 msgstr "Texto en negrita"
 
-#: src/ui.c:983
+#: src/ui.c:1010
 msgid "Italic"
 msgstr "Itálica"
 
-#: src/ui.c:988
+#: src/ui.c:1015
 msgid "italic text"
 msgstr "Texto en itálica"
 
-#: src/ui.c:992
+#: src/ui.c:1019
 msgid "Underline"
 msgstr "Subrayado"
 
-#: src/ui.c:997
+#: src/ui.c:1024
 msgid "underline text"
 msgstr "texto subrayado"
 
-#: src/ui.c:1009 src/ui.c:1040
+#: src/ui.c:1036 src/ui.c:1067
 msgid "line width"
 msgstr "ancho de la línea"
 
-#: src/ui.c:1027
+#: src/ui.c:1054
 msgid "1"
 msgstr "1"
 
-#: src/ui.c:1028
+#: src/ui.c:1055
 msgid "2"
 msgstr "2"
 
-#: src/ui.c:1029
+#: src/ui.c:1056
 msgid "3"
 msgstr "3"
 
-#: src/ui.c:1030
+#: src/ui.c:1057
 msgid "4"
 msgstr "4"
 
-#: src/ui.c:1031
+#: src/ui.c:1058
 msgid "6"
 msgstr "6"
 
-#: src/ui.c:1032
+#: src/ui.c:1059
 msgid "8"
 msgstr "8"
 
-#: src/ui.c:1091
+#: src/ui.c:1118
 msgid "erase"
 msgstr "borrar"
 
-#: src/ui.c:1102
+#: src/ui.c:1129
 msgid "lasso"
 msgstr "enlazar"
 
-#: src/ui.c:1113
+#: src/ui.c:1140
 #, fuzzy
 msgid "rectselect"
 msgstr "rectángulo"
 
-#: src/ui.c:1124 src/ui.c:1272
+#: src/ui.c:1151 src/ui.c:1299
 msgid "fill"
 msgstr "rellenar"
 
-#: src/ui.c:1135
+#: src/ui.c:1162
 msgid "line"
 msgstr "línea"
 
-#: src/ui.c:1146
+#: src/ui.c:1173
 #, fuzzy
 msgid "multiline"
 msgstr "línea"
 
-#: src/ui.c:1157
+#: src/ui.c:1184
 msgid "rectangle"
 msgstr "rectángulo"
 
-#: src/ui.c:1168
+#: src/ui.c:1195
 #, fuzzy
 msgid "freehand"
 msgstr "mano alzada cerrada"
 
-#: src/ui.c:1190
+#: src/ui.c:1217
 msgid "pen"
 msgstr "lápiz"
 
-#: src/ui.c:1201
+#: src/ui.c:1228
 #, fuzzy
 msgid "polyselect"
 msgstr "selección poligonal"
 
-#: src/ui.c:1213
+#: src/ui.c:1240
 msgid "text"
 msgstr "texto"
 
-#: src/ui.c:1224
+#: src/ui.c:1251
 msgid "arc"
 msgstr "arco"
 
-#: src/ui.c:1235
+#: src/ui.c:1262
 msgid "curve"
 msgstr "curva"
 
-#: src/ui.c:1246
+#: src/ui.c:1273
 msgid "oval"
 msgstr "ovalo"
 
-#: src/ui.c:1257
+#: src/ui.c:1284
 msgid "brush"
 msgstr "brocha"
 
-#: src/support.c:90 src/support.c:114
+#: src/support.c:91 src/support.c:115
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "No se ha podido encontrar el archivo pixmap: %s"
 
 #. default filename
-#: src/drawing.c:48
+#: src/drawing.c:46
 msgid "untitled.png"
 msgstr ""
 
-#: src/drawing.c:221
+#: src/drawing.c:220
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -445,7 +446,7 @@ msgid ""
 "Do you want to overwrite it?"
 msgstr ""
 
-#: src/drawing.c:261
+#: src/drawing.c:260
 #, c-format
 msgid ""
 "Failed to save file %s.\n"
@@ -453,15 +454,15 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/drawing.c:309
+#: src/drawing.c:308
 msgid "Untitled"
 msgstr ""
 
-#: src/drawing.c:325
+#: src/drawing.c:324
 msgid " (modified)"
 msgstr ""
 
-#: src/drawing.c:327
+#: src/drawing.c:326
 #, fuzzy
 msgid " - gpaint"
 msgstr "gpaint"

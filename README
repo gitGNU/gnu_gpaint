@@ -1,6 +1,6 @@
 
 
-This is gpaint (GNU Paint) version 0.3.1, a small-scale painting program for
+This is gpaint (GNU Paint) version 0.3.2, a small-scale painting program for
 GNOME, the GNU Desktop.  Gpaint does not attempt to compete with GIMP.  Think of
 GIMP is like Photoshop as gpaint is like Windows Paint.
 
@@ -8,15 +8,19 @@ Gpaint is still work in progress and many features are still being developed.
 However, gpaint is usable already for simple image editing..  
 
 
-Changes in this version:
+Changes in this version (patch and bug numbers refer to the bug and task
+trackers for gpaint at savannah.gnu.org):
 
-    * patch 3838 from Goedson Teixeira Paixao <goedson> for updated pt_BR translation
-    * patch 3839 from Goedson Teixeira Paixao <goedson> for eliminating gcc warnings
-    * patch 5700, from Yavor Doganov <yavor>, New Bulgarian (bg) translation
-    * patch 5746, from Goedson Teixeira Paixao <goedson> , German translation
-    * patch 5894, from Goedson Teixeira Paixao <goedson> for Use GtkFileChooser for the open and save dialogs; also some fix for the German translation
-    * patch 5895, from Goedson Teixeira Paixao <goedson> implementing rectangular selection
-    * patch from Yavor Doganov <yavor> fixing bug 18842; also fixing the modal dialog when opening a file fails
+    * patch from Daniel Nylander <yeager>, new Swedish translation, fix for Bug 20144
+    * fix for bug 20150, gtk now needs v 2.8 or later
+    * patch 6007 from Goedson Teixeira Paixao <goedson> applied; make colorpalette width fixed
+    * patch from Goedson Teixeira Paixao <goedson>, updated PR translation
+    * patch from Goedson Teixeira Paixao <goedson>, fix for Bug 20251, gpaint crashed with SIGSEGV in image_from_selection()
+    * fix for Bug 20562, patch from Charlie Watson <chunkyq>, fix Crash when 0 is entered as line width
+    * patch from Steven McCoy <steven.mccoy@miru.hk>, submitted by Goedson Teixeira Paixao <goedson>, implements real clipboard copy and paste
+    * patch from  Goedson Teixeira Paixao <goedson>, Implement keyboard accelerators for common operations
+    * text drawing is now Pango-based; now multiple line text is supported
+    * upgrade to GNU GPL v3
 
 Currently gpaint has the following features:
    * Drawing tools--ovals, freehand, polygon, text, with fill or shallow for 
@@ -29,10 +33,13 @@ Currently gpaint has the following features:
    * All image processing features present in xpaint
 
 This version of gpaint requires the GNOME 2.0 environment.  This version uses
-the gdk-pixbuf library to handle image loading and saving.  Currently
-gdk-pixbuf's image saving capabilities are limited, with BUGGY support for only
-JPEG and PNG formats.  So currently gpaint's image saving is subject to the same
-limitations.
+the gdk-pixbuf library to handle image loading and saving.   So currently
+gpaint's image saving is limited to the formats supported by gdk-pixbuf.
+
+From this version gpaint uses Pango to do text drawing.  Currently English
+multi-line texts work; non-English languages are not tested and input methods
+like SCIM are not yet properly supported; this is to be addressed for the next
+version.
 
 A large part of gpaint is derived from xpaint 2.4.9, authored by David Koblas
 and later Torsten Martinsen.  
@@ -53,8 +60,8 @@ For bugs report at https://savannah.gnu.org/bugs/?func=additem&group=gpaint
 Future development plans:
 
 I plan to incorporate the recent printing features of gtk+ and to move away from
-gnomeprint.  Utilizing libglade and pango are the immediate next steps.  Also
-planned is the incorporation of a small extension language in the code base to
-support high level app logic.
+gnomeprint.  Utilizing libglade and ehnancing international text support using
+Pango is the immediate next steps.  Also planned is the incorporation of a small
+extension language in the code base to support high level app logic.
 
 For general comments please send mail to Andy Tai <atai@gnu.org>

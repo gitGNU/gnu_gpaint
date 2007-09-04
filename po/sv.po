@@ -1,5 +1,6 @@
 # Swedish messages for gpaint.
-# Copyright (C) 2003 Free Software Foundation, Inc.
+# Copyright (C) 2003, 2007 Free Software Foundation, Inc.
+# Daniel Nylander <po@danielnylander.se>, 2007.
 # Christian Rose <menthos@menthos.com>, 2003.
 #
 # $Id: sv.po,v 1.4 2005/03/06 16:19:37 meffie Exp $
@@ -8,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpaint\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-11 01:43-0700\n"
-"PO-Revision-Date: 2003-02-03 00:13+0100\n"
-"Last-Translator: Christian Rose <menthos@menthos.com>\n"
-"Language-Team: Swedish <sv@li.org>\n"
+"POT-Creation-Date: 2007-09-01 17:49-0700\n"
+"PO-Revision-Date: 2007-06-11 12:33+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,10 +38,11 @@ msgid "about"
 msgstr "om"
 
 #: src/ui.c:214
+#, fuzzy
 msgid ""
 "This program is free software; you may redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
-"Software Foundation, either version 2, or (at your opinion) any later "
+"Software Foundation, either version 3, or (at your opinion) any later "
 "version.\n"
 msgstr ""
 "Detta program är fri programvara. Du kan distribuera det och/eller modifiera "
@@ -57,12 +59,11 @@ msgstr ""
 "Copyright 1992--1996"
 
 #: src/ui.c:231
-#, fuzzy
 msgid ""
 "Copyright 2000--2003, 2007  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
 "Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
 msgstr ""
-"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2000--2003, 2007  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
 "Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
 
 #: src/ui.c:489
@@ -70,417 +71,390 @@ msgid "gpaint"
 msgstr "gpaint"
 
 #: src/ui.c:506
-#, fuzzy
 msgid "_File"
-msgstr "/_Arkiv"
+msgstr "_Arkiv"
 
 #: src/ui.c:515
-#, fuzzy
 msgid "_New"
-msgstr "Ny"
+msgstr "_Ny"
 
 #: src/ui.c:525
-#, fuzzy
 msgid "_Open"
-msgstr "Öppna"
+msgstr "_Öppna"
 
-#: src/ui.c:535
-#, fuzzy
+#: src/ui.c:538
 msgid "_Save"
-msgstr "Spara"
+msgstr "_Spara"
 
-#: src/ui.c:545
-#, fuzzy
+#: src/ui.c:551
 msgid "Save _As"
-msgstr "Spara som"
+msgstr "Spara s_om"
 
-#: src/ui.c:561 src/ui.c:566
+#: src/ui.c:567 src/ui.c:572
 msgid "Print Preview"
 msgstr "Förhandsgranskning"
 
-#: src/ui.c:573
-#, fuzzy
+#: src/ui.c:579
 msgid "_Print"
-msgstr "Skriv ut"
+msgstr "S_kriv ut"
 
-#: src/ui.c:590
-#, fuzzy
+#: src/ui.c:596
 msgid "_Close"
-msgstr "Klona"
+msgstr "_Stäng"
 
-#: src/ui.c:600
-#, fuzzy
+#: src/ui.c:606
 msgid "_Quit"
-msgstr "Avsluta"
-
-#: src/ui.c:610
-#, fuzzy
-msgid "_Edit"
-msgstr "Redigera"
+msgstr "_Avsluta"
 
 #: src/ui.c:619
-#, fuzzy
+msgid "_Edit"
+msgstr "R_edigera"
+
+#: src/ui.c:628
 msgid "Cu_t"
-msgstr "Klipp ut"
+msgstr "Klipp _ut"
 
-#: src/ui.c:629
-#, fuzzy
+#: src/ui.c:641
 msgid "_Copy"
-msgstr "Kopiera"
+msgstr "_Kopiera"
 
-#: src/ui.c:639
-#, fuzzy
+#: src/ui.c:654
 msgid "_Paste"
-msgstr "Klistra in"
+msgstr "Klistra _in"
 
-#: src/ui.c:649
+#: src/ui.c:667
 msgid "Clear"
 msgstr "Töm"
 
-#: src/ui.c:665
-#, fuzzy
+#: src/ui.c:683
 msgid "_Select All"
-msgstr "Markera allt"
+msgstr "_Markera allt"
 
-#: src/ui.c:670
+#: src/ui.c:691
 msgid "_Image"
 msgstr "_Bild"
 
-#: src/ui.c:679
+#: src/ui.c:700
 msgid "Desktop"
 msgstr "Skrivbord"
 
-#: src/ui.c:688
+#: src/ui.c:709
 msgid "Get Snapshot of Desktop"
 msgstr "Få tag i ögonblicksbild av skrivbordet"
 
-#: src/ui.c:693
+#: src/ui.c:714
 msgid "Set Desktop Background"
 msgstr "Ställ in skrivbordsbakgrunden"
 
-#: src/ui.c:704
-#, fuzzy
+#: src/ui.c:725
 msgid "Rotate Right"
-msgstr "Rotera"
+msgstr "Rotera åt höger"
 
-#: src/ui.c:708
+#: src/ui.c:729
 msgid "Rotate 90 degrees Clockwise"
-msgstr ""
+msgstr "Rotera 90 grader medsols"
 
-#: src/ui.c:713
-#, fuzzy
+#: src/ui.c:734
 msgid "Rotate Left"
-msgstr "Rotera"
+msgstr "Rotera åt vänster"
 
-#: src/ui.c:717
+#: src/ui.c:738
 msgid "Rotate 90 degrees Anticlockwise"
-msgstr ""
+msgstr "Rotera 90 grader motsols"
 
-#: src/ui.c:728
-#, fuzzy
+#: src/ui.c:749
 msgid "Flip Left to Right"
-msgstr "Vänster till höger"
+msgstr "Vänd vänster till höger"
 
-#: src/ui.c:732
-#, fuzzy
+#: src/ui.c:753
 msgid "Mirror Left to Right"
-msgstr "Vänster till höger"
+msgstr "Spegla vänster till höger"
 
-#: src/ui.c:737
-#, fuzzy
+#: src/ui.c:758
 msgid "Flip Top to Bottom"
-msgstr "Topp till botten"
+msgstr "Vänd topp till botten"
 
-#: src/ui.c:745
-#, fuzzy
+#: src/ui.c:766
 msgid "Effec_ts"
-msgstr "_Effekter"
+msgstr "Effek_ter"
 
-#: src/ui.c:754
-#, fuzzy
+#: src/ui.c:775
 msgid "_Invert"
-msgstr "Invertera"
+msgstr "_Invertera"
 
-#: src/ui.c:759
+#: src/ui.c:780
 msgid "_Sharpen"
 msgstr "Gör _skarpare"
 
-#: src/ui.c:770
+#: src/ui.c:791
 msgid "S_mooth"
 msgstr "_Jämna ut"
 
-#: src/ui.c:775
+#: src/ui.c:796
 msgid "_Directional Smooth"
 msgstr "_Riktningsbaserad utjämning"
 
-#: src/ui.c:780
+#: src/ui.c:801
 msgid "Despeckle"
 msgstr "Avfläcka"
 
-#: src/ui.c:791
+#: src/ui.c:812
 msgid "_Edge Detect"
 msgstr "_Leta kanter"
 
-#: src/ui.c:796
+#: src/ui.c:817
 msgid "Emboss"
 msgstr "Gör relief"
 
-#: src/ui.c:801
+#: src/ui.c:822
 msgid "_Oil Paint"
 msgstr "_Oljemåla"
 
-#: src/ui.c:806
+#: src/ui.c:827
 msgid "_Add Noise"
 msgstr "_Lägg till brus"
 
 # Osäker
-#: src/ui.c:811
+#: src/ui.c:832
 msgid "Spread"
 msgstr "Sprid"
 
-#: src/ui.c:816
+#: src/ui.c:837
 msgid "_Pixelize"
 msgstr "_Pixelisera"
 
-#: src/ui.c:821
+#: src/ui.c:842
 msgid "_Blend"
 msgstr "_Tona"
 
 # Osäker
-#: src/ui.c:826
+#: src/ui.c:847
 msgid "Solarize"
 msgstr "Solarisera"
 
-#: src/ui.c:837
+#: src/ui.c:858
 msgid "_Normalize Contrast"
 msgstr "_Normalisera kontrast"
 
-#: src/ui.c:842
+#: src/ui.c:863
 msgid "_Quantize Color"
 msgstr "_Kvantifiera färg"
 
-#: src/ui.c:847
+#: src/ui.c:868
 msgid "Convert to _Greyscale"
 msgstr "Konvertera till _gråskala"
 
-#: src/ui.c:852
-#, fuzzy
+#: src/ui.c:873
 msgid "_Windows"
-msgstr "Bildfönster"
+msgstr "_Fönster"
 
-#: src/ui.c:861
-#, fuzzy
+#: src/ui.c:882
 msgid "Create _New Window"
-msgstr "Skapa en ny bild"
+msgstr "Skapa _nytt fönster"
 
-#: src/ui.c:866
-#, fuzzy
+#: src/ui.c:890
 msgid "_Close This Window"
-msgstr "Använd informationsfönster"
+msgstr "_Stäng det här fönstret"
 
-#: src/ui.c:871
-#, fuzzy
+#: src/ui.c:898
 msgid "_Help"
-msgstr "/_Hjälp"
+msgstr "_Hjälp"
 
-#: src/ui.c:880
-#, fuzzy
+#: src/ui.c:907
 msgid "_About"
-msgstr "om"
+msgstr "_Om"
 
-#: src/ui.c:905
+#: src/ui.c:932
 msgid "New"
 msgstr "Ny"
 
-#: src/ui.c:909
+#: src/ui.c:936
 msgid "New File"
 msgstr "Ny fil"
 
-#: src/ui.c:913
+#: src/ui.c:940
 msgid "Open"
 msgstr "Öppna"
 
-#: src/ui.c:917
+#: src/ui.c:944
 msgid "Open File"
 msgstr "Öppna fil"
 
-#: src/ui.c:921
+#: src/ui.c:948
 msgid "Save"
 msgstr "Spara"
 
-#: src/ui.c:925
+#: src/ui.c:952
 msgid "Save File"
 msgstr "Spara fil"
 
-#: src/ui.c:929
+#: src/ui.c:956
 msgid "Save As"
 msgstr "Spara som"
 
-#: src/ui.c:933
+#: src/ui.c:960
 msgid "Save File As"
 msgstr "Spara fil som"
 
-#: src/ui.c:942 src/ui.c:947
+#: src/ui.c:969 src/ui.c:974
 msgid "Print"
 msgstr "Skriv ut"
 
-#: src/ui.c:974
+#: src/ui.c:1001
 msgid "Bold"
 msgstr "Fet"
 
-#: src/ui.c:979
+#: src/ui.c:1006
 msgid "bold text"
 msgstr "fet text"
 
-#: src/ui.c:983
+#: src/ui.c:1010
 msgid "Italic"
 msgstr "Kursiv"
 
-#: src/ui.c:988
+#: src/ui.c:1015
 msgid "italic text"
 msgstr "kursiv text"
 
-#: src/ui.c:992
+#: src/ui.c:1019
 msgid "Underline"
 msgstr "Understruken"
 
-#: src/ui.c:997
+#: src/ui.c:1024
 msgid "underline text"
 msgstr "understruken text"
 
-#: src/ui.c:1009 src/ui.c:1040
+#: src/ui.c:1036 src/ui.c:1067
 msgid "line width"
 msgstr "linjebredd"
 
-#: src/ui.c:1027
+#: src/ui.c:1054
 msgid "1"
 msgstr "1"
 
-#: src/ui.c:1028
+#: src/ui.c:1055
 msgid "2"
 msgstr "2"
 
-#: src/ui.c:1029
+#: src/ui.c:1056
 msgid "3"
 msgstr "3"
 
-#: src/ui.c:1030
+#: src/ui.c:1057
 msgid "4"
 msgstr "4"
 
-#: src/ui.c:1031
+#: src/ui.c:1058
 msgid "6"
 msgstr "6"
 
-#: src/ui.c:1032
+#: src/ui.c:1059
 msgid "8"
 msgstr "8"
 
-#: src/ui.c:1091
+#: src/ui.c:1118
 msgid "erase"
 msgstr "sudda"
 
-#: src/ui.c:1102
+#: src/ui.c:1129
 msgid "lasso"
 msgstr "lasso"
 
-#: src/ui.c:1113
-#, fuzzy
+#: src/ui.c:1140
 msgid "rectselect"
-msgstr "Rekt. markering"
+msgstr "rekt. markering"
 
-#: src/ui.c:1124 src/ui.c:1272
+#: src/ui.c:1151 src/ui.c:1299
 msgid "fill"
 msgstr "fyll"
 
-#: src/ui.c:1135
+#: src/ui.c:1162
 msgid "line"
 msgstr "linje"
 
-#: src/ui.c:1146
-#, fuzzy
+#: src/ui.c:1173
 msgid "multiline"
-msgstr "linje"
+msgstr "flerlinjer"
 
-#: src/ui.c:1157
+#: src/ui.c:1184
 msgid "rectangle"
 msgstr "rektangel"
 
-#: src/ui.c:1168
-#, fuzzy
+#: src/ui.c:1195
 msgid "freehand"
-msgstr "stängd frihand"
+msgstr "frihand"
 
-#: src/ui.c:1190
+#: src/ui.c:1217
 msgid "pen"
 msgstr "penna"
 
-#: src/ui.c:1201
-#, fuzzy
+#: src/ui.c:1228
 msgid "polyselect"
 msgstr "polygonmarkering"
 
-#: src/ui.c:1213
+#: src/ui.c:1240
 msgid "text"
 msgstr "text"
 
-#: src/ui.c:1224
+#: src/ui.c:1251
 msgid "arc"
 msgstr "båge"
 
-#: src/ui.c:1235
+#: src/ui.c:1262
 msgid "curve"
 msgstr "kurva"
 
-#: src/ui.c:1246
+#: src/ui.c:1273
 msgid "oval"
 msgstr "oval"
 
-#: src/ui.c:1257
+#: src/ui.c:1284
 msgid "brush"
 msgstr "pensel"
 
-#: src/support.c:90 src/support.c:114
+#: src/support.c:91 src/support.c:115
 #, c-format
 msgid "Couldn't find pixmap file: %s"
-msgstr "Kunde inte hitta pixmap-fil: %s"
+msgstr "Kunde inte hitta bildfil: %s"
 
 #. default filename
-#: src/drawing.c:48
-#, fuzzy
+#: src/drawing.c:46
 msgid "untitled.png"
-msgstr "namnlös"
+msgstr "namnlös.png"
 
-#: src/drawing.c:221
-#, fuzzy, c-format
+#: src/drawing.c:220
+#, c-format
 msgid ""
 "The file %s already exists.\n"
 "\n"
 "Do you want to overwrite it?"
 msgstr ""
-"Filen \"%s\" existerar.\n"
-"Skriva över den?"
+"Filen %s finns redan.\n"
+"\n"
+"Vill du skriva över den?"
 
-#: src/drawing.c:261
-#, fuzzy, c-format
+#: src/drawing.c:260
+#, c-format
 msgid ""
 "Failed to save file %s.\n"
 "\n"
 "%s"
-msgstr "Misslyckades med att skapa filen \"%s\": %s"
+msgstr ""
+"Misslyckades med att spara filen %s.\n"
+"\n"
+"%s"
 
-#: src/drawing.c:309
+#: src/drawing.c:308
 msgid "Untitled"
 msgstr "Namnlös"
 
-#: src/drawing.c:325
+#: src/drawing.c:324
 msgid " (modified)"
-msgstr ""
+msgstr " (ändrad)"
 
-#: src/drawing.c:327
-#, fuzzy
+#: src/drawing.c:326
 msgid " - gpaint"
-msgstr "gpaint"
+msgstr " - gpaint"
 
 #: src/drawing.c:427
 #, c-format
@@ -488,6 +462,20 @@ msgid ""
 "Do you want to save the changes you made to \"%s\"?\n"
 "Your changes will be lost if you don't save them."
 msgstr ""
+"Vill du spara ändringarna som du har gjort i \"%s\"?\n"
+"Dina ändringar kommer att förloras om du inte sparar dem."
+
+#~ msgid "Cannot open file %s."
+#~ msgstr "Kan inte öppna %s."
+
+#~ msgid "Save as"
+#~ msgstr "Spara som"
+
+#~ msgid "Open image"
+#~ msgstr "Öppna bild"
+
+#~ msgid "Invalid width or height values"
+#~ msgstr "Ogiltiga värden för bredd eller höjd"
 
 #~ msgid "Flip"
 #~ msgstr "Vänd"
@@ -2242,9 +2230,6 @@ msgstr ""
 #~ msgid "Confirm Image Size"
 #~ msgstr "Bekräfta bildstorlek"
 
-#~ msgid "Open Image"
-#~ msgstr "Öppna bild"
-
 #~ msgid ""
 #~ "Click to update preview\n"
 #~ "%s  Click to force update even if preview is up-to-date"
@@ -3126,13 +3111,6 @@ msgstr ""
 
 #~ msgid "Layer's Alpha Channel"
 #~ msgstr "Lagrets alfakanal"
-
-#~ msgid ""
-#~ "Invalid width or height.\n"
-#~ "Both must be positive."
-#~ msgstr ""
-#~ "Inte giltig bredd eller höjd.\n"
-#~ "Båda måste vara positiva."
 
 #~ msgid "/New Layer..."
 #~ msgstr "/Nytt lager..."
@@ -6271,9 +6249,6 @@ msgstr ""
 #~ msgid "  unexpected token: %s\n"
 #~ msgstr "  oväntad token: %s\n"
 
-#~ msgid "Can't open %s; %s"
-#~ msgstr "Kan inte öppna %s: %s"
-
 #~ msgid "Can't rename %s to %s.old; %s"
 #~ msgstr "Kan inte döpa om %s till %s.old: %s"
 
@@ -6461,736 +6436,3 @@ msgstr ""
 
 #~ msgid "Source:"
 #~ msgstr "Källa:"
-
-# <janne> "sampel" är vad man använder i digitalteknik och bildbehandling
-# så vitt jag förstår
-#
-#~ msgid "Sample Size:"
-#~ msgstr "Sampelstorlek:"
-
-#~ msgid "Select"
-#~ msgstr "Välj"
-
-#~ msgid "New Plug-ins"
-#~ msgstr "Nya insticksmoduler"
-
-#~ msgid "Plug-ins"
-#~ msgstr "Insticksmoduler"
-
-#~ msgid "Extensions"
-#~ msgstr "Tillägg"
-
-#~ msgid "Color Levels"
-#~ msgstr "Färgnivåer"
-
-#~ msgid "Crop Tool"
-#~ msgstr "Beskäringsverktyg"
-
-#~ msgid "Load/Save Curves"
-#~ msgstr "Läs in/spara kurvor"
-
-#~ msgid "Load/Save Levels"
-#~ msgstr "Läs in/Spara nivåer"
-
-#~ msgid "Measure Tool"
-#~ msgstr "Mätverktyg"
-
-#~ msgid "Rotate Tool"
-#~ msgstr "Roteringsverktyg"
-
-#~ msgid "By Color Selection"
-#~ msgstr "Markera via färg"
-
-#~ msgid "Inactive"
-#~ msgstr "Inaktiv"
-
-#~ msgid "All"
-#~ msgstr "Hela"
-
-#~ msgid "The GIMP tips file could not be parsed correctly!"
-#~ msgstr "GIMP-tipsfilen kunde inte tolkas korrekt!"
-
-#~ msgid "Loading preview..."
-#~ msgstr "Läser in förhandsvisning..."
-
-#~ msgid "Buffer"
-#~ msgstr "Buffert"
-
-#~ msgid "EEK: can't undo"
-#~ msgstr "IIK: kan inte ångra"
-
-#~ msgid "Could not open image"
-#~ msgstr "Kunde inte öppna bild"
-
-#~ msgid ""
-#~ "Could not open thumbnail\n"
-#~ "file '%s':\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Kunde inte öppna miniatyrbildsfilen\n"
-#~ "\"%s\":\n"
-#~ "%s"
-
-#~ msgid "Blend:"
-#~ msgstr "Färgtoning:"
-
-#~ msgid "Unable to open file %s"
-#~ msgstr "Kunde inte öppna filen %s"
-
-#~ msgid "Navigation: No Image"
-#~ msgstr "Navigation: Ingen bild"
-
-#~ msgid ""
-#~ "%s failed.\n"
-#~ "%s: %s."
-#~ msgstr ""
-#~ "%s misslyckades.\n"
-#~ "%s: %s."
-
-#~ msgid "Determine File Type"
-#~ msgstr "Bestäm filtyp"
-
-#~ msgid "This thumbnail may be out of date"
-#~ msgstr "Denna miniatyrbild kan vara för gammal"
-
-#~ msgid "No Information"
-#~ msgstr "Ingen information"
-
-#~ msgid "Thumbnail saving is disabled."
-#~ msgstr "Miniatyrbildssparande är inaktiverat."
-
-#~ msgid "Opening '%s' failed."
-#~ msgstr "Öppnande av \"%s\" misslyckades."
-
-#~ msgid "Save Options"
-#~ msgstr "Sparaalternativ"
-
-#~ msgid "Saving %s failed."
-#~ msgstr "Sparande av %s misslyckades."
-
-#~ msgid "Never"
-#~ msgstr "Aldrig"
-
-#~ msgid "Add"
-#~ msgstr "Lägg till"
-
-#~ msgid "Remove"
-#~ msgstr "Ta bort"
-
-#~ msgid "Up"
-#~ msgstr "Upp"
-
-#~ msgid "Down"
-#~ msgstr "Ned"
-
-#~ msgid "Brush Selection"
-#~ msgstr "Penselmarkering"
-
-#~ msgid "Custom Palette Options"
-#~ msgstr "Alternativ för egen palett"
-
-#~ msgid "/File/Dialogs/Display Filters..."
-#~ msgstr "/Arkiv/Fönster/Visningsfilter..."
-
-#~ msgid "Palette Selection"
-#~ msgstr "Färgkarteval"
-
-#~ msgid "Pattern Selection"
-#~ msgstr "Mönsterval"
-
-#~ msgid "Extra Small"
-#~ msgstr "Extraliten"
-
-#~ msgid "Paint Options"
-#~ msgstr "Penselalternativ"
-
-#~ msgid "Use Global Paint Options"
-#~ msgstr "Använd globala målaralternativ"
-
-#~ msgid "Gradient Options"
-#~ msgstr "Färgskaleåtgärder"
-
-#~ msgid "Error: Levels of undo must be zero or greater."
-#~ msgstr "Fel: Antalet ångrasteg måste vara 0 eller högre."
-
-#~ msgid "Error: Marching speed must be 50 or greater."
-#~ msgstr "Fel: Vandrande myrornas hastighet måste vara 50 eller högre."
-
-#~ msgid "Error: Default width must be one or greater."
-#~ msgstr "Fel: Standardbredden måste vara 1 eller högre."
-
-#~ msgid "Error: Default height must be one or greater."
-#~ msgstr "Fel: Standardhöjden måste vara 1 eller högre."
-
-#~ msgid "Error: Default unit must be within unit range."
-#~ msgstr "Fel: Standardmåttet måste vara inom måttområdet."
-
-#~ msgid "Error: Default resolution must not be zero."
-#~ msgstr "Fel: Standardbildskärmsupplösningen får inte vara 0."
-
-#~ msgid "Error: Default resolution unit must be within unit range."
-#~ msgstr "Fel: Standardmåttenheten måste vara inom måttområdet."
-
-#~ msgid "Error: Monitor resolution must not be zero."
-#~ msgstr "Fel: Bildskärmsupplösningen får inte vara 0."
-
-#~ msgid "Error: Image title format must not be NULL."
-#~ msgstr "Fel: Bildtitelformatet får inte vara NULL."
-
-#~ msgid "Error: Image status format must not be NULL."
-#~ msgstr "Fel: Bildstatusformatet får inte vara NULL."
-
-#~ msgid "Error: Number of processors must be between 1 and 30."
-#~ msgstr "Fel: Antalet processorer måste vara mellan 1 och 30."
-
-#~ msgid ""
-#~ "This folder is used to store brushes that are created\n"
-#~ "created with the brush editor."
-#~ msgstr ""
-#~ "Denna mapp används för att lagra penslar som skapas med\n"
-#~ "penselredigeraren."
-
-#~ msgid "This brush cannot be edited."
-#~ msgstr "Denna pensel kan inte redigeras."
-
-#~ msgid "Default"
-#~ msgstr "Standard"
-
-#~ msgid ""
-#~ "Position: %0.6f    RGB (%0.3f, %0.3f, %0.3f)    HSV (%0.3f, %0.3f, %"
-#~ "0.3f)    Opacity: %0.3f"
-#~ msgstr ""
-#~ "Position: %0.6f    RGB (%0.3f, %0.3f, %0.3f)    HSV (%0.3f, %0.3f, %"
-#~ "0.3f)    Opacitet: %0.3f"
-
-#~ msgid "Foreground color set to RGB (%d, %d, %d) <-> (%0.3f, %0.3f, %0.3f)"
-#~ msgstr "Förgrundsfärg satt till RGB (%d, %d, %d) <-> (%0.3f, %0.3f, %0.3f)"
-
-#~ msgid "Background color to RGB (%d, %d, %d) <-> (%0.3f, %0.3f, %0.3f)"
-#~ msgstr "Bakgrundsfärg satt till RGB (%d, %d, %d) <-> (%0.3f, %0.3f, %0.3f)"
-
-#~ msgid ""
-#~ "Click: select    <Shift>+Click: extend selection    Drag: move    <Shift>"
-#~ "+Drag: move & compress"
-#~ msgstr ""
-#~ "Klicka: markera   <Skift>+klicka: utöka markering    Dra: flytta   <Skift>"
-#~ "+dra: flytta och komprimera"
-
-#~ msgid "Invalid UTF-8 string in GIMP brush file '%s'."
-#~ msgstr "Ogiltig UTF-8-sträng i GIMP-penselfilen \"%s\"."
-
-#~ msgid "image"
-#~ msgstr "bild"
-
-#~ msgid "mask"
-#~ msgstr "mask"
-
-#~ msgid "transform"
-#~ msgstr "transform"
-
-#~ msgid "new layer"
-#~ msgstr "nytt lager"
-
-#~ msgid "delete layer"
-#~ msgstr "ta bort lager"
-
-#~ msgid "add layer mask"
-#~ msgstr "lägg till lagermask"
-
-#~ msgid "delete layer mask"
-#~ msgstr "ta bort lagermask"
-
-#~ msgid "new channel"
-#~ msgstr "ny kanal"
-
-#~ msgid "delete channel"
-#~ msgstr "ta bort kanal"
-
-#~ msgid "gimage"
-#~ msgstr "gimage"
-
-#~ msgid "float selection"
-#~ msgstr "flytande markering"
-
-#~ msgid "paste"
-#~ msgstr "klistra in"
-
-#~ msgid "cut"
-#~ msgstr "klipp ut"
-
-#~ msgid "transform core"
-#~ msgstr "transformera"
-
-#~ msgid "paint core"
-#~ msgstr "måla"
-
-#~ msgid "floating layer"
-#~ msgstr "flytande lager"
-
-#~ msgid "apply layer mask"
-#~ msgstr "applicera lagermask"
-
-#~ msgid "layer merge"
-#~ msgstr "sammanslagning av lager"
-
-#~ msgid "FS anchor"
-#~ msgstr "FM-ankra"
-
-#~ msgid "gimage mod"
-#~ msgstr "gimage mod"
-
-#~ msgid "crop"
-#~ msgstr "beskär"
-
-#~ msgid "layer scale"
-#~ msgstr "skala lager"
-
-#~ msgid "image scale"
-#~ msgstr "skala om bild"
-
-#~ msgid "image resize"
-#~ msgstr "ändra storlek på bild"
-
-#~ msgid "misc"
-#~ msgstr "div"
-
-#~ msgid "Zero width or height layers not allowed."
-#~ msgstr "Lager med noll i bredd eller höjd är inte tillåtna."
-
-#~ msgid "Invert operation failed."
-#~ msgstr "Inverteringsåtgärd misslyckades."
-
-#~ msgid "/File/Dialogs/Input Devices..."
-#~ msgstr "/Arkiv/Fönster/Inmatningsenheter..."
-
-#~ msgid "/Dialogs/Input Devices..."
-#~ msgstr "/Fönster/Inmatningsenheter..."
-
-#~ msgid "/Merge Visible Layers..."
-#~ msgstr "/Sammanfoga synliga lager..."
-
-#~ msgid "/Flatten Image"
-#~ msgstr "/Platta till bilden"
-
-#~ msgid "Categories"
-#~ msgstr "Kategorier"
-
-#~ msgid "Display Brush, Pattern and Gradient Indicators"
-#~ msgstr "Visa pensel-, mönster- och färgskaleindikatorer"
-
-#~ msgid "Nearest Neighbor (Fast)"
-#~ msgstr "Närmaste granne (snabb)"
-
-#~ msgid "Session Management"
-#~ msgstr "Sessionshantering"
-
-#~ msgid "Session"
-#~ msgstr "Session"
-
-#~ msgid "Always Try to Restore Session"
-#~ msgstr "Försök alltid återställa sessionen"
-
-#~ msgid "Devices"
-#~ msgstr "Enheter"
-
-#~ msgid "gimp_tips.txt"
-#~ msgstr "gimp_tips.txt"
-
-#~ msgid "Blend operation failed."
-#~ msgstr "Toningsåtgärden misslyckades."
-
-#~ msgid "Smoothing"
-#~ msgstr "Utjämnande"
-
-#~ msgid ""
-#~ "This is a subdirectory which is used to store brushes\n"
-#~ "that are created with the brush editor.  The default\n"
-#~ "gimprc file checks this subdirectory when searching\n"
-#~ "for generated brushes."
-#~ msgstr ""
-#~ "Detta är en underkatalog som kan användas för att spara\n"
-#~ "penslar som är skapade med penselredigeraren. Standard-\n"
-#~ "gimprc-filen kontrollerar denna underkatalog när den\n"
-#~ "söker efter genererade penslar."
-
-#~ msgid ""
-#~ "This is a subdirectory which can be used to store\n"
-#~ "user defined palettes.  The default gimprc file\n"
-#~ "checks only this subdirectory (not the system-wide\n"
-#~ "installation) when searching for palettes.  During\n"
-#~ "installation, the system palettes will be copied\n"
-#~ "here.  This is done to allow modifications made to\n"
-#~ "palettes during GIMP execution to persist across\n"
-#~ "sessions."
-#~ msgstr ""
-#~ "Detta är en underkatalog som kan användas för att\n"
-#~ "lagra användardefinerade paletter. Standard-gimprc-\n"
-#~ "filen söker endast i denna underkatalog (inte\n"
-#~ "systemets installation) när den söker efter paletter.\n"
-#~ "Systemets paletter kopieras hit vid installation för\n"
-#~ "att kunna modifieras vid senare tillfälle. Detta gör\n"
-#~ "att du kan spara paletter mellan sessioner."
-
-#~ msgid "Swap Directory:"
-#~ msgstr "Swapkatalog:"
-
-#~ msgid "Bucket Fill operation failed."
-#~ msgstr "Fyllåtgärd misslyckades."
-
-#~ msgid "Store Path"
-#~ msgstr "Stryk slinga"
-
-#~ msgid "error parsing pluginrc"
-#~ msgstr "fel vid tolkning av pluginrc"
-
-#~ msgid "# of Colors:"
-#~ msgstr "Antal färger:"
-
-#~ msgid "(Thumbnail file not written)"
-#~ msgstr "(miniatyrbildsfil är inte sparad)"
-
-#~ msgid "(could not make preview)"
-#~ msgstr "(kunde inte skapa förhandsvisning)"
-
-#~ msgid "Left endpoint's color"
-#~ msgstr "Vänstra ändpunktens färg"
-
-#~ msgid "Right endpoint"
-#~ msgstr "Höger ändpunkt"
-
-#~ msgid "Right endpoint's color"
-#~ msgstr "Högra ändpunktens färg"
-
-#~ msgid "Selection operations"
-#~ msgstr "Markeringsåtgärder"
-
-#~ msgid "FG color"
-#~ msgstr "Förgrundsfärg"
-
-#~ msgid "Curved"
-#~ msgstr "Kurvig"
-
-#~ msgid "Sinusoidal"
-#~ msgstr "Sinusformad"
-
-#~ msgid "(Varies)"
-#~ msgstr "(Varierar)"
-
-#~ msgid "Plain RGB"
-#~ msgstr "Ren RGB"
-
-#~ msgid "Really Quit?"
-#~ msgstr "Verkligen avsluta?"
-
-#~ msgid "/Layers/Layers, Channels & Paths..."
-#~ msgstr "/Lager/Lager, kanaler & slingor..."
-
-#~ msgid "/Layers/Rotate"
-#~ msgstr "/Lager/Rotera"
-
-#~ msgid "nowhere (click 'refresh')"
-#~ msgstr "ingenstans (tryck på \"uppdatera\")"
-
-#~ msgid "Wrap Around"
-#~ msgstr "Slå-runt"
-
-#~ msgid "Tool Paradigm"
-#~ msgstr "Verktygsparadigm"
-
-#~ msgid "Unknown brush format version #%d in \"%s\"."
-#~ msgstr "Okänt penselformat version #%d i \"%s\"."
-
-#~ msgid "Error in GIMP brush file \"%s\"."
-#~ msgstr "Fel i GIMP-penselfilen \"%s\"."
-
-#~ msgid "GIMP brush file appears to be truncated: \"%s\"."
-#~ msgstr "GIMP-penselfilen verkar vara trunkerad: \"%s\"."
-
-#~ msgid ""
-#~ "Brush pipes should have at least one brush:\n"
-#~ "\"%s\""
-#~ msgstr ""
-#~ "Penselrör bör ha minst en pensel:\n"
-#~ "\"%s\""
-
-#~ msgid ""
-#~ "Failed to load one of the brushes in the brush pipe\n"
-#~ "\"%s\""
-#~ msgstr ""
-#~ "Misslyckades med att läsa in en av penslarna i penselröret\n"
-#~ "\"%s\""
-
-#~ msgid "unnamed"
-#~ msgstr "namnlös"
-
-#~ msgid "Layer type %d not supported."
-#~ msgstr "Lagertyp %d stöds inte."
-
-#~ msgid "Can't fill unknown image type."
-#~ msgstr "Kan inte fylla en okänd bildtyp."
-
-#~ msgid "detach parasite from drawable"
-#~ msgstr "koppla ifrån parasit från objekt"
-
-#~ msgid "No available patterns for this operation."
-#~ msgstr "Inga tillgängliga mönster för denna åtgärd."
-
-#~ msgid "/Add Tab/Brush Grid..."
-#~ msgstr "/Lägg till flik/Penselrutnät..."
-
-#~ msgid "/Add Tab/Pattern Grid..."
-#~ msgstr "/Lägg till flik/Mönsterrutnät..."
-
-#~ msgid "/Add Tab/Gradient Grid..."
-#~ msgstr "/Lägg till flik/Färgskalerutnät..."
-
-#~ msgid "/Add Tab/Palette Grid..."
-#~ msgstr "/Lägg till flik/Palettrutnät..."
-
-#~ msgid "/Add Tab/Tool Grid..."
-#~ msgstr "/Lägg till flik/Verktygsrutnät..."
-
-#~ msgid "/Add Tab/Image Grid..."
-#~ msgstr "/Lägg till flik/Bildrutnät..."
-
-#~ msgid "Replace"
-#~ msgstr "Ersätt"
-
-#~ msgid "Intersect"
-#~ msgstr "Snitt"
-
-#~ msgid "Fuzziness Threshold"
-#~ msgstr "Luddighetströskel"
-
-#~ msgid "GTK color selector as a pluggable color selector"
-#~ msgstr "GTKs färgväljare som insticksbar färgväljare"
-
-#~ msgid ""
-#~ "Move the selected entry up in the index\n"
-#~ "<Shift> To top"
-#~ msgstr ""
-#~ "Flytta den valda posten uppåt i listan\n"
-#~ "<Skift> Till toppen"
-
-#~ msgid ""
-#~ "Move the selected entry down in the index\n"
-#~ "<Shift> To bottom"
-#~ msgstr ""
-#~ "Flytta den valda posten nedåt i listan\n"
-#~ "Skift> Till botten"
-
-#~ msgid ""
-#~ "%s failed.\n"
-#~ "%s: Permission denied."
-#~ msgstr ""
-#~ "%s misslyckades.\n"
-#~ "%s: Åtkomst nekas."
-
-#~ msgid ""
-#~ "Save failed.\n"
-#~ "%s: Permission denied."
-#~ msgstr ""
-#~ "Spara misslyckades.\n"
-#~ "%s: Åtkomst nekad."
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "-*-helvetica-bold-r-normal-*-*-240-*-*-*-*-*-*,*"
-#~ msgstr "-*-helvetica-bold-r-normal-*-*-240-*-*-*-*-*-*,*"
-
-#~ msgid "-*-helvetica-medium-r-normal--*-140-*-*-*-*-*-*"
-#~ msgstr "-*-helvetica-medium-r-normal--*-140-*-*-*-*-*-*"
-
-#~ msgid "Indexed Color Palette"
-#~ msgstr "Indexerad färgpalett"
-
-#~ msgid "Image:"
-#~ msgstr "Bild:"
-
-#~ msgid "none"
-#~ msgstr "ingen"
-
-#~ msgid "Yes"
-#~ msgstr "Ja"
-
-#~ msgid "No"
-#~ msgstr "Nej"
-
-#~ msgid "/File/Test Dialogs/List Dock..."
-#~ msgstr "/Arkiv/Testfönster/Listdocka..."
-
-#~ msgid "/File/Test Dialogs/Grid Dock..."
-#~ msgstr "/Arkiv/Testfönster/Rutnätsdocka..."
-
-#~ msgid "/Help/Dump Items (Debug)"
-#~ msgstr "/Hjälp/Dumpa objekt (debug)"
-
-#~ msgid "/Dialogs/Document Index..."
-#~ msgstr "/Fönster/Dokumentindex..."
-
-#~ msgid "Palette Ops"
-#~ msgstr "Palettåtgärder"
-
-#~ msgid "-*-helvetica-bold-r-normal--*-140-*-*-*-*-*-*"
-#~ msgstr "-*-helvetica-bold-r-normal--*-140-*-*-*-*-*-*"
-
-#~ msgid "-*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*,*"
-#~ msgstr "-*-helvetica-bold-r-normal--*-120-*-*-*-*-*-*,*"
-
-#~ msgid "brought to you by"
-#~ msgstr "presenteras av"
-
-#~ msgid "/Tools/Crop Tool"
-#~ msgstr "/Verktyg/Beskäringsverktyg"
-
-#~ msgid "/Tools/Transform Tools/Transform"
-#~ msgstr "/Verktyg/Transformeringsverktyg/Transformera"
-
-#~ msgid "Use Dynamic Text"
-#~ msgstr "Använd Dynamisk Text"
-
-#~ msgid "Font '%s' not found."
-#~ msgstr "Hittade inte typsnittet \"%s\"."
-
-#~ msgid "Font '%s' not found.%s"
-#~ msgstr "Hittade inte typsnittet \"%s\".%s"
-
-#~ msgid ""
-#~ "\n"
-#~ "If you don't have scalable fonts, try turning off antialiasing in the "
-#~ "tool options."
-#~ msgstr ""
-#~ "\n"
-#~ "Om du inte har några skalbara typsnitt, prova att stänga av kantutjämning "
-#~ "i verktygsmenyn."
-
-#~ msgid "Select a buffer to paste:"
-#~ msgstr "Markera en buffert att klistra in:"
-
-#~ msgid "No Brushes available"
-#~ msgstr "Inga penslar tillgängliga"
-
-#~ msgid "Sorry, this brush can't be deleted."
-#~ msgstr "Tyvärr, den här penseln kan inte tas bort."
-
-#~ msgid "Lower Channel"
-#~ msgstr "Sänk kanal"
-
-#~ msgid "Duplicate Channel"
-#~ msgstr "Duplicera kanal"
-
-#~ msgid "Floated Layer"
-#~ msgstr "Flytande lager"
-
-#~ msgid "GIMP brush file appears to be corrupted: \"%s\"."
-#~ msgstr "GIMP-penselfilen verkar vara trasig: \"%s\"."
-
-#~ msgid ""
-#~ "Warning: Failed to load brush pipe\n"
-#~ "\"%s\""
-#~ msgstr ""
-#~ "Varning: Misslyckades med att läsa in penselrör\n"
-#~ "\"%s\""
-
-#~ msgid "Name"
-#~ msgstr "Namn"
-
-#~ msgid "Copy Gradient"
-#~ msgstr "Kopiera färgskala"
-
-#~ msgid "New gradient"
-#~ msgstr "Ny färgskala"
-
-#~ msgid "Enter a name for the new gradient"
-#~ msgstr "Ange namn för den nya färgskalan"
-
-#~ msgid "Copy gradient"
-#~ msgstr "Kopiera färgskala"
-
-#~ msgid "Enter a name for the copied gradient"
-#~ msgstr "Ange namn för den kopierade färgskalan"
-
-#~ msgid "Enter a new name for the gradient"
-#~ msgstr "Ange nytt namn för färgskalan"
-
-#~ msgid "Channel Ops"
-#~ msgstr "Kanalåtgärder"
-
-#~ msgid "Duplicate Layer"
-#~ msgstr "Duplicera lager"
-
-#~ msgid "Layers, Channels & Paths"
-#~ msgstr "Lager, kanaler och slingor"
-
-#~ msgid "Magnify Tool"
-#~ msgstr "Förstoringsverktyg"
-
-#~ msgid "Multiply (Burn)"
-#~ msgstr "Multiplicera (Blek)"
-
-#~ msgid "Subtraction"
-#~ msgstr "Subtraktion"
-
-#~ msgid "Divide (Dodge)"
-#~ msgstr "Dividera (Bränn)"
-
-#~ msgid "Enter a name for new palette"
-#~ msgstr "Ange namn för ny palett"
-
-#~ msgid "Ncols"
-#~ msgstr "Nfärger"
-
-#~ msgid "Generated Brushes Directories"
-#~ msgstr "Genererade penselkataloger"
-
-#~ msgid "Select Generated Brushes Dir"
-#~ msgstr "Välj katalog för genererade penslar"
-
-#~ msgid "Rectangular Selection"
-#~ msgstr "Rektangulär markering"
-
-#~ msgid "Elliptical Selection"
-#~ msgstr "Elliptisk markering"
-
-#~ msgid "Free-Hand Selection"
-#~ msgstr "Frihandsmarkering"
-
-#~ msgid "Fuzzy Selection"
-#~ msgstr "Luddig markering"
-
-#~ msgid "Bezier Selection"
-#~ msgstr "Beziermarkering"
-
-#~ msgid "By-Color Selection"
-#~ msgstr "Markera per färg"
-
-#~ msgid "/Tools/Transform Tools/Magnify"
-#~ msgstr "/Verktyg/Transformeringsverktyg/Förstora"
-
-#~ msgid "Rotation, scaling, shearing, perspective."
-#~ msgstr "Rotering, skalning, luta, perspektiv."
-
-#~ msgid "Draw sharp pencil strokes"
-#~ msgstr "Måla med skarpa penndrag"
-
-#~ msgid "By Color Select"
-#~ msgstr "Markera per färg"
-
-#~ msgid "Transform Tool"
-#~ msgstr "Transformeringsverktyg"
-
-#~ msgid "Rotation"
-#~ msgstr "Rotation"
-
-#~ msgid "Shearing"
-#~ msgstr "Lutning"
-
-#~ msgid "Error in GIMP brush file...aborting."
-#~ msgstr "Fel i GIMP-penselfil...avbryter."
-
-#~ msgid "Unknown GIMP pattern version #%d in \"%s\"\n"
-#~ msgstr "Okänd GIMP-mönsterversion #%d i \"%s\"\n"
-
-#~ msgid "Error loading pattern \"%s\""
-#~ msgstr "Fel vid inläsning av mönstret \"%s\""

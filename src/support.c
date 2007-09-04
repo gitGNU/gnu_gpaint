@@ -15,6 +15,7 @@
 #include <gtk/gtk.h>
 
 #include "support.h"
+#include "debug.h"
 
 GtkWidget*
 lookup_widget                          (GtkWidget       *widget,
@@ -141,4 +142,71 @@ glade_set_atk_action_description       (AtkAction       *action,
         atk_action_set_description (action, i, description);
     }
 }
+
+
+inline void invalidate_window(GdkWindow *win)
+{
+        GdkRectangle wreckt;
+        wreckt.x = 0;
+        wreckt.y = 0;
+
+        if(win)
+        {
+                debug("Invalidating window\n");
+                gdk_drawable_get_size (GDK_DRAWABLE (win),
+                               &wreckt.width,
+                               &wreckt.height);
+                gdk_window_invalidate_rect(win, &wreckt, FALSE);
+                gdk_window_process_all_updates();
+        }
+}
+
+
+/*
+ * Convert an 8 bit color [0,255] to a 16 bit color [0,65538].
+ */
+guint16
+color16(guint8 color)
+{
+    return ((guint16)color * (guint16)MAX_8_BIT_COLOR) + (guint16)color;
+}
+
+/*
+ * convert a GdkColor to its red, blue, green values
+ */
+#define SHIFT_COLOR(NAME) \
+ (color->pixel & visual->NAME##_mask) >> \
+ visual->NAME##_shift << \
+ (sizeof(unsigned char) * 8 - visual->NAME##_prec);
+
+void
+convert_color(const GdkColor *color, unsigned char *r, unsigned char *g, unsigned char *b)
+{
+    GdkColormap *cmap = gdk_rgb_get_cmap();
+    GdkVisual *visual = gdk_rgb_get_visual();
+    GdkColor *c;
+    switch(visual->type)
+    {
+        case GDK_VISUAL_STATIC_COLOR:
+        case GDK_VISUAL_PSEUDO_COLOR:
+            c = cmap->colors + color->pixel;
+            *r = c->red >> 8;
+            *g = c->green >> 8;
+            *b = c->blue >> 8;
+            break;
+
+        case GDK_VISUAL_TRUE_COLOR:
+        case GDK_VISUAL_DIRECT_COLOR:
+            *r = SHIFT_COLOR(red);
+            *g = SHIFT_COLOR(green);
+            *b = SHIFT_COLOR(blue);
+            break;
+   
+       default:
+            g_assert_not_reached();
+            break;
+    }
+}
+
+
 

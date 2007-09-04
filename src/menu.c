@@ -34,6 +34,7 @@
 #include "menu.h"
 #include "print.h"
 #include "file.h"
+#include "text.h"
 
 #include <gtk/gtk.h>
 
@@ -293,6 +294,7 @@ on_line_width_combo_combo_entry_changed(GtkEditable     *editable,
     GdkGCValues gcvalues;
     gpaint_canvas *canvas;
     gpaint_drawing *drawing;
+    int position = 0;
    
     debug_fn();
     canvas = canvas_lookup(GTK_WIDGET(editable));  
@@ -300,15 +302,26 @@ on_line_width_combo_combo_entry_changed(GtkEditable     *editable,
     
     tmp = gtk_editable_get_chars(editable, 0, -1);
     g_assert(tmp);
-    sscanf(tmp, "%d", &t);
-    g_free(tmp);
-    g_assert(t != 0);
-   
-    gdk_gc_get_values(drawing->gc, &gcvalues);
-    gdk_gc_set_line_attributes(drawing->gc, t, gcvalues.line_style, gcvalues.cap_style, gcvalues.join_style);
+    if (strlen(tmp) > 0) {
+        sscanf(tmp, "%d", &t);
+        g_free(tmp);
+        if (t > 0) {
+            gdk_gc_get_values(drawing->gc, &gcvalues);
+            gdk_gc_set_line_attributes(drawing->gc, t, gcvalues.line_style, gcvalues.cap_style, gcvalues.join_style);
 
-    /* force the line width entry widget to give up focus */
-    gtk_widget_grab_focus(GTK_WIDGET(canvas->drawing_area));
+            /* force the line width entry widget to give up focus */
+            gtk_widget_grab_focus(GTK_WIDGET(canvas->drawing_area));
+        } else {
+            gdk_gc_get_values(drawing->gc, &gcvalues);
+            tmp = g_strdup_printf("%d", gcvalues.line_width);
+            gtk_editable_delete_text(editable, 0, -1);
+            gtk_editable_insert_text(editable, tmp, strlen(tmp), &position);
+            gtk_editable_set_position(editable, -1);
+            g_free(tmp);
+        }
+    } else {
+      g_free(tmp);
+    }
 }
 
 void
@@ -322,18 +335,15 @@ on_fontpicker_font_set                 (GtkFontButton *fontpicker,
                                         gchar *arg1,
                                         gpointer         user_data)
 {
-    GdkFont     *font = gdk_font_load(gtk_font_button_get_font_name(fontpicker));
     gpaint_tool *tool = tool_palette_get_tool(GTK_WIDGET(fontpicker), "text");
 
     const gchar* name = gtk_font_button_get_font_name(fontpicker);
     debug1("font name = %s", name);
-    //GdkFont *font = gdk_font_load(name);
-    debug1("font=%p", font);
-    debug1("font->type=%d", font->type);
+  
 
     if (tool && tool->attribute)
     {
-        (*tool->attribute)(tool, GpaintFont, (gpointer*)font);
+        (*tool->attribute)(tool, GpaintFont, (gpointer*)name);
     }
 }
 

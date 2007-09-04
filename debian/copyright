@@ -1,9 +1,9 @@
-gpaint was packaged for Debian
-by Robert McQueen <robot101@debian.org> on
-Tue, 22 May 2001 22:16:33 +0100.
+gpaint was packaged for Debian by Robert McQueen <robot101@debian.org> on
+Tue, 22 May 2001 22:16:33 +0100. The pachage is currently maintained
+by Goedson Teixeira Paixao <goedson@debian.org>
 
 It was downloaded from:
- http://www.gnu.org/software/gpaint/gpaint-0.2.3.tar.gz
+ http://alpha.gnu.org/gnu/gpaint/
 
 Upstream Authors: Li-Cheng (Andy) Tai  <atai@gnu.org>, Michael A. Meffie III  <meffiem@neo.rr.com>
 
@@ -11,7 +11,7 @@ Copyright:
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of
+published by the Free Software Foundation; either version 3 of
 the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,

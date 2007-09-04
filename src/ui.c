@@ -211,7 +211,7 @@ create_about_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_label_set_justify (GTK_LABEL (about_dialog_version_label), GTK_JUSTIFY_CENTER);
 
-  label10 = gtk_label_new (_("This program is free software; you may redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2, or (at your opinion) any later version.\n"));
+  label10 = gtk_label_new (_("This program is free software; you may redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3, or (at your opinion) any later version.\n"));
   gtk_widget_set_name (label10, "label10");
   gtk_widget_show (label10);
   gtk_table_attach (GTK_TABLE (table7), label10, 0, 1, 4, 5,
@@ -526,6 +526,9 @@ create_main_window (void)
   gtk_widget_set_name (open_menu, "open_menu");
   gtk_widget_show (open_menu);
   gtk_container_add (GTK_CONTAINER (file_menu_item_menu), open_menu);
+  gtk_widget_add_accelerator (open_menu, "activate", accel_group,
+                              GDK_O, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
 
   image26 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_MENU);
   gtk_widget_set_name (image26, "image26");
@@ -536,6 +539,9 @@ create_main_window (void)
   gtk_widget_set_name (save_menu, "save_menu");
   gtk_widget_show (save_menu);
   gtk_container_add (GTK_CONTAINER (file_menu_item_menu), save_menu);
+  gtk_widget_add_accelerator (save_menu, "activate", accel_group,
+                              GDK_S, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
 
   image27 = gtk_image_new_from_stock ("gtk-save", GTK_ICON_SIZE_MENU);
   gtk_widget_set_name (image27, "image27");
@@ -601,6 +607,9 @@ create_main_window (void)
   gtk_widget_set_name (quit_menu_item, "quit_menu_item");
   gtk_widget_show (quit_menu_item);
   gtk_container_add (GTK_CONTAINER (file_menu_item_menu), quit_menu_item);
+  gtk_widget_add_accelerator (quit_menu_item, "activate", accel_group,
+                              GDK_Q, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
 
   image32 = gtk_image_new_from_stock ("gtk-quit", GTK_ICON_SIZE_MENU);
   gtk_widget_set_name (image32, "image32");
@@ -620,6 +629,9 @@ create_main_window (void)
   gtk_widget_set_name (cut_menu, "cut_menu");
   gtk_widget_show (cut_menu);
   gtk_container_add (GTK_CONTAINER (edit_menu_item_menu), cut_menu);
+  gtk_widget_add_accelerator(cut_menu, "activate", accel_group, 
+                             GDK_X, (GdkModifierType) GDK_CONTROL_MASK, 
+                             GTK_ACCEL_VISIBLE);
 
   image33 = gtk_image_new_from_stock ("gtk-cut", GTK_ICON_SIZE_MENU);
   gtk_widget_set_name (image33, "image33");
@@ -630,6 +642,9 @@ create_main_window (void)
   gtk_widget_set_name (copy_menu, "copy_menu");
   gtk_widget_show (copy_menu);
   gtk_container_add (GTK_CONTAINER (edit_menu_item_menu), copy_menu);
+  gtk_widget_add_accelerator(copy_menu, "activate", accel_group, 
+                             GDK_C, (GdkModifierType) GDK_CONTROL_MASK, 
+                             GTK_ACCEL_VISIBLE);
 
   image34 = gtk_image_new_from_stock ("gtk-copy", GTK_ICON_SIZE_MENU);
   gtk_widget_set_name (image34, "image34");
@@ -640,6 +655,9 @@ create_main_window (void)
   gtk_widget_set_name (paste_menu, "paste_menu");
   gtk_widget_show (paste_menu);
   gtk_container_add (GTK_CONTAINER (edit_menu_item_menu), paste_menu);
+  gtk_widget_add_accelerator(paste_menu, "activate", accel_group, 
+                             GDK_V, (GdkModifierType) GDK_CONTROL_MASK, 
+                             GTK_ACCEL_VISIBLE);
 
   image35 = gtk_image_new_from_stock ("gtk-paste", GTK_ICON_SIZE_MENU);
   gtk_widget_set_name (image35, "image35");
@@ -666,6 +684,9 @@ create_main_window (void)
   gtk_widget_set_name (select_all, "select_all");
   gtk_widget_show (select_all);
   gtk_container_add (GTK_CONTAINER (edit_menu_item_menu), select_all);
+  gtk_widget_add_accelerator(select_all, "activate", accel_group, 
+                             GDK_A, (GdkModifierType) GDK_CONTROL_MASK, 
+                             GTK_ACCEL_VISIBLE);
 
   image_menu_item = gtk_menu_item_new_with_mnemonic (_("_Image"));
   gtk_widget_set_name (image_menu_item, "image_menu_item");
@@ -862,11 +883,17 @@ create_main_window (void)
   gtk_widget_set_name (create_new_window, "create_new_window");
   gtk_widget_show (create_new_window);
   gtk_container_add (GTK_CONTAINER (windows_menu_item_menu), create_new_window);
+  gtk_widget_add_accelerator (create_new_window, "activate", accel_group,
+                              GDK_N, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
 
   close_this_window = gtk_menu_item_new_with_mnemonic (_("_Close This Window"));
   gtk_widget_set_name (close_this_window, "close_this_window");
   gtk_widget_show (close_this_window);
   gtk_container_add (GTK_CONTAINER (windows_menu_item_menu), close_this_window);
+  gtk_widget_add_accelerator (close_this_window, "activate", accel_group,
+                              GDK_W, (GdkModifierType) GDK_CONTROL_MASK,
+                              GTK_ACCEL_VISIBLE);
 
   help_menu_item = gtk_menu_item_new_with_mnemonic (_("_Help"));
   gtk_widget_set_name (help_menu_item, "help_menu_item");
@@ -1295,8 +1322,8 @@ create_main_window (void)
   gtk_widget_set_name (fixed1, "fixed1");
   gtk_widget_show (fixed1);
   gtk_table_attach (GTK_TABLE (table8), fixed1, 0, 1, 0, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   gtk_widget_set_size_request (fixed1, 70, 40);
   gtk_container_set_border_width (GTK_CONTAINER (fixed1), 2);
 
@@ -1351,8 +1378,8 @@ create_main_window (void)
   gtk_widget_set_name (frame4, "frame4");
   gtk_widget_show (frame4);
   gtk_table_attach (GTK_TABLE (table8), frame4, 2, 3, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame4, GTK_CAN_FOCUS);
 
   color_palette_entry1 = gtk_drawing_area_new ();
@@ -1386,8 +1413,8 @@ create_main_window (void)
   gtk_widget_set_name (frame6, "frame6");
   gtk_widget_show (frame6);
   gtk_table_attach (GTK_TABLE (table8), frame6, 3, 4, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   gtk_widget_set_size_request (frame6, 20, 20);
   GTK_WIDGET_SET_FLAGS (frame6, GTK_CAN_FOCUS);
 
@@ -1421,8 +1448,8 @@ create_main_window (void)
   gtk_widget_set_name (frame8, "frame8");
   gtk_widget_show (frame8);
   gtk_table_attach (GTK_TABLE (table8), frame8, 4, 5, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame8, GTK_CAN_FOCUS);
 
   color_palette_entry3 = gtk_drawing_area_new ();
@@ -1455,8 +1482,8 @@ create_main_window (void)
   gtk_widget_set_name (frame10, "frame10");
   gtk_widget_show (frame10);
   gtk_table_attach (GTK_TABLE (table8), frame10, 5, 6, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame10, GTK_CAN_FOCUS);
 
   color_palette_entry4 = gtk_drawing_area_new ();
@@ -1489,8 +1516,8 @@ create_main_window (void)
   gtk_widget_set_name (frame12, "frame12");
   gtk_widget_show (frame12);
   gtk_table_attach (GTK_TABLE (table8), frame12, 6, 7, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame12, GTK_CAN_FOCUS);
 
   color_palette_entry5 = gtk_drawing_area_new ();
@@ -1523,8 +1550,8 @@ create_main_window (void)
   gtk_widget_set_name (frame14, "frame14");
   gtk_widget_show (frame14);
   gtk_table_attach (GTK_TABLE (table8), frame14, 7, 8, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame14, GTK_CAN_FOCUS);
 
   color_palette_entry6 = gtk_drawing_area_new ();
@@ -1557,8 +1584,8 @@ create_main_window (void)
   gtk_widget_set_name (frame16, "frame16");
   gtk_widget_show (frame16);
   gtk_table_attach (GTK_TABLE (table8), frame16, 8, 9, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame16, GTK_CAN_FOCUS);
 
   color_palette_entry7 = gtk_drawing_area_new ();
@@ -1591,8 +1618,8 @@ create_main_window (void)
   gtk_widget_set_name (frame18, "frame18");
   gtk_widget_show (frame18);
   gtk_table_attach (GTK_TABLE (table8), frame18, 9, 10, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame18, GTK_CAN_FOCUS);
 
   color_palette_entry8 = gtk_drawing_area_new ();
@@ -1625,8 +1652,8 @@ create_main_window (void)
   gtk_widget_set_name (frame20, "frame20");
   gtk_widget_show (frame20);
   gtk_table_attach (GTK_TABLE (table8), frame20, 10, 11, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame20, GTK_CAN_FOCUS);
 
   color_palette_entry9 = gtk_drawing_area_new ();
@@ -1659,8 +1686,8 @@ create_main_window (void)
   gtk_widget_set_name (frame22, "frame22");
   gtk_widget_show (frame22);
   gtk_table_attach (GTK_TABLE (table8), frame22, 11, 12, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame22, GTK_CAN_FOCUS);
 
   color_palette_entry10 = gtk_drawing_area_new ();
@@ -1693,8 +1720,8 @@ create_main_window (void)
   gtk_widget_set_name (frame24, "frame24");
   gtk_widget_show (frame24);
   gtk_table_attach (GTK_TABLE (table8), frame24, 12, 13, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame24, GTK_CAN_FOCUS);
 
   color_palette_entry11 = gtk_drawing_area_new ();
@@ -1727,8 +1754,8 @@ create_main_window (void)
   gtk_widget_set_name (frame26, "frame26");
   gtk_widget_show (frame26);
   gtk_table_attach (GTK_TABLE (table8), frame26, 13, 14, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame26, GTK_CAN_FOCUS);
 
   color_palette_entry12 = gtk_drawing_area_new ();
@@ -1761,8 +1788,8 @@ create_main_window (void)
   gtk_widget_set_name (frame28, "frame28");
   gtk_widget_show (frame28);
   gtk_table_attach (GTK_TABLE (table8), frame28, 14, 15, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+                    (GtkAttachOptions) (0),
+                    (GtkAttachOptions) (0), 0, 0);
   GTK_WIDGET_SET_FLAGS (frame28, GTK_CAN_FOCUS);
 
   color_palette_entry13 = gtk_drawing_area_new ();

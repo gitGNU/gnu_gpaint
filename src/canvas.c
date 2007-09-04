@@ -8,7 +8,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be
@@ -16,10 +16,8 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -35,6 +33,9 @@
 #include "image_processing.h"
 #include "paste.h"
 #include "selection.h"
+#include "text.h"
+
+#define GPAINT_CLIPBOARD_KEY "gpaint-clipboard"
 
 /* Single clipboard to share selections between canvases. */
 static gpaint_clipboard *clipboard = NULL;
@@ -44,12 +45,25 @@ static gpaint_clipboard *clipboard = NULL;
 #define ACTIVE_TOOL(user_data) (((gpaint_canvas*)(user_data))->active_tool)
 #define DRAWING(user_data)     (((gpaint_canvas*)(user_data))->drawing)
 
+/* gobject canvas */
+#define GPAINT_TYPE_CANVAS		(gpaint_canvas_get_type ())
+#define GPAINT_CANVAS(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GPAINT_TYPE_CANVAS, gpaint_canvas))
+#define GPAINT_CANVAS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GPAINT_TYPE_CANVAS, gpaint_canvas_class))
+#define GPAINT_IS_CANVAS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPAINT_TYPE_CANVAS))
+#define GPAINT_IS_CANVAS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GPAINT_TYPE_CANVAS))
+#define GPAINT_CANVAS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPAINT_TYPE_CANVAS, gpaint_canvas_class))
+
+GType gpaint_canvas_get_type (void);
+
 /* File to open when starting. */
-static const gchar* canvas_initial_filename = 0;
+static gchar** canvas_initial_filenames = 0;
 
 static gpaint_canvas* canvas_new(GtkDrawingArea *drawing_area);
 static void canvas_copy_selection_to_clipboard(gpaint_canvas *canvas);
 
+static void canvas_clipboard_free (gpaint_clipboard *clipboard);
+static gint canvas_clipboard_format_compare (GdkPixbufFormat *a, GdkPixbufFormat *b);
+static void canvas_clipboard_send_buffer(GtkClipboard *gtk_clipboard, GtkSelectionData *selection_data, guint info, gpaint_canvas *canvas);
 
 static void 
 on_drawing_area_realize           (GtkWidget       *widget,
@@ -217,6 +231,7 @@ on_drawing_area_expose_event            (GtkWidget       *widget,
                                         gpointer         user_data)
 {
     gpaint_canvas *canvas = (gpaint_canvas*)user_data;
+    gpaint_tool *tool = ACTIVE_TOOL(user_data);
     debug_fn();
     gdk_draw_pixmap(widget->window,
                     widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
@@ -224,6 +239,7 @@ on_drawing_area_expose_event            (GtkWidget       *widget,
                     event->area.x, event->area.y,
                     event->area.x, event->area.y,
                     event->area.width, event->area.height);
+    if (tool && tool->current_draw) tool->current_draw(tool);                
     return FALSE;
 }
 
@@ -345,14 +361,18 @@ on_drawing_area_key_release_event       (GtkWidget       *widget,
  * blank drawing is created if no file name is given.
  */
 void
-canvas_init(int argc, char* argv[])
+canvas_init_arg(int argc, char* argv[])
 {
-    if (argc>1)
+    int i;
+    if (argc > 1)
     {
-        canvas_initial_filename = argv[1];
+        canvas_initial_filenames = calloc(sizeof(char*), argc - 1);
+        for (i = 1; i < argc; i++)
+            canvas_initial_filenames[i - 1] = argv[i];
     }
     return;
 }
+
 
 /*
  * Lookup the canvas object from a widget.
@@ -395,7 +415,8 @@ canvas_new(GtkDrawingArea *drawing_area)
     gdk_gc_set_line_attributes(gc, 1, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND);
    
     /* Create the canvas object */
-    canvas = (gpaint_canvas*)g_new0(gpaint_canvas, 1);
+//    canvas = (gpaint_canvas*)g_new0(gpaint_canvas, 1);
+    canvas = g_object_new (GPAINT_TYPE_CANVAS, NULL);
     g_assert(canvas);
     canvas->top_level = gtk_widget_get_toplevel(GTK_WIDGET(drawing_area));
     canvas->drawing_area = drawing_area;    
@@ -409,14 +430,16 @@ canvas_new(GtkDrawingArea *drawing_area)
     canvas->selection = selection_new(drawing_area);
     
     /* Create the drawing object */
-    if (canvas_initial_filename)
-    {
-        drawing = drawing_new_from_file(canvas->drawing_area, canvas->gc, canvas_initial_filename);
+    if (canvas_initial_filenames)
+    { /* only open the first one for now; open additonal ones TO DO */
+    
+        drawing = drawing_new_from_file(canvas->drawing_area, canvas->gc, canvas_initial_filenames[0]);
         if (!drawing)
         {
-            g_message("Failed to open drawing file %s", canvas_initial_filename);
+            g_message("Failed to open drawing file %s", canvas_initial_filenames[0]);
         }
-        canvas_initial_filename = 0;  /* use only in the first window */
+        free(canvas_initial_filenames);
+        canvas_initial_filenames = 0;  /* use only in the first window */
     }
     if (!drawing)
     {
@@ -429,6 +452,33 @@ canvas_new(GtkDrawingArea *drawing_area)
     return canvas;
 }  
 
+GType
+gpaint_canvas_get_type (void)
+{
+    static GType object_type = 0;
+
+    if (!object_type)
+    {
+	static const GTypeInfo object_info =
+	{
+	    sizeof (gpaint_canvas_class),
+	    (GBaseInitFunc) NULL,
+	    (GBaseFinalizeFunc) NULL,
+	    (GClassInitFunc) NULL,
+	    NULL,	/* class_finalize */
+	    NULL,	/* class_data */
+	    sizeof (gpaint_canvas),
+	    0,
+	    (GInstanceInitFunc) NULL,
+	};
+
+	object_type = g_type_register_static (G_TYPE_OBJECT,
+						"GpaintCanvas",
+						&object_info, 0);
+    }
+
+    return object_type;
+}
 
 void
 canvas_destroy(gpaint_canvas *canvas)
@@ -448,8 +498,9 @@ canvas_destroy(gpaint_canvas *canvas)
     gdk_gc_unref(canvas->gc);
     gdk_cursor_destroy(canvas->arrow_cursor);
     gdk_cursor_destroy(canvas->busy_cursor);
-    memset(canvas, 0xBEBE, sizeof(canvas)); /* debugging aid */
-    g_free(canvas);
+//    memset(canvas, 0xBEBE, sizeof(canvas)); /* debugging aid */
+//    g_free(canvas);
+    g_object_unref(canvas);
     debug("canvas_destroy() returning");
 }
 
@@ -531,6 +582,7 @@ canvas_set_tool(gpaint_canvas* canvas, gpaint_tool *new_tool)
 void
 canvas_begin_busy_cursor(gpaint_canvas *canvas)
 {
+    canvas_commit_change(canvas);
     gdk_window_set_cursor(canvas->top_level->window, canvas->busy_cursor);
     gdk_window_set_cursor(canvas->drawing->window, canvas->busy_cursor);
     gdk_flush(); 
@@ -595,7 +647,8 @@ void
 canvas_begin_paste_mode(gpaint_canvas *canvas)
 {
     gpaint_clipboard *clipboard = canvas_clipboard(canvas);
-    if (clipboard && point_array_size(clipboard->points)) 
+    canvas_commit_change(canvas);
+//    if (clipboard && point_array_size(clipboard->points)) 
     {
         if (canvas->active_tool != canvas->paste_tool)
         {
@@ -617,6 +670,7 @@ canvas_end_paste_mode(gpaint_canvas *canvas)
 void
 canvas_cut(gpaint_canvas *canvas)
 {
+    canvas_commit_change(canvas);
     if (canvas_has_selection(canvas))
     {
         selection_disable_flash(canvas->selection);
@@ -629,6 +683,7 @@ canvas_cut(gpaint_canvas *canvas)
 void
 canvas_copy(gpaint_canvas *canvas)
 {
+    canvas_commit_change(canvas);
     if (canvas_has_selection(canvas))
     {
         selection_disable_flash(canvas->selection);
@@ -640,6 +695,7 @@ canvas_copy(gpaint_canvas *canvas)
 void
 canvas_clear(gpaint_canvas *canvas)
 {
+
     if (canvas_has_selection(canvas))
     {
         selection_disable_flash(canvas->selection);
@@ -657,6 +713,7 @@ void
 canvas_select_all(gpaint_canvas *canvas)
 {
     GdkRectangle rect;
+    canvas_commit_change(canvas);
     rect.x = 0;
     rect.y = 0;
     rect.width = canvas->drawing->width;
@@ -676,17 +733,97 @@ canvas_clipboard(gpaint_canvas *canvas)
     /* create the single clipboard */
     if (!clipboard)
     {
+	GSList *list;
+
         clipboard = g_new0(gpaint_clipboard, 1);
         clipboard->image = 0;
         clipboard->points = point_array_new();
+
+/* create gobject for clipboard notifications */
+	g_object_set_data_full (G_OBJECT (canvas), GPAINT_CLIPBOARD_KEY,
+				clipboard, (GDestroyNotify) canvas_clipboard_free);
+
+/* create list of pixbuf formats for clipboard format negotiation */
+
+        clipboard->pixbuf_formats =
+		g_slist_sort (gdk_pixbuf_get_formats(),
+				(GCompareFunc) canvas_clipboard_format_compare);
+	for (list = clipboard->pixbuf_formats; list; list = g_slist_next (list))
+	{
+	    GdkPixbufFormat *format = list->data;
+
+	    if (gdk_pixbuf_format_is_writable (format))
+	    {
+		gchar **mime_types;
+		gchar **type;
+
+		mime_types = gdk_pixbuf_format_get_mime_types (format);
+
+		for (type = mime_types; *type; type++)
+		    clipboard->n_target_entries++;
+
+		g_strfreev (mime_types);
+	    }
+	}
+
+	if (clipboard->n_target_entries > 0)
+	{
+	    gint i = 0;
+
+	    clipboard->target_entries = g_new0(GtkTargetEntry,
+						clipboard->n_target_entries);
+	    clipboard->savers 	      = g_new0(gchar*,
+						clipboard->n_target_entries + 1);
+
+	    for (list = clipboard->pixbuf_formats; list; list = g_slist_next (list))
+	    {
+	        GdkPixbufFormat *format = list->data;
+
+	        if (gdk_pixbuf_format_is_writable (format))
+	        {
+		    gchar *format_name;
+		    gchar **mime_types;
+		    gchar **type;
+
+		    format_name = gdk_pixbuf_format_get_name (format);
+		    mime_types = gdk_pixbuf_format_get_mime_types (format);
+
+		    for (type = mime_types; *type; type++)
+		    {
+			gchar *mime_type = *type;
+
+			clipboard->target_entries[i].target = g_strdup (mime_type);
+			clipboard->target_entries[i].flags  = 0;
+			clipboard->target_entries[i].info   = i;
+
+			clipboard->savers[i]                = g_strdup (format_name);
+
+			i++;
+		    }
+
+		    g_strfreev (mime_types);
+		    g_free (format_name);
+		}
+	    }
+	}
     }
     return clipboard;
+}
+
+static void
+canvas_clipboard_free (gpaint_clipboard *clipboard)
+{
+    g_slist_free (clipboard->pixbuf_formats);
+    g_free (clipboard->target_entries);
+    g_strfreev (clipboard->savers);
+    g_free (clipboard);
 }
 
 static void
 canvas_copy_selection_to_clipboard(gpaint_canvas *canvas)
 {
     gpaint_clipboard *clipboard = canvas_clipboard(canvas);
+    GtkClipboard *gtk_clipboard;
     
     if (clipboard->image)
     {
@@ -696,5 +833,113 @@ canvas_copy_selection_to_clipboard(gpaint_canvas *canvas)
                             canvas->drawing->backing_pixmap,
                             selection_points(canvas->selection));
     point_array_copy(clipboard->points, selection_points(canvas->selection));
+
+    gtk_clipboard = gtk_clipboard_get_for_display (gdk_display_get_default(),
+						   GDK_SELECTION_CLIPBOARD);
+    if (!gtk_clipboard)
+        return;
+
+    if (clipboard->image)
+    {
+        gtk_clipboard_set_with_owner (gtk_clipboard,
+    					clipboard->target_entries,
+					clipboard->n_target_entries,
+					(GtkClipboardGetFunc) canvas_clipboard_send_buffer,
+					(GtkClipboardClearFunc) NULL,
+					G_OBJECT (canvas));
+    }
+    else if (gtk_clipboard_get_owner (gtk_clipboard) == G_OBJECT(canvas))
+    {
+        gtk_clipboard_clear (gtk_clipboard);
+    }
 }   
 
+static GdkPixbuf* 
+clipboard_pixbuf(gpaint_clipboard *clipboard) {
+    return image_pixbuf(clipboard->image);
+}
+
+
+static void
+canvas_clipboard_send_buffer(GtkClipboard	*gtk_clipboard,
+			     GtkSelectionData	*selection_data,
+			     guint		 info,
+			     gpaint_canvas	*canvas)
+{
+    gpaint_clipboard *clipboard = canvas_clipboard(canvas);
+    GdkPixbuf *pixbuf = clipboard_pixbuf(clipboard);
+
+    if (pixbuf)
+    {
+        GdkAtom atom = gdk_atom_intern (clipboard->target_entries[info].target,
+					FALSE);
+
+	g_print ("sending pixbuf data as '%s' (%s)\n",
+			clipboard->target_entries[info].target,
+			clipboard->savers[info]);
+	gchar *buffer;
+	gsize buffer_size;
+	GError *error = NULL;
+
+	g_return_if_fail (selection_data != NULL);
+	g_return_if_fail (atom != GDK_NONE);
+	g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+	g_return_if_fail (clipboard->savers[info] != NULL);
+
+	if (gdk_pixbuf_save_to_buffer (pixbuf,
+					&buffer, &buffer_size, clipboard->savers[info],
+					&error, NULL))
+	{
+	    gtk_selection_data_set (selection_data, atom,
+					8, (guchar*) buffer, buffer_size);
+        }
+    }
+}
+
+static gint
+canvas_clipboard_format_compare (GdkPixbufFormat *a,
+				 GdkPixbufFormat *b)
+{
+    gchar *a_name = gdk_pixbuf_format_get_name (a);
+    gchar *b_name = gdk_pixbuf_format_get_name (b);
+    gint retval = 0;
+
+#ifdef GDK_WINDOWING_WIN32
+    /*  move BMP to the front of the list  */
+    if (g_ascii_strncasecmp (a_name, "bmp", strlen("bmp")) == 0)
+        retval = -1;
+    else if (g_ascii_strncasecmp (b_name, "bmp", strlen("bmp")) == 0)
+        retval = 1;
+    else
+#endif
+
+    /*  move PNG to the front of the list  */
+    if (g_ascii_strncasecmp (a_name, "png", strlen("png")) == 0)
+        retval = -1;
+    else if (g_ascii_strncasecmp (b_name, "png", strlen("png")) == 0)
+        retval = 1;
+
+    /*  move JPEG to the end of the list  */
+    else if (g_ascii_strncasecmp (a_name, "jpeg", strlen("jpeg")) == 0)
+        retval = 1;
+    else if (g_ascii_strncasecmp (b_name, "jpeg", strlen("jpeg")) == 0)
+        retval = -1;
+
+    /*  move GIF to the end of the list  */
+    else if (g_ascii_strncasecmp (a_name, "gif", strlen("gif")) == 0)
+        retval = 1;
+    else if (g_ascii_strncasecmp (b_name, "gif", strlen("gif")) == 0)
+        retval = -1;
+
+    g_free (a_name);
+    g_free (b_name);
+
+    return retval;
+}   
+
+void canvas_commit_change(gpaint_canvas *canvas)
+{
+    gpaint_tool * tool = canvas->active_tool;
+    if (tool && tool->commit_change)
+        tool->commit_change(tool);
+}

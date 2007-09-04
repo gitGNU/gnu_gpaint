@@ -8,7 +8,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be
@@ -16,10 +16,8 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -64,6 +62,7 @@ drawing_new_blank(GtkDrawingArea *drawing_area, GdkGC *gc, gint width, gint heig
 
     drawing->top_level = gtk_widget_get_toplevel(widget);
     drawing->window = widget->window;       /* reference to the drawing area window */
+      
     drawing->gc = gc;                       /* reference to the gc */
     gdk_gc_ref(gc);
 
@@ -415,6 +414,7 @@ drawing_prompt_to_save(gpaint_drawing *drawing)
 {
     gboolean cancel = FALSE;
     debug_fn();
+    
     if (drawing->modified)
     {
         GtkWidget *dialog;
@@ -428,7 +428,11 @@ drawing_prompt_to_save(gpaint_drawing *drawing)
                drawing->filename->str);
         gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE,GTK_RESPONSE_YES);
         gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL);
+#ifdef GTK_STOCK_DISCARD
+        gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_DISCARD,GTK_RESPONSE_DISCARD);
+#else
         gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_NO,GTK_RESPONSE_NO);
+#endif /* !GTK_STOCK_DISCARD */
         
         result = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -473,3 +477,32 @@ drawing_rotate(gpaint_drawing *drawing, double degrees)
         drawing_modified(drawing);
     }
 }
+
+
+
+inline void drawing_save_undo_pixmap(gpaint_drawing *drawing)
+{
+#if 0
+        debug("Backing up the backing pixmap\n");
+        gdk_draw_drawable(drawing->undo_pixmap,
+                                                drawing->gc,
+                                                drawing->backing_pixmap,
+                                                0, 0,
+                                                0, 0,
+                                                -1, -1);
+#endif
+}
+
+inline void drawing_undo(gpaint_drawing *drawing)
+{
+#if 0
+        debug("Undoing the last backing pixmap operation\n");
+        gdk_draw_drawable(drawing->backing_pixmap,
+                                                        drawing->gc,
+                                                        drawing->undo_pixmap,
+                                                        0, 0,
+                                                        0, 0,
+                                                        -1, -1);
+#endif
+}
+

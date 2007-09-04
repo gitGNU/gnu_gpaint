@@ -5,7 +5,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be
@@ -13,10 +13,8 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -29,7 +27,8 @@
 
 #include "image.h"
 #include "debug.h"
-#include <math.h>     
+#include <math.h>
+#include <gdk/gdk.h>
 #include <gdk/gdkx.h>  /* for gdk_root_parent */
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -52,6 +51,16 @@ struct _gpaint_image
 {
     GdkPixbuf *pixbuf;    /* X client side image for processing */ 
 };
+
+
+typedef struct {
+  int rowstride;
+  int pixelsize;
+  unsigned char value[4];
+  unsigned char mask[4];
+  unsigned char * data;
+} GdkSpanFillData;
+
 
 gpaint_image*
 image_new(int width, int height)
@@ -333,6 +342,24 @@ cmp_int(const void *a, const void *b)
 	return (*(const int *)a) - (*(const int *)b);
 }
 
+
+
+static void gdk_span_fill(GdkSpan *span, gpointer data) {
+  GdkSpanFillData *fill_data = (GdkSpanFillData *) data;
+  unsigned char *c = fill_data->data + (fill_data->rowstride * span->y) + (fill_data->pixelsize * span->x);
+  int i;
+  int j;
+
+  for (i = 0; i <span->width; ++i) {
+    for (j = 0; j < fill_data->pixelsize; ++j, ++c) {
+      if (fill_data->mask[j]) {
+        *c = fill_data->value[j];
+      }
+    }
+  }
+}
+
+
 static void
 fill_polygon(
         unsigned char *data,
@@ -347,99 +374,46 @@ fill_polygon(
 {
    /* this assumes the data is in RGBA format, each channel takes 1 bytes (thus 4 bytes per pixel) */
 
-   int x;
-   int j;
-   unsigned char *c;
-   
-/* taken from gd.c in gd 1.8.3 */
-   
    int i;
-   int y;
-   int miny, maxy;
-   int x1, y1;
-   int x2, y2;
-   int ind1, ind2;
-   int ints;
-   int * polyInts = 0;
-   int polyAllocated = 0;
-   
-   debug_fn();
-   
+   GdkRegion *region;
+   GdkRectangle bbox;
+   GdkSpan *spans;
+   GdkSpanFillData fill_data;
+
    g_assert(xoffset >= 0);
    g_assert(yoffset >= 0);
+
+   debug_fn();
+
+   if (!num_pts)
+     return;
+
+   region  = gdk_region_polygon(pts, num_pts, GDK_EVEN_ODD_RULE);
+
+   fill_data.rowstride = rowstride;
+   fill_data.pixelsize = pixelsize;
+   fill_data.data = data;
+   for (i = 0; i < 4; ++i) {
+     fill_data.value[i] = value[i];
+     fill_data.mask[i] = mask[i];
+   }
+
+   gdk_region_offset(region, -xoffset, -yoffset);
+
+   gdk_region_get_clipbox(region, &bbox);
+
+   spans = (GdkSpan *) g_new0(GdkSpan, bbox.height);
+   for(i = 0; i < bbox.height; ++i) {
+     spans[i].x = bbox.x;
+     spans[i].width = bbox.width;
+     spans[i].y = bbox.y + i;
+   }
    
-   if (!num_pts) {
-	   return;
-   }
-   if (!polyAllocated) {
-	   polyInts = (int *) malloc(sizeof(int) * num_pts);
-	   polyAllocated = num_pts;
-   }		
+   gdk_region_spans_intersect_foreach(region, spans, bbox.height, TRUE, gdk_span_fill, &fill_data);
 
-   miny = pts[0].y;
-   maxy = pts[0].y;
-   for (i=1; (i < num_pts); i++) {
-	   if (pts[i].y < miny) {
-		   miny = pts[i].y;
-	   }
-	   if (pts[i].y > maxy) {
-		   maxy = pts[i].y;
-	   }
-   }
-   /* Fix in 1.3: count a vertex only once */
-   for (y=miny; (y <= maxy); y++) {
-/*1.4		int interLast = 0; */
-/*		int dirLast = 0; */
-/*		int interFirst = 1; */
-	   ints = 0;
-	   for (i=0; (i < num_pts); i++) {
-		   if (!i) {
-			   ind1 = num_pts-1;
-			   ind2 = 0;
-		   } else {
-			   ind1 = i-1;
-			   ind2 = i;
-		   }
-		   y1 = pts[ind1].y;
-		   y2 = pts[ind2].y;
-		   if (y1 < y2) {
-			   x1 = pts[ind1].x;
-			   x2 = pts[ind2].x;
-		   } else if (y1 > y2) {
-			   y2 = pts[ind1].y;
-			   y1 = pts[ind2].y;
-			   x2 = pts[ind1].x;
-			   x1 = pts[ind2].x;
-		   } else {
-			   continue;
-		   }
-		   if ((y >= y1) && (y < y2)) {
-			   polyInts[ints++] = (y-y1) * (x2-x1) / (y2-y1) + x1;
-		   } else if ((y == maxy) && (y > y1) && (y <= y2)) {
-			   polyInts[ints++] = (y-y1) * (x2-x1) / (y2-y1) + x1;
-		   }
-	   }
-	   qsort(polyInts, ints, sizeof(int), cmp_int);
+   g_free(spans);
+   gdk_region_destroy(region);
 
-	   for (i=0; (i < (ints)); i+=2) {
-	      c = data + (y - yoffset) * rowstride + (polyInts[i] - xoffset) * pixelsize;
-	      for (x = polyInts[i]; x <= polyInts[i+1] ; x++)
-	      {
-	         for (j = 0; j < pixelsize; j++, c++)
-             {
-                 if (mask[j])
-                     *c = value[j];
-             }    
-	      }
-	      
-	   }
-   }
-
-   if (polyInts)
-   {   
-       debug("freeing polyInts");
-       free(polyInts);
-   }
 }
 
 int
@@ -655,3 +629,6 @@ image_rotate(gpaint_image *image, double degrees)
 }
 
 
+GdkPixbuf* image_pixbuf(gpaint_image* image) {
+    return image->pixbuf;
+};

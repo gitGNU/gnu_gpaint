@@ -6,7 +6,7 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be
@@ -14,11 +14,8 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307 USA
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -71,8 +68,7 @@ guint8 init_palette_values[][3] =
 
 const int NUM_PALETTES = sizeof(init_palette_values)/sizeof(*init_palette_values);
 const int RIGHT_BUTTON = 3;
-const guint8  MAX_8_BIT_COLOR  = 0xFF;
-const guint16 MAX_16_BIT_COLOR = 0xFFFF;
+
 
 typedef enum
 {
@@ -120,16 +116,6 @@ change_foreground_color(gpaint_canvas *canvas, GdkColor *color);
 
 static void
 change_background_color(gpaint_canvas *canvas, GdkColor *color);
-
-/*
- * Convert an 8 bit color [0,255] to a 16 bit color [0,65538].
- */
-static guint16
-color16(guint8 color)
-{
-    return ((guint16)color * (guint16)MAX_8_BIT_COLOR) + (guint16)color;
-}
-
 /*
  * Set the foreground color picker initial color.
  */
