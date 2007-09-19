@@ -57,10 +57,23 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+AR = @AR@
+AS = @AS@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
 DATADIRNAME = @DATADIRNAME@
+DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EGREP = @EGREP@
+EXEEXT = @EXEEXT@
+F77 = @F77@
+GCJ = @GCJ@
+GCJFLAGS = @GCJFLAGS@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
@@ -68,9 +81,13 @@ GUI_CFLAGS = @GUI_CFLAGS@
 GUI_LIBS = @GUI_LIBS@
 INSTOBJEXT = @INSTOBJEXT@
 INTLLIBS = @INTLLIBS@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKINSTALLDIRS = @MKINSTALLDIRS@
+OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PKG_CONFIG = @PKG_CONFIG@
 POFILES = @POFILES@
@@ -79,6 +96,9 @@ PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
 PO_IN_DATADIR_TRUE = @PO_IN_DATADIR_TRUE@
 PRINT_CFLAGS = @PRINT_CFLAGS@
 PRINT_LIBS = @PRINT_LIBS@
+RANLIB = @RANLIB@
+RC = @RC@
+STRIP = @STRIP@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 
@@ -111,6 +131,7 @@ fill.c \
 fill.h \
 freehand.c \
 freehand.h \
+global.h \
 gtkscrollframe.c \
 gtkscrollframe.h \
 image.c \
@@ -137,21 +158,21 @@ selection.c \
 selection.h \
 shape.c \
 shape.h \
-support.c \
-support.h \
+util.c \
+util.h \
 text.c \
 text.h \
 tool_palette.c \
 tool_palette.h \
-ui.c \
-ui.h \
 version.h
 
 
 gpaint_2_CFLAGS = -I$(srcdir)
 gpaint_2_LDADD = $(GUI_LIBS) $(PRINT_LIBS)
+gpaint_2_LDFLAGS = -Wl,--export-dynamic
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
+bin_PROGRAMS =  gpaint-2$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
 
@@ -159,17 +180,20 @@ DEFS = @DEFS@ -I. -I$(srcdir)
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-gpaint_2_OBJECTS =  about.o brush.o callbacks.o canvas.o color_palette.o \
-drawing.o file.o fill.o freehand.o gtkscrollframe.o image.o \
-image_processing.o lasso.o main.o menu.o paste.o pen.o pixmaps.o \
-polyselect.o rectselect.o print.o selection.o shape.o support.o text.o \
-tool_palette.o ui.o
+gpaint_2_OBJECTS =  about.$(OBJEXT) brush.$(OBJEXT) callbacks.$(OBJEXT) \
+canvas.$(OBJEXT) color_palette.$(OBJEXT) drawing.$(OBJEXT) \
+file.$(OBJEXT) fill.$(OBJEXT) freehand.$(OBJEXT) \
+gtkscrollframe.$(OBJEXT) image.$(OBJEXT) image_processing.$(OBJEXT) \
+lasso.$(OBJEXT) main.$(OBJEXT) menu.$(OBJEXT) paste.$(OBJEXT) \
+pen.$(OBJEXT) pixmaps.$(OBJEXT) polyselect.$(OBJEXT) \
+rectselect.$(OBJEXT) print.$(OBJEXT) selection.$(OBJEXT) \
+shape.$(OBJEXT) util.$(OBJEXT) text.$(OBJEXT) tool_palette.$(OBJEXT)
 gpaint_2_DEPENDENCIES = 
-gpaint_2_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -182,7 +206,7 @@ OBJECTS = $(gpaint_2_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .o .s
+.SUFFIXES: .S .c .lo .o .obj .s
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps src/Makefile
 
@@ -205,8 +229,8 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
-	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	  else :; fi; \
 	done
 
@@ -219,6 +243,11 @@ uninstall-binPROGRAMS:
 .c.o:
 	$(COMPILE) -c $<
 
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -227,6 +256,7 @@ uninstall-binPROGRAMS:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
 
 clean-compile:
 
@@ -235,8 +265,27 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-gpaint-2: $(gpaint_2_OBJECTS) $(gpaint_2_DEPENDENCIES)
-	@rm -f gpaint-2
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
+
+gpaint-2$(EXEEXT): $(gpaint_2_OBJECTS) $(gpaint_2_DEPENDENCIES)
+	@rm -f gpaint-2$(EXEEXT)
 	$(LINK) $(gpaint_2_LDFLAGS) $(gpaint_2_OBJECTS) $(gpaint_2_LDADD) $(LIBS)
 
 tags: TAGS
@@ -283,18 +332,19 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-about.o: about.c ui.h version.h about.h
+about.o: about.c version.h about.h global.h
 brush.o: brush.c brush.h canvas.h image.h selection.h drawing.h debug.h
 callbacks.o: callbacks.c debug.h
-canvas.o: canvas.c debug.h canvas.h image.h selection.h drawing.h \
-	support.h gtkscrollframe.h image_processing.h paste.h text.h
+canvas.o: canvas.c debug.h canvas.h image.h selection.h drawing.h util.h \
+	gtkscrollframe.h image_processing.h paste.h text.h global.h
 color_palette.o: color_palette.c canvas.h image.h selection.h drawing.h \
-	callbacks.h pixmaps.h support.h debug.h
+	callbacks.h pixmaps.h util.h debug.h
 drawing.o: drawing.c drawing.h image.h selection.h image_processing.h \
 	debug.h
-file.o: file.c canvas.h image.h selection.h drawing.h debug.h ui.h \
-	support.h
-fill.o: fill.c fill.h canvas.h image.h selection.h drawing.h debug.h
+file.o: file.c global.h canvas.h image.h selection.h drawing.h debug.h \
+	util.h
+fill.o: fill.c fill.h canvas.h image.h selection.h drawing.h util.h \
+	debug.h
 freehand.o: freehand.c freehand.h canvas.h image.h selection.h drawing.h \
 	debug.h
 gtkscrollframe.o: gtkscrollframe.c gtkscrollframe.h
@@ -302,8 +352,8 @@ image.o: image.c image.h selection.h debug.h
 image_processing.o: image_processing.c image.h selection.h debug.h \
 	image_processing.h
 lasso.o: lasso.c lasso.h canvas.h image.h selection.h drawing.h debug.h
-main.o: main.c ui.h debug.h canvas.h image.h selection.h drawing.h \
-	tool_palette.h
+main.o: main.c global.h debug.h canvas.h image.h selection.h drawing.h \
+	tool_palette.h util.h
 menu.o: menu.c debug.h canvas.h image.h selection.h drawing.h \
 	image_processing.h tool_palette.h print.h file.h text.h
 paste.o: paste.c paste.h canvas.h image.h selection.h drawing.h debug.h
@@ -324,13 +374,11 @@ rectselect.o: rectselect.c rectselect.h canvas.h image.h selection.h \
 	drawing.h debug.h
 selection.o: selection.c selection.h debug.h
 shape.o: shape.c shape.h canvas.h image.h selection.h drawing.h debug.h
-support.o: support.c support.h debug.h
 text.o: text.c text.h canvas.h image.h selection.h drawing.h debug.h
 tool_palette.o: tool_palette.c tool_palette.h canvas.h image.h \
-	selection.h drawing.h debug.h support.h pixmaps.h pen.h \
-	freehand.h brush.h shape.h lasso.h polyselect.h rectselect.h \
-	fill.h text.h
-ui.o: ui.c callbacks.h pixmaps.h ui.h support.h
+	selection.h drawing.h debug.h util.h pixmaps.h pen.h freehand.h \
+	brush.h shape.h lasso.h polyselect.h rectselect.h fill.h text.h
+util.o: util.c util.h debug.h global.h
 
 info-am:
 info: info-am
@@ -369,23 +417,26 @@ distclean-generic:
 
 maintainer-clean-generic:
 mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
-		mostlyclean-tags mostlyclean-generic
+		mostlyclean-libtool mostlyclean-tags \
+		mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-binPROGRAMS clean-compile clean-tags clean-generic \
-		mostlyclean-am
+clean-am:  clean-binPROGRAMS clean-compile clean-libtool clean-tags \
+		clean-generic mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-binPROGRAMS distclean-compile distclean-tags \
-		distclean-generic clean-am
+distclean-am:  distclean-binPROGRAMS distclean-compile distclean-libtool \
+		distclean-tags distclean-generic clean-am
+	-rm -f libtool
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-binPROGRAMS \
-		maintainer-clean-compile maintainer-clean-tags \
-		maintainer-clean-generic distclean-am
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-tags maintainer-clean-generic \
+		distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -394,13 +445,14 @@ maintainer-clean: maintainer-clean-am
 .PHONY: mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir info-am info dvi-am dvi check \
-check-am installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
+dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
+install-exec install-data-am install-data install-am install \
+uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

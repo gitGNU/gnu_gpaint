@@ -1,5 +1,4 @@
-/* $Id: main.c,v 1.9 2004/12/25 04:41:58 meffie Exp $
- *
+/* 
  * GNU Paint 
  * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
@@ -27,13 +26,18 @@
 #endif
 
 #include <gtk/gtk.h>
-#include "ui.h"
+#include <glade/glade.h>
+#include "global.h"
 #include "debug.h"
 #include "canvas.h"
 #include "tool_palette.h"
+#include "util.h"
+
 
 static GList *window_list = 0;
-static void create_window();
+static void create_window(void);
+
+
 
 #define WIDTH  740
 #define HEIGHT 680
@@ -53,6 +57,7 @@ main (int argc, char *argv[])
 
     
     gtk_init(&argc, &argv);
+    glade_init();
     
     canvas_init_arg(argc, argv);
     create_window();
@@ -62,14 +67,47 @@ main (int argc, char *argv[])
     return 0;
 }
 
-static void
-create_window()
+static void main_window_ui_initial_adjustment(GtkWidget *main_window)
 {
-    GtkWidget *main_window = create_main_window();
-    debug_fn1("main_window = %p", main_window);
+    GtkWidget *widget;
+    tool_palette_set_active_button(main_window, "pen_button");
+        /* make the pen tool the default initial tool so the user can draw right away */
 
+#if (!defined(HAVE_GTK_PRINT) && !defined(HAVE_GNOME_PRINT))
+/* disable print menus and buttons if no print support available*/
+    widget = lookup_widget(main_window, "print_button");
+    g_assert(widget);
+    gtk_widget_set_sensitive(widget, FALSE);
+    widget = lookup_widget(main_window, "print_menu");
+    g_assert(widget);
+    gtk_widget_set_sensitive(widget, FALSE);
+    widget = lookup_widget(main_window, "print_preview_menu");
+    if (widget)
+        gtk_widget_set_sensitive(widget, FALSE);
+
+#endif
+
+}
+
+static void
+create_window(void)
+{
+    GladeXML *glade_xml = glade_xml_new(GLADE_DATA_FILE, NULL, NULL);
+    GtkWidget *main_window ;
+    g_assert(glade_xml);
+    glade_xml_signal_autoconnect(glade_xml);
+
+    main_window = glade_xml_get_widget(glade_xml, "main_window");
+    debug_fn1("main_window = %p", main_window);
+    
+    g_object_set_data_full((gpointer) main_window, GLADE_XML, (gpointer) glade_xml,
+    g_object_unref);
+        
     gtk_window_set_default_size(GTK_WINDOW(main_window), WIDTH, HEIGHT);
-    gtk_widget_show(main_window);
+    gtk_widget_show_all(main_window);
+    
+    main_window_ui_initial_adjustment(main_window);
+    
 }
 
 
@@ -111,6 +149,7 @@ on_mainwindow_destroy                  (GtkObject       *object,
     
     debug_fn();
     window_list = g_list_remove(window_list, (gpointer)widget);
+    
     gtk_widget_unref(widget);   /* removed from list */
     gtk_widget_destroy(widget); /* cleanup window and child objects */
     if (!window_list)  /* if window list is empty */
@@ -215,11 +254,11 @@ main_prompt_to_quit(GtkWidget *widget)
     dialog = gtk_message_dialog_new(
                GTK_WINDOW(canvas->drawing->top_level), 
                GTK_DIALOG_MODAL, 
-               GTK_MESSAGE_QUESTION, 
+               GTK_MESSAGE_WARNING, 
                GTK_BUTTONS_NONE, 
                "You have more than one window open.\nDo you really want to quit?");
-    gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_YES, GTK_RESPONSE_YES);
     gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_NO,  GTK_RESPONSE_NO);
+    gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_YES, GTK_RESPONSE_YES);
         
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -278,3 +317,21 @@ on_quit_menu_activate(GtkMenuItem *menuitem, gpointer user_data)
     }
 }
 
+GtkWidget*
+create_new_canvas_window (void)
+{
+    GladeXML *glade_xml = 0;
+    GtkWidget *widget;
+    if (glade_xml == 0)
+    {
+        glade_xml = glade_xml_new(GLADE_DATA_FILE, NULL, NULL);
+        glade_xml_signal_autoconnect(glade_xml);
+    }
+    g_assert(glade_xml);
+    widget = glade_xml_get_widget(glade_xml, "new_canvas_window");
+    
+    g_object_set_data_full((gpointer) widget, GLADE_XML, (gpointer) glade_xml,
+        g_object_unref);
+    return widget;
+
+}

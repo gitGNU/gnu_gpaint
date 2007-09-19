@@ -2,15 +2,11 @@
 TODO for gpaint 
 Working toward version 0.4.0
 
-$Id: TODO,v 1.9 2005/03/07 03:08:15 meffie Exp $
-
 
 =========================================================================
 BUGS
 
 * File Save As: Prompt to confirm file overwrite if filename already exists
-
-* Font selection is broken. gdk_draw_string() is deprecated.
 
 * Flip image while selection is blinking causes selection line droppings.
 
@@ -103,8 +99,6 @@ Nice to have new features
 Future Release
 
 * adding variable zooming to the image window (like xpaint can do)
-
-* Make gpaint a bonobo component
 
 * Drag and drop support
 

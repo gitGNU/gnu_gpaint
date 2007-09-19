@@ -23,12 +23,110 @@
 #  include <config.h>
 #endif
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "print.h"
 #include <gtk/gtk.h>
 #include <gtk/gtk.h>
 #include "debug.h"
 
-#ifdef HAVE_GNOME_PRINT
+
+#ifdef HAVE_GTK_PRINT
+
+static void begin_print(GtkPrintOperation *print, GtkPrintContext *context, gpointer data)
+{
+
+    gtk_print_operation_set_n_pages(print, 1);
+}
+
+static void draw_page(GtkPrintOperation *print, GtkPrintContext *context, gint page, gpointer data)
+{
+    gpaint_image *image = (gpaint_image*) data;
+    gdouble pwidth, pheight;
+    cairo_surface_t *src_img;
+    cairo_t *cr;
+    long size;
+    int w, h, rowstride, pixelsize;
+    unsigned char *buf ;
+    g_assert(image);
+    
+    cr = gtk_print_context_get_cairo_context(context);
+    pwidth = gtk_print_context_get_width(context);
+    pheight = gtk_print_context_get_height(context);
+
+    size = (h = image_height(image)) * image_rowstride(image);
+    w = image_width(image);
+    rowstride = image_rowstride(image);
+    pixelsize = image_pixelsize(image);
+    buf = malloc(sizeof(buf[0]) * size);
+    memcpy(buf, image_pixels(image), size);
+    {
+        int x, y;
+        unsigned char c, *t2 = buf, *t;
+        for (y = 0; y < h; y++)
+        {
+            t = t2;
+            for (x = 0; x < w; x++)
+            {  /* swap R and B; this may be little endian specific */
+                c = t[0];
+                t[0] = t[2];
+                t[2] = c;
+                t += pixelsize;
+            }
+            t2 += rowstride;
+        }
+    }
+
+    src_img = cairo_image_surface_create_for_data(buf,
+                          CAIRO_FORMAT_ARGB32, 
+                          w,
+                          h, 
+                          rowstride);
+    cairo_set_source_surface(cr, src_img, 0, 0);
+    cairo_paint(cr);                          
+                          
+    cairo_surface_destroy(src_img);
+    free(buf);
+}
+                      
+
+int
+do_print(gpaint_image * image, const gchar * name)
+{
+    GtkWidget *main_window = NULL; 
+    GtkPrintOperation *print;
+    static GtkPrintSettings *settings = NULL;
+    GtkPrintOperationResult r;
+    
+    print = gtk_print_operation_new();
+    g_assert(print);
+    g_signal_connect(print, "draw_page", G_CALLBACK(draw_page), (gpointer) image);
+    g_signal_connect(print, "begin_print", G_CALLBACK(begin_print), (gpointer) image);
+    
+    if (settings) gtk_print_operation_set_print_settings(print, settings); 
+    gtk_print_operation_set_job_name(print, name);
+    r = gtk_print_operation_run(print, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                          GTK_WINDOW(main_window), NULL);
+                          
+    if (r == GTK_PRINT_OPERATION_RESULT_APPLY)
+    {
+        if (settings)
+            g_object_unref(settings);
+        settings = g_object_ref(gtk_print_operation_get_print_settings(print));
+    }
+    g_object_unref(print);
+}
+
+int
+do_print_preview(gpaint_image * image, const gchar * name)
+{
+
+}
+
+
+
+#elif defined(HAVE_GNOME_PRINT)
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-job.h>

@@ -349,8 +349,8 @@ text_commit_change(gpaint_tool * tool)
     gpaint_text *text = GPAINT_TEXT(tool);
     if (text && is_point_defined(&text->location))
     {
-        text_draw_string(tool);
-        text_clear(tool);
+        text_draw_string(text);
+        text_clear(text);
     }
 
 }

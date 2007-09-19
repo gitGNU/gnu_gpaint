@@ -24,8 +24,10 @@
 #  include <config.h>
 #endif
 
+
 #include "fill.h"
 #include "image.h"
+#include "util.h"
 #include "debug.h"
 
 #define STACKSIZE 10000
@@ -79,10 +81,10 @@ struct fillpixelinfo
 
 static void fill_destroy(gpaint_tool *tool);
 static void fill_bounded_area(gpaint_tool *tool, int x, int y);
-static void convert_color(const GdkColor *color, unsigned char *r, unsigned char *g, unsigned char *b);
+
 static void flood_fill_algo(struct fillinfo *info, int x, int y);
-static void set_new_pixel_value(struct fillinfo *info, int x, int y);
-static int is_old_pixel_value(struct fillinfo *info, int x, int y);
+static void __inline__ set_new_pixel_value(struct fillinfo *info, int x, int y);
+static int __inline__ is_old_pixel_value(struct fillinfo *info, int x, int y);
 
 gpaint_tool *fill_create(const char *name)
 {
@@ -143,6 +145,33 @@ fill_bounded_area(gpaint_tool* tool, int x, int y)
 
     drawing_modified(drawing);
 }
+
+
+static __inline__ int
+is_old_pixel_value(struct fillinfo *info, int x, int y)
+{
+    unsigned char *p = info->rgb + y * info->rowstride + x * info->pixelsize;
+    unsigned char or, og, ob;
+    or = *p;
+    og = *(p + 1);
+    ob = *(p + 2);
+    if ((or == info->or) && (og == info->og) && (ob == info->ob))
+    {
+        return 1;
+    }
+    return 0;
+}
+
+
+static __inline__ void
+set_new_pixel_value(struct fillinfo *info, int x, int y)
+{
+    unsigned char *p = info->rgb + y * info->rowstride + x * info->pixelsize;
+    *p = info->r;
+    *(p + 1) = info->g;
+    *(p + 2) = info->b;
+}
+
 /*
  * algorithm based on SeedFill.c from GraphicsGems 1
  */
@@ -203,27 +232,3 @@ skip:
 }  
 
 
-static int
-is_old_pixel_value(struct fillinfo *info, int x, int y)
-{
-    unsigned char *p = info->rgb + y * info->rowstride + x * info->pixelsize;
-    unsigned char or, og, ob;
-    or = *p;
-    og = *(p + 1);
-    ob = *(p + 2);
-    if ((or == info->or) && (og == info->og) && (ob == info->ob))
-    {
-        return 1;
-    }
-    return 0;
-}
-
-
-static void
-set_new_pixel_value(struct fillinfo *info, int x, int y)
-{
-    unsigned char *p = info->rgb + y * info->rowstride + x * info->pixelsize;
-    *p = info->r;
-    *(p + 1) = info->g;
-    *(p + 2) = info->b;
-}

@@ -1,7 +1,7 @@
-/* $Id: tool_palette.h,v 1.2 2004/03/13 03:33:51 meffie Exp $
+/* 
  *
  * GNU Paint 
- * Copyright 2003  Li-Cheng (Andy) Tai, Michael Meffie
+ * Copyright 2000-2003, 2007  Li-Cheng (Andy) Tai
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,14 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TOOL_PALETTE_H__
-#define __TOOL_PALETTE_H__
+
+#ifndef __GLOBAL_H__
+#define __GLOBAL_H__
 
 #include <gtk/gtk.h>
-#include "canvas.h"
 
-GtkWidget *lookup_tool_palette(GtkWidget*);
-gpaint_tool *tool_palette_get_tool(GtkWidget*,const gchar*);
-void tool_palette_set_active_button(GtkWidget *widget, const char *button_name);
+#define GLADE_DATA_FILE (PACKAGE_DATA_DIR "/gpaint/glade/gpaint.glade")
+
+static const char *GLADE_XML = "GLADE_XML";
+static const char *DRAWING_AREA = "drawing_area";
+
+GtkWidget* create_about_dialog (void);
+GtkWidget* create_new_canvas_window (void);
 
 #endif
+

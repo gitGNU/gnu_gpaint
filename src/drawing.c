@@ -422,17 +422,17 @@ drawing_prompt_to_save(gpaint_drawing *drawing)
         dialog = gtk_message_dialog_new(
                GTK_WINDOW(drawing->top_level), 
                GTK_DIALOG_MODAL, 
-               GTK_MESSAGE_QUESTION, 
+               GTK_MESSAGE_WARNING, 
                GTK_BUTTONS_NONE, 
                _("Do you want to save the changes you made to \"%s\"?\nYour changes will be lost if you don't save them."),
                drawing->filename->str);
-        gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE,GTK_RESPONSE_YES);
-        gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL,GTK_RESPONSE_CANCEL);
 #ifdef GTK_STOCK_DISCARD
         gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_DISCARD,GTK_RESPONSE_DISCARD);
 #else
-        gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_NO,GTK_RESPONSE_NO);
+        gtk_dialog_add_button(GTK_DIALOG(dialog), _("Close _without Saving"), GTK_RESPONSE_NO);
 #endif /* !GTK_STOCK_DISCARD */
+        gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+        gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
         
         result = gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(GTK_WIDGET(dialog));

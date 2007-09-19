@@ -21,11 +21,23 @@
 #  include <config.h>
 #endif
 
+#include <libintl.h>
 #include <gtk/gtk.h>
+#include <glade/glade.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include "ui.h"
 #include "version.h"
 #include "about.h"
+#include "global.h"
+
+#define _(str) gettext(str)
+
+static gchar *authors[] = { "Li-Cheng (Andy) Tai <atai@gnu.org>", 
+            "Michael A. Meffie III  <meffiem@neo.rr.com>",
+            NULL } ;
+
+                             
+                              
+static gchar *website = "http://www.gnu.org/software/gpaint";                                         
 
 /*
  * on_about_menu_activate()  [callback]
@@ -36,8 +48,52 @@ void
 on_about_menu_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-   GtkWidget *about = create_about_dialog ();
-   gtk_widget_show(about);
+    gchar *copyright = _("Copyright 2000--2003, 2007  Li-Cheng (Andy) Tai\n"
+                         "Copyright 2002 Michael A. Meffie III\n"
+                         "\n"
+                         "based on xpaint, by David Koblas and Torsten Martinsen\n"
+                         "Copyright 1992--1996");
+   
+    gchar *license = _(
+   "This program is free software; you can redistribute it and/or\n"
+   "modify it under the terms of the GNU General Public License\n"
+   "as published by the Free Software Foundation; either version 3\n"
+   "of the License, or (at your option) any later version.\n"
+   "\n"                           
+   "This program is distributed in the hope that it will be\n"
+   "useful, but WITHOUT ANY WARRANTY; without even the implied\n"
+   "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
+   "PURPOSE. See the GNU General Public License for more details.\n"
+   "\n"
+   "You should have received a copy of the GNU General Public License\n"
+   "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n" );
+                              
+                               
+    gchar *comments = _("a small-scale painting program for GNOME,"
+                        " the GNU Desktop.");  
+                                              
+    GtkWidget *widget, *top_level;
+    widget = gtk_menu_get_attach_widget (GTK_MENU(GTK_WIDGET(menuitem)->parent));
+    top_level = gtk_widget_get_toplevel(widget);
+    if (top_level && GTK_WIDGET_TOPLEVEL(top_level)) ;
+    else top_level = 0;             
+
+    gtk_show_about_dialog(GTK_WINDOW(top_level),               
+                                 "authors",
+                                 authors,
+                                 "license",
+                                 license, 
+                                 "copyright", 
+                                 copyright,
+                                 "comments",
+                                 comments,
+                                 "name",
+                                 PROGRAM_TITLE,
+                                 "version", 
+                                 VERSION,
+                                 "website",
+                                 website,
+                                 NULL);
 }
 
 /*
@@ -73,57 +129,3 @@ on_about_dialog_pixmap_realize         (GtkWidget       *widget,
     }
 }
 
-/*
- * on_about_dialog_version_label_realize()  [callback]
- *
- * Display the program title and version number in the about box.
- * The version number is set by the project's configure script.
- */
-void
-on_about_dialog_version_label_realize  (GtkWidget       *widget,
-                                        gpointer         user_data)
-{
-    char tmp[200];
-    sprintf(tmp, "%s %s", PROGRAM_TITLE, VERSION_STRING);
-    gtk_label_set(GTK_LABEL(widget), tmp);
-}
-
-/*
- * on_about_gnome_activate()  [callback]
- *
- * Display the gnome web site with the system's web browser (default
- * is mozilla).
- */
-void
-on_about_gnome_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-    /*gnome_url_show("http://www.gnome.org/");*/
-}
-
-
-/*
- * on_about_gnu_activate()  [callback]
- *
- * Display the gnu web site with the system's web browser (default
- * is mozilla).
- */
-void
-on_about_gnu_activate                  (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-    /*gnome_url_show("http://www.gnu.org/");*/
-}
-
-/*
- * on_about_dialog_ok_button_clicked      
- *
- * Dismiss the about dialog.
- */
-void
-on_about_dialog_ok_button_clicked      (GtkButton       *button,
-                                        gpointer         user_data)
-{
-   GtkWidget *window = gtk_widget_get_toplevel(GTK_WIDGET(button));
-   gtk_widget_destroy(window);
-}

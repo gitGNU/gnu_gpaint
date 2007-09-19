@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 01_drawing.dpatch by  <goedson@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad gpaint-0.3.3~/src/drawing.c gpaint-0.3.3/src/drawing.c
+--- gpaint-0.3.3~/src/drawing.c	2007-09-08 21:49:46.000000000 -0300
++++ gpaint-0.3.3/src/drawing.c	2007-09-19 17:00:35.000000000 -0300
+@@ -427,7 +427,7 @@
+                _("Do you want to save the changes you made to \"%s\"?\nYour changes will be lost if you don't save them."),
+                drawing->filename->str);
+ #ifdef GTK_STOCK_DISCARD
+-        gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_DISCARD,GTK_RESPONSE_DISCARD);
++        gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_DISCARD,GTK_RESPONSE_NO);
+ #else
+         gtk_dialog_add_button(GTK_DIALOG(dialog), _("Close _without Saving"), GTK_RESPONSE_NO);
+ #endif /* !GTK_STOCK_DISCARD */

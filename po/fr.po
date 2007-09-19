@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpaint 0.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-01 17:49-0700\n"
+"POT-Creation-Date: 2007-09-10 02:50-0700\n"
 "PO-Revision-Date: 2003-04-07 00:12+0200\n"
 "Last-Translator: Laurent Richard <laurent.richard@lilit.be>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -430,7 +430,7 @@ msgstr "ellipse"
 msgid "brush"
 msgstr "brosse"
 
-#: src/support.c:91 src/support.c:115
+#: src/util.c:120 src/util.c:144
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Ne peut trouver le fichier pixmap : %s"
@@ -474,6 +474,42 @@ msgstr "gpaint"
 msgid ""
 "Do you want to save the changes you made to \"%s\"?\n"
 "Your changes will be lost if you don't save them."
+msgstr ""
+
+#: src/drawing.c:432
+msgid "Close _without Saving"
+msgstr ""
+
+#: src/about.c:51
+#, fuzzy
+msgid ""
+"Copyright 2000--2003, 2007  Li-Cheng (Andy) Tai\n"
+"Copyright 2002 Michael A. Meffie III\n"
+"\n"
+"based on xpaint, by David Koblas and Torsten Martinsen\n"
+"Copyright 1992--1996"
+msgstr ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+
+#: src/about.c:58
+msgid ""
+"This program is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 3\n"
+"of the License, or (at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be\n"
+"useful, but WITHOUT ANY WARRANTY; without even the implied\n"
+"warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
+"PURPOSE. See the GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
+msgstr ""
+
+#: src/about.c:72
+msgid "a small-scale painting program for GNOME, the GNU Desktop."
 msgstr ""
 
 #~ msgid "Flip"

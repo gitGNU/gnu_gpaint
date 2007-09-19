@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include "tool_palette.h"
 #include "debug.h"
-#include "support.h"
+#include "util.h"
 #include "pixmaps.h"
 
 #include <gtk/gtk.h>
@@ -132,7 +132,7 @@ static void filled_button_destroy(gpaint_fill_button *fb);
 GtkWidget*
 lookup_tool_palette(GtkWidget *widget)
 {
-    GtkWidget *tp = lookup_widget(widget, "table4");
+    GtkWidget *tp = lookup_widget(widget, "tool_palette_table");
     g_assert(tp);
     return tp;
 }
@@ -251,8 +251,9 @@ on_tool_button_realize                 (GtkWidget       *widget,
     }
     else
     {
-	g_warning("missing icon data");
+	    g_warning("missing icon data");
     }
+    
 }
 
 static void
@@ -504,4 +505,17 @@ static gint
 tool_hash_compare(gconstpointer a, gconstpointer b)
 {
     return (!strcmp((const char*)a, (const char*)b));
+}
+
+
+void tool_palette_set_active_button(GtkWidget *widget, const char *button_name)
+{
+    
+    GtkWidget *button = lookup_widget(widget, button_name);
+    gpaint_tool_button *tb = 
+        (gpaint_tool_button*)gtk_object_get_data(GTK_OBJECT(button), "tool_button");
+    
+    on_tool_select(tb);
+
+
 }

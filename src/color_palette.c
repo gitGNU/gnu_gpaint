@@ -22,9 +22,12 @@
 #  include <config.h>
 #endif
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "canvas.h"
 #include "callbacks.h"
-#include "support.h"
+#include "util.h"
 #include "debug.h"
 #include <gtk/gtk.h>
 
@@ -197,7 +200,8 @@ on_color_palette_entry_expose_event    (GtkWidget       *widget,
     gpaint_color_swatch *swatch = 
         (gpaint_color_swatch*)gtk_object_get_data(GTK_OBJECT(widget), "color_swatch");
     debug_fn1("widget=%s", gtk_widget_get_name(widget));
-    g_assert(swatch);
+    if (swatch == NULL)
+        return FALSE;
     gdk_draw_rectangle(
             widget->window, swatch->gc, TRUE,
             event->area.x, event->area.y,

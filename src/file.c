@@ -25,11 +25,11 @@
 #endif
 
 #include <string.h>
+#include "global.h"
 #include "canvas.h"
 #include "image.h"
 #include "debug.h"
-#include "ui.h"
-#include "support.h"
+#include "util.h"
 
 #define MAX_WIDTH  4096
 #define MAX_HEIGHT 4096

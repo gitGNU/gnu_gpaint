@@ -8,6 +8,9 @@ EXTRA_DIST =            \
 	gpaint.glade \
 	gpaint.gladep
 
+gladedir = $(datadir)/gpaint/glade
+glade_DATA = gpaint.glade
+
 install-data-local:
 	@$(NORMAL_INSTALL)
 

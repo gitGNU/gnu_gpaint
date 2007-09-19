@@ -1,3 +1,11 @@
+gpaint (0.3.3-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/patches/01_drawing.dpatch:fix wrong response value for a GTK dialog.
+  * debian/copyright: fixed spelling error.
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Wed, 19 Sep 2007 17:59:24 -0300
+
 gpaint (0.3.2-1) unstable; urgency=low
 
   * New upstream release

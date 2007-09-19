@@ -30,6 +30,7 @@ fill.c \
 fill.h \
 freehand.c \
 freehand.h \
+global.h \
 gtkscrollframe.c \
 gtkscrollframe.h \
 image.c \
@@ -56,17 +57,16 @@ selection.c \
 selection.h \
 shape.c \
 shape.h \
-support.c \
-support.h \
+util.c \
+util.h \
 text.c \
 text.h \
 tool_palette.c \
 tool_palette.h \
-ui.c \
-ui.h \
 version.h
 
 
 gpaint_2_CFLAGS = -I$(srcdir)
 gpaint_2_LDADD = $(GUI_LIBS) $(PRINT_LIBS)
+gpaint_2_LDFLAGS = -Wl,--export-dynamic
 

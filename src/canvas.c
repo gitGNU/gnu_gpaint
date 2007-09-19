@@ -24,16 +24,19 @@
 #  include <config.h>
 #endif
 
+#include <stdlib.h>
+#include <string.h>
 #include <gtk/gtk.h>
 #include "debug.h"
 #include "canvas.h"
-#include "support.h"
+#include "util.h"
 #include "gtkscrollframe.h"
 #include "image.h"
 #include "image_processing.h"
 #include "paste.h"
 #include "selection.h"
 #include "text.h"
+#include "global.h"
 
 #define GPAINT_CLIPBOARD_KEY "gpaint-clipboard"
 
@@ -130,12 +133,11 @@ create_drawing_area_in_scroll_frame (
     gtk_container_add(GTK_CONTAINER (scrolledwindow), viewport);
 
     drawing_area = gtk_drawing_area_new();
-    gtk_widget_set_name(drawing_area, "drawing_area");
+    gtk_widget_set_name(drawing_area, DRAWING_AREA);
     gtk_widget_ref(drawing_area);
-    gtk_object_set_data_full(GTK_OBJECT(viewport), "drawing_area", drawing_area,
+    gtk_object_set_data_full(GTK_OBJECT(scrolledwindow), DRAWING_AREA, drawing_area,
                             (GtkDestroyNotify) gtk_widget_unref);
                  
-    gtk_widget_show(drawing_area);
     gtk_container_add(GTK_CONTAINER(viewport), drawing_area);
 
     gtk_widget_set_events(GTK_WIDGET(drawing_area),
@@ -165,6 +167,7 @@ create_drawing_area_in_scroll_frame (
     gtk_signal_connect(GTK_OBJECT(drawing_area), "realize",
                        GTK_SIGNAL_FUNC(on_drawing_area_realize),
                        NULL);
+    gtk_widget_show(drawing_area);
     return scrolledwindow;
 }
 
@@ -193,7 +196,7 @@ on_drawing_area_realize           (GtkWidget       *drawing_area,
     /* save a reference to the drawing area in the top_level window */
     gtk_widget_ref(drawing_area);
     gtk_object_set_data_full(GTK_OBJECT(canvas->top_level),
-                             "drawing_area",
+                             DRAWING_AREA,
                              drawing_area,
                              (GtkDestroyNotify)gtk_widget_unref);
 
@@ -382,8 +385,8 @@ canvas_lookup(GtkWidget *widget)
 {
     GtkWidget *cw;
     gpaint_canvas *canvas;
-    cw = lookup_widget(widget, "drawing_area");
-    g_assert(cw);
+    cw = lookup_widget(widget, DRAWING_AREA);
+    g_assert(cw) ;
     canvas = (gpaint_canvas*)gtk_object_get_data(GTK_OBJECT(cw), "user_data");
     g_assert(canvas);
     return canvas;
