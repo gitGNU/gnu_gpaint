@@ -1,0 +1,54 @@
+
+This is gpaint (GNU Paint), a small-scale painting program for GNOME, the GNU
+Desktop.  Gpaint does not attempt to compete with GIMP.  Think of GIMP is like
+Photoshop as gpaint is like Windows Paint.
+
+Gpaint is still work in progress and many features are still being developed. 
+However, gpaint is usable already for simple image editing..  
+
+Currently gpaint has the following features:
+   * Drawing tools--ovals, freehand, polygon, text, with fill or shallow for 
+     polygons and closed freehand, and brushes.
+   * Cut and paste by selecting regions or polygons.
+   * Print support using gnome-print (basic functionality is there) 
+   * Modern, ease-to-use user interface with tool and color palettes
+   * Editing multiple image at the same time without running multiple instance
+     of the image editor
+   * All image processing features present in xpaint
+
+Gpaint requires the GNOME environment (gtk+ 1.2.8 or above, gnome-libs 1.2.4 or
+above, gdkimlib and gdk-pixbuf 0.9 or above, gnome-print 0.25 or above).  It
+requires both gdkimlib and gdk-pixbuf at this point because gpaint uses
+gdk-pixbuf internally but gdk-pixbuf does not provide image saving functions at
+this point.  As gdk-pixbuf acquires image saving capabilities from gtk+ 2.0,
+the dependency on gdkimlib will be removed.
+
+A large part of gpaint is derived from xpaint 2.4.9, authored by David Koblas
+and later Torsten Martinsen.  Gpaint also uses the gtkscrollframe widget (taking
+from eog 0.5) by Federco Mena-Quintero.
+
+Future plans include the implementation of zooming in/out, image
+scaling/rotation, and turning gpaint into a Bonobo component for simple image
+editing tasks.
+
+Thanks to Michael A. Meffie III  (meffiem@neo.rr.com) for improving the menu
+interface, bug fixes and brush implementation, and just great improvements to
+usability!
+
+Thanks to 
+Pierre Sarrazin <sarrazip@sympatico.ca>
+for providing the RPM spec file, and George Farris <george@gmsys.com> for the
+gpaint.desktop file.
+
+Thanks to several people who submitted Japanese message catalogs.  They will be
+included in future releases.
+
+Also, I may soon move the main development to the GNOME 2 platform, 
+although I would like to try to push farther on the GNOME 1.4 platform to 
+make gpaint useful to GNOME 1.4 users. The exact point of when to switch has not
+been decided.
+
+For bugs or general comments please send mail to Andy Tai, atai@gnu.org
+
+Andy Tai  
+atai@gnu.org

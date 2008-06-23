@@ -1,0 +1,28 @@
+Version 0.2.2 (March 16, 2002)  
+These changes are contributed by Michael A. Meffie III.
+   * The menu is re-arranged so it is now much more user friendly.
+   * Initial brush tool implementation.
+   * Improvement to the eraser tool.
+   * Bug fix in clipboard, and more sensible initial color settings
+   * General usability improvements so gpaint is much more usable!
+   * Added the TODO file.
+
+Version 0.2.1 (January 13, 2002)
+   * Icons now smaller, so the toolbar takes less space
+   * First attempt at support RPM creation
+   * Updated to work with the GNOME 1.4 platform
+   * First implementation of image flipping and envolving infrastructure 
+     for future interactive rotation and shearing
+   * Improve image paste with better manual control
+
+Version 0.2 (November 20, 2000)
+   * Printing support added
+   * Now works in 8, 16 24 and 32 bit screens
+   * Cut, paste support added
+   * bug fixes
+   * Color palette added to UI
+
+
+
+Version 0.1 (October 16, 2000)
+   * First release development version.

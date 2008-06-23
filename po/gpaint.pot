@@ -1,0 +1,369 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-03-16 01:29-0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: src/ui.c:22
+msgid "_New File"
+msgstr ""
+
+#: src/ui.c:28 src/ui.c:29
+msgid "Print Preview"
+msgstr ""
+
+#: src/ui.c:55
+msgid "Get Snapshot of Desktop"
+msgstr ""
+
+#: src/ui.c:62
+msgid "Set Desktop Background"
+msgstr ""
+
+#: src/ui.c:74
+msgid "Left to Right"
+msgstr ""
+
+#: src/ui.c:81
+msgid "Top to Bottom"
+msgstr ""
+
+#: src/ui.c:93
+msgid "+90"
+msgstr ""
+
+#: src/ui.c:100
+msgid "+45"
+msgstr ""
+
+#: src/ui.c:107
+msgid "-45"
+msgstr ""
+
+#: src/ui.c:114
+msgid "-90"
+msgstr ""
+
+#: src/ui.c:121
+msgid "+180"
+msgstr ""
+
+#: src/ui.c:133
+msgid "_Revert"
+msgstr ""
+
+#: src/ui.c:140
+msgid "_Sharpen"
+msgstr ""
+
+#: src/ui.c:148
+msgid "S_mooth"
+msgstr ""
+
+#: src/ui.c:155
+msgid "_Directional Smooth"
+msgstr ""
+
+#: src/ui.c:162
+msgid "Despeckle"
+msgstr ""
+
+#: src/ui.c:170
+msgid "_Edge Detect"
+msgstr ""
+
+#: src/ui.c:177
+msgid "Emboss"
+msgstr ""
+
+#: src/ui.c:184
+msgid "_Oil Paint"
+msgstr ""
+
+#: src/ui.c:191
+msgid "_Add Noise"
+msgstr ""
+
+#: src/ui.c:198
+msgid "Spread"
+msgstr ""
+
+#: src/ui.c:205
+msgid "_Pixelize"
+msgstr ""
+
+#: src/ui.c:212
+msgid "_Blend"
+msgstr ""
+
+#: src/ui.c:219
+msgid "Solarize"
+msgstr ""
+
+#: src/ui.c:227
+msgid "_Normalize Contrast"
+msgstr ""
+
+#: src/ui.c:234
+msgid "_Quantize Color"
+msgstr ""
+
+#: src/ui.c:241
+msgid "Convert to _Greyscale"
+msgstr ""
+
+#: src/ui.c:253
+msgid "Desktop"
+msgstr ""
+
+#: src/ui.c:260
+msgid "Flip"
+msgstr ""
+
+#: src/ui.c:267
+msgid "Rotate"
+msgstr ""
+
+#: src/ui.c:274
+msgid "_Effects"
+msgstr ""
+
+#: src/ui.c:288
+msgid "About G_NOME"
+msgstr ""
+
+#: src/ui.c:295
+msgid "About _GNU"
+msgstr ""
+
+#: src/ui.c:309
+msgid "_Image"
+msgstr ""
+
+#: src/ui.c:426
+msgid "gpaint"
+msgstr ""
+
+#: src/ui.c:796
+msgid "Bold"
+msgstr ""
+
+#: src/ui.c:797
+msgid "bold text"
+msgstr ""
+
+#: src/ui.c:810
+msgid "Italic"
+msgstr ""
+
+#: src/ui.c:811
+msgid "italic text"
+msgstr ""
+
+#: src/ui.c:824
+msgid "Underline"
+msgstr ""
+
+#: src/ui.c:825
+msgid "underline text"
+msgstr ""
+
+#: src/ui.c:844 src/ui.c:880
+msgid "line width"
+msgstr ""
+
+#: src/ui.c:865 src/ui.c:881
+msgid "1"
+msgstr ""
+
+#: src/ui.c:866
+msgid "2"
+msgstr ""
+
+#: src/ui.c:867
+msgid "3"
+msgstr ""
+
+#: src/ui.c:868
+msgid "4"
+msgstr ""
+
+#: src/ui.c:869
+msgid "6"
+msgstr ""
+
+#: src/ui.c:870
+msgid "8"
+msgstr ""
+
+#: src/ui.c:901
+msgid "New"
+msgstr ""
+
+#: src/ui.c:902
+msgid "New File"
+msgstr ""
+
+#: src/ui.c:914
+msgid "Open"
+msgstr ""
+
+#: src/ui.c:915
+msgid "Open File"
+msgstr ""
+
+#: src/ui.c:927
+msgid "Save"
+msgstr ""
+
+#: src/ui.c:928
+msgid "Save File"
+msgstr ""
+
+#: src/ui.c:940
+msgid "Save As"
+msgstr ""
+
+#: src/ui.c:941
+msgid "Save File As"
+msgstr ""
+
+#: src/ui.c:955 src/ui.c:956
+msgid "Print"
+msgstr ""
+
+#: src/ui.c:1006
+msgid "background color"
+msgstr ""
+
+#: src/ui.c:1007
+msgid "Background color"
+msgstr ""
+
+#: src/ui.c:1018
+msgid "foreground color"
+msgstr ""
+
+#: src/ui.c:1019
+msgid "Foreground color"
+msgstr ""
+
+#: src/ui.c:1721
+msgid "erase"
+msgstr ""
+
+#: src/ui.c:1733
+msgid "lasso"
+msgstr ""
+
+#: src/ui.c:1745 src/ui.c:1909
+msgid "fill"
+msgstr ""
+
+#: src/ui.c:1757
+msgid "line"
+msgstr ""
+
+#: src/ui.c:1769
+msgid "polyline"
+msgstr ""
+
+#: src/ui.c:1781
+msgid "rectangle"
+msgstr ""
+
+#: src/ui.c:1793
+msgid "closed freehand"
+msgstr ""
+
+#: src/ui.c:1817
+msgid "pen"
+msgstr ""
+
+#: src/ui.c:1829
+msgid "polygon select"
+msgstr ""
+
+#: src/ui.c:1841
+msgid "text"
+msgstr ""
+
+#: src/ui.c:1853
+msgid "arc"
+msgstr ""
+
+#: src/ui.c:1865
+msgid "curve"
+msgstr ""
+
+#: src/ui.c:1878
+msgid "oval"
+msgstr ""
+
+#: src/ui.c:1890
+msgid "brush"
+msgstr ""
+
+#: src/ui.c:2571
+msgid "New Canvas"
+msgstr ""
+
+#: src/ui.c:2583
+msgid "Enter the desired image size:"
+msgstr ""
+
+#: src/ui.c:2635
+msgid "Width: "
+msgstr ""
+
+#: src/ui.c:2647
+msgid "Height: "
+msgstr ""
+
+#: src/ui.c:2659
+msgid "Zoom:"
+msgstr ""
+
+#: src/ui.c:2759
+msgid "about"
+msgstr ""
+
+#: src/ui.c:2798
+msgid ""
+"This program is free software; you may redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation, either version 2, or (at your opinion) any later "
+"version.\n"
+msgstr ""
+
+#: src/ui.c:2809
+msgid ""
+"based on xpaint, by David Koblas and Torsten Martinsen \n"
+"Copyright 1992--1996"
+msgstr ""
+
+#: src/ui.c:2819
+msgid ""
+"Copyright 2000--2002  Li-Cheng (Andy) Tai (atai@gnu.org)\n"
+"Copyright 2002 Michael A. Meffie III  (meffiem@neo.rr.com) "
+msgstr ""
+
+#: src/support.c:100 src/support.c:138
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr ""
+
+#: src/support.c:116
+#, c-format
+msgid "Couldn't create pixmap from file: %s"
+msgstr ""

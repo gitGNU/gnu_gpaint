@@ -1,0 +1,96 @@
+TODO for gpaint
+
+
+=========================================================================
+BUGS
+
+* Clear is broken after the flip operation.
+
+* Rotate operation asserts.
+
+
+=========================================================================
+New Features
+
+* Paint Brush Tool - select different kinds of brush tips.
+  Note: square brush is the only tip now.
+
+* Following xpaint, the "image processing" routines need dialog boxes to
+  allow users to change certain parameters. (Right now the parameters are
+  hard coded to certain default value, not adjustible by the user.)
+
+* We want fill patterns and line widths selectable by the user. (Right
+  now there is a crude line width select control and no fill pattern
+  dialog box.) 
+
+* Printing--right now there is little or no printing control (user
+  interfaces)--we may borrow the code from eog for this.
+
+* Help Topics - online user documentation
+
+* Spray Paint Tool - The spray can tool, also known as the airbrush.
+
+* Undo Feature - Should be able to undo and redo changes to the drawing.
+
+* Background Color Selection - Should be able to right click on a color
+  palette to select the current background color.
+
+* Cursors - Need better mouse cursors to indicate the current selected
+  tool, and to indicate the area to be changed. For example, the eraser
+  cursor should show which pixels will be erased. Currently there is a
+  cross hair, which shows just the center of the area.
+
+* Tool Bar Icons - I would like to see nicer icons for some of the
+  tools. 
+
+* Blocking Operations - Some menu selections, such as grabbing the
+  desktop and some of the image processing functions, take a very long
+  time. When these functions are running, the application is not
+  responsive and the main window does not repaint after the menu pop up
+  is dismissed. Could these time expensive tasks be processed in "the
+  background"?
+
+* File Formats - It would be nice to be able to select the format type
+  in the save dialog.
+
+* Save Confirmation - The application should prompt the user to save
+  unchanged images when exiting. Well maybe it could be optional.
+
+* Zoom - Fixed size zoom (like the "fat bits" feature of xpaint,
+  set to 1:6)
+
+
+=========================================================================
+Future Release
+
+* GNOME 2
+
+* adding variable zooming to the image window (like xpaint can do)
+
+* Make gpaint a bonobo component
+
+=========================================================================
+Done
+
+* Black background bug
+  - initial image was black, now is white
+  - background color selector was black, now white
+
+* Invisible rubberbanding when drawing black shapes on white background
+
+* fixed crash on empty cut/copy/paste
+
+* Main window
+  - too small initial image
+  - not placed entirely on screen (center in ui.c)
+  - smoother initial show
+
+* Main Menu
+  - simpler layout and names
+  - removed unfinished items
+
+* Eraser Tool - interpolation fixed 
+  Note: still need to work on tool objects.
+
+* Brush Tool - square brush with interpolation
+
