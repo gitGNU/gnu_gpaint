@@ -22,9 +22,13 @@ include /usr/share/cdbs/1/class/gnome.mk
 
 # Use dpatch to apply patches
 include /usr/share/dpatch/dpatch.make
+makebuilddir::
+	[ -f $(CURDIR)/configure.backup ] || cp $(CURDIR)/configure $(CURDIR)/configure.backup
+	sed -i -r 's/(hardcode_into_libs)=.*$$/\1=no/;s/(hardcode_libdir_flag_spec)=.*--rpath.*$$//' $(CURDIR)/configure
 post-patches:: patch
 clean:: unpatch
 	-rm po/*.gmo
+	[ ! -f $(CURDIR)/configure.backup ] || mv $(CURDIR)/configure.backup $(CURDIR)/configure
 
 install/gpaint::
 	# Rename executable

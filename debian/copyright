@@ -5,9 +5,12 @@ by Goedson Teixeira Paixao <goedson@debian.org>
 It was downloaded from:
  http://alpha.gnu.org/gnu/gpaint/
 
-Upstream Authors: Li-Cheng (Andy) Tai  <atai@gnu.org>, Michael A. Meffie III  <meffiem@neo.rr.com>
-
 Copyright:
+    Copyright (C) 2000-2003, 2007 Li-Cheng (Andy) Tai  <atai@gnu.org>
+    Copyright (C) 2003 Michael A. Meffie III  <meffiem@neo.rr.com>
+    Copyright (C) 2003 Free Software Foundation
+    Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and
+                            Josh MacDonald
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License as
