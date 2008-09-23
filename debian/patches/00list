@@ -2,4 +2,5 @@
 02_remove_menu_h_reference
 #04_update_pt_br_translation
 09_fix_menu_entry
+10_fix_crash_on_font_select
 20_fix_line_width_combo

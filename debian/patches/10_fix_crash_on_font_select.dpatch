@@ -1,0 +1,96 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 10_fix_crash_on_font_select.dpatch by Goedson Teixeira Paixao <goedson@debian.org>
+##
+## DP: Makes the font selection button active only when the text tool
+## DP: is selected avoid a crash that would occur when the user selects
+## DP: a font without selecting the text tool.
+
+@DPATCH@
+diff --git a/gpaint.glade b/gpaint.glade
+index 1437dbb..d2c789e 100644
+--- a/gpaint.glade
++++ b/gpaint.glade
+@@ -1137,6 +1137,7 @@
+ 		  <child>
+ 		    <widget class="GtkFontButton" id="fontpicker">
+ 		      <property name="visible">True</property>
++		      <property name="sensitive">False</property>
+ 		      <property name="can_focus">True</property>
+ 		      <property name="show_style">True</property>
+ 		      <property name="show_size">True</property>
+diff --git a/src/main.c b/src/main.c
+index c382735..273e2ff 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -73,6 +73,10 @@ static void main_window_ui_initial_adjustment(GtkWidget *main_window)
+     tool_palette_set_active_button(main_window, "pen_button");
+         /* make the pen tool the default initial tool so the user can draw right away */
+ 
++    gpaint_tool *text_tool = tool_palette_get_tool(main_window, "text");
++    widget = lookup_widget(main_window, "fontpicker");
++    text_set_fontpicker(text_tool, widget);
++
+ #if (!defined(HAVE_GTK_PRINT) && !defined(HAVE_GNOME_PRINT))
+ /* disable print menus and buttons if no print support available*/
+     widget = lookup_widget(main_window, "print_button");
+diff --git a/src/text.c b/src/text.c
+index 810bc94..af9dc58 100644
+--- a/src/text.c
++++ b/src/text.c
+@@ -54,6 +54,7 @@ typedef struct _gpaint_text
+     GString *textbuf;
+     int max_width;
+     int max_height;
++    GtkFontButton *fontpicker;
+ } gpaint_text;
+ 
+ 
+@@ -94,6 +95,7 @@ gpaint_tool *text_create(const char *name)
+     GPAINT_TOOL(text)->commit_change  = text_commit_change;
+     
+     text->textbuf =   g_string_new(0);
++    text->fontpicker = NULL;
+     return GPAINT_TOOL(text);
+ }
+ 
+@@ -118,6 +120,7 @@ text_select(gpaint_tool *tool)
+     g_string_printf(text->textbuf, "");
+     text->timer = g_timeout_add(TEXT_CURSOR_BLINK_RATE,
+                      (GtkFunction)(text_handle_timeout), text);
++    gtk_widget_set_sensitive(GTK_WIDGET(text->fontpicker), TRUE);
+ }
+ 
+ static void
+@@ -145,7 +148,7 @@ text_deselect(gpaint_tool *tool)
+         text_draw_string(text);
+     }
+     text_clear(text);
+-   
++    gtk_widget_set_sensitive(GTK_WIDGET(text->fontpicker), FALSE);
+ }
+ 
+ static gboolean
+@@ -474,6 +477,8 @@ static void set_layout_foreground_color(PangoLayout *layout, GdkColor *foregroun
+   
+ }
+ 
+-   
+-
+-
++void text_set_fontpicker(gpaint_tool *tool, GtkFontButton *fontpicker)
++{
++    gpaint_text *text = GPAINT_TEXT(tool);
++    text->fontpicker = fontpicker;
++}
+diff --git a/src/text.h b/src/text.h
+index aa64291..9b8c7ac 100644
+--- a/src/text.h
++++ b/src/text.h
+@@ -30,6 +30,6 @@
+ 
+ 
+ gpaint_tool* text_create(const char *name);
+-
++void text_set_fontpicker(gpaint_tool *tool, GtkFontButton *fontpicker);
+ 
+ #endif

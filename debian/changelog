@@ -2,8 +2,12 @@ gpaint (0.3.3-2) unstable; urgency=low
 
   * debian/patches/20_fix_line_width_combo.dpatch: Add missing line
     widths (5, 7 and 9).
+  * debian/patches/10_fix_crash_on_font_select.dpatch: Make the font
+    selection button active only when the text tool is selected,
+    avoiding a crash that occurs if the user selects a font without
+    selecting the text tool. (Closes: #497201) (LP: #262889)
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 20 Sep 2008 16:47:32 -0300
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Tue, 23 Sep 2008 15:12:14 -0300
 
 gpaint (0.3.3-1.1) unstable; urgency=low
 
