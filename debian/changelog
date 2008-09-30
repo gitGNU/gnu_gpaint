@@ -1,4 +1,4 @@
-gpaint (0.3.3-2) unstable; urgency=low
+gpaint (0.3.3-2) UNRELEASED; urgency=low
 
   * debian/patches/20_fix_line_width_combo.dpatch: Add missing line
     widths (5, 7 and 9).
@@ -7,8 +7,11 @@ gpaint (0.3.3-2) unstable; urgency=low
     avoiding a crash that occurs if the user selects a font without
     selecting the text tool. (Closes: #497201) (LP: #262889)
   * debian/control: Added packaging Vcs information.
+  * debian/patches/11_fix_image_rotation.dpatch: Use the
+    gdk_pixbuf_rotate_simple function to do image rotation in multiples
+    of 90 degrees (Closes: #497487) (LP: #262942)
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Tue, 23 Sep 2008 15:20:14 -0300
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Tue, 30 Sep 2008 16:09:14 -0300
 
 gpaint (0.3.3-1.1) unstable; urgency=low
 
