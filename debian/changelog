@@ -1,4 +1,4 @@
-gpaint (0.3.3-2) UNRELEASED; urgency=low
+gpaint (0.3.3-2) unstable; urgency=low
 
   * debian/patches/20_fix_line_width_combo.dpatch: Add missing line
     widths (5, 7 and 9).
