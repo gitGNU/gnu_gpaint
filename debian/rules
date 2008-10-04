@@ -39,6 +39,8 @@ install/gpaint::
 	install -o root -g root -m 644 gpaint.desktop debian/gpaint/usr/share/applications/gpaint.desktop
 	mkdir -p debian/gpaint/usr/share/pixmaps
 	install -o root -g root -m 644 debian/gpaint.xpm debian/gpaint/usr/share/pixmaps/gpaint.xpm
+	mkdir -p debian/gpaint/usr/share/icons/hicolor/scalable/apps/
+	install -o root -g root -m 644 debian/gpaint.svg debian/gpaint/usr/share/icons/hicolor/scalable/apps/gpaint.svg
 
 	# Install manpage
 	mkdir -p debian/gpaint/usr/share/man/man1/

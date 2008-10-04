@@ -17,7 +17,7 @@ diff -urNad gpaint-0.3.1~/gpaint.desktop gpaint-0.3.1/gpaint.desktop
 -Icon=gnome-logo-icon-transparent.png
 +TryExec=gpaint
 +Exec=gpaint
-+Icon=gpaint.xpm
++Icon=gpaint.svg
  Terminal=0
  Type=Application
 -

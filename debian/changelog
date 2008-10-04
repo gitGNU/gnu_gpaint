@@ -1,3 +1,10 @@
+gpaint (0.3.3-3) UNRELEASED; urgency=low
+
+  * Updated menu entry with a new SVG icon (Closes: #497483) (LP: #127298).
+    Thanks to Fernando Muñoz for the art.
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 04 Oct 2008 07:25:22 -0300
+
 gpaint (0.3.3-2) unstable; urgency=low
 
   * debian/patches/20_fix_line_width_combo.dpatch: Add missing line
