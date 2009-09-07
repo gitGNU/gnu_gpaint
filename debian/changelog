@@ -2,8 +2,11 @@ gpaint (0.3.3-3) UNRELEASED; urgency=low
 
   * Updated menu entry with a new SVG icon (Closes: #497483) (LP: #127298).
     Thanks to Fernando Muñoz for the art.
+  * debian/patches/21_fix_crash_on_fill_button_click.dpatch: Added. Fixes a
+    crash when the fill button is clicked before the text tool is selected.
+    (LP: #348764)
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 04 Oct 2008 07:25:22 -0300
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Sun, 06 Sep 2009 23:42:16 -0300
 
 gpaint (0.3.3-2.1) unstable; urgency=low
 
