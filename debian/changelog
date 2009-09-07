@@ -1,4 +1,4 @@
-gpaint (0.3.3-3) UNREALEASED; urgency=low
+gpaint (0.3.3-3) unstable; urgency=low
 
   * Updated menu entry with a new SVG icon (Closes: #497483) (LP: #127298).
     Thanks to Fernando Muñoz for the art.
