@@ -1,0 +1,20 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 22_fix_not_printable_string.dpatch by  <Ying-Chun Liu (PaulLiu) <grandpaul@gmail.com>>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Ignore non-printable characters on text input.
+
+@DPATCH@
+diff -urNad gpaint-0.3.3~/src/text.c gpaint-0.3.3/src/text.c
+--- gpaint-0.3.3~/src/text.c	2007-09-05 15:33:04.000000000 +0800
++++ gpaint-0.3.3/src/text.c	2009-03-25 00:15:53.745155529 +0800
+@@ -232,7 +232,9 @@
+     }
+     else if (keyevent->string)
+     {
++      if (isprint(keyevent->string[0])) {
+         g_string_append(text->textbuf, keyevent->string);
++      }
+     }
+     else if ((keyevent->keyval >= GDK_space) && (keyevent->keyval < GDK_Shift_L))
+     {
