@@ -5,6 +5,9 @@ gpaint (0.3.3-4) UNRELEASED; urgency=low
     added various keyboard shortcuts (LP: #444750)
 
   [ Goedson Teixeira Paixao ]
+  * debian/patches/24_fix_crash_on_failed_write.dpatch:
+    check if is possible to save in the format chosen by the user before
+    trying to save. (LP: #386234)
 
  --
 
