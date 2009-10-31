@@ -1,4 +1,4 @@
-gpaint (0.3.3-4) UNRELEASED; urgency=low
+gpaint (0.3.3-4) unstable; urgency=low
 
   [ Matt Wheeler ] (merged from Ubuntu)
   * debian/patches/23_add_accelerator_keys.dpatch:
