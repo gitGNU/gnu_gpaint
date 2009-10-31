@@ -2,14 +2,14 @@ gpaint (0.3.3-4) UNRELEASED; urgency=low
 
   [ Matt Wheeler ] (merged from Ubuntu)
   * debian/patches/23_add_accelerator_keys.dpatch:
-    added various keyboard shortcuts (LP: #444750)
+    added various keyboard shortcuts (LP: #444750) (Closes: #550305)
 
   [ Goedson Teixeira Paixao ]
   * debian/patches/24_fix_crash_on_failed_write.dpatch:
     check if is possible to save in the format chosen by the user before
     trying to save. (LP: #386234)
 
- --
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Fri, 30 Oct 2009 23:28:02 -0200
 
 gpaint (0.3.3-3) unstable; urgency=low
 
