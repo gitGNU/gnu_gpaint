@@ -7,4 +7,5 @@
 20_fix_line_width_combo
 21_fix_crash_on_fill_button_click
 22_fix_not_printable_string
-23_add_accelerator_keys.dpatch
+23_add_accelerator_keys
+24_fix_crash_on_failed_write
