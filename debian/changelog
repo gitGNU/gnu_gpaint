@@ -1,3 +1,14 @@
+gpaint (0.3.3-5) UNRELEASED; urgency=low
+
+  * debian/control:
+    - Removed build-dependencies on libgnomeprint2.2-dev and
+    libgnomeprintui2.2-dev
+    - Added build-dependency on libgtk2.0-dev (>= 2.10) for using GtkPrint
+    (Closes: #542569)
+    - Removed spurious build-dependency on libgnomeui-dev
+
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Thu, 17 Dec 2009 22:12:41 -0200
+
 gpaint (0.3.3-4) unstable; urgency=low
 
   [ Matt Wheeler ] (merged from Ubuntu)
