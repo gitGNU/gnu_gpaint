@@ -15,8 +15,9 @@ gpaint (0.3.3-5) UNRELEASED; urgency=low
   	- debian/rules: removed patch applying rules
   	- debian/control: removed build-dependency on dpatch
     - debian/patches/00list: removed
+    - debian/patches/04_update_pt_br_translation.dpatch: removed
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Thu, 17 Dec 2009 23:51:26 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Fri, 18 Dec 2009 00:33:20 -0200
 
 gpaint (0.3.3-4) unstable; urgency=low
 
