@@ -9,8 +9,13 @@ gpaint (0.3.3-5) UNRELEASED; urgency=low
   * Updated debhelper compatibility level 7
     - debian/compat: changed to 7
     - debian/control: changed version of debhelper build-dependency to 7
+  * Changed to 3.0 (quilt) source format
+    - debian/source/format: added file with source format declaration
+  	- debian/rules: removed patch applying rules
+  	- debian/control: removed build-dependency on dpatch
+    - debian/patches/00list: removed
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Thu, 17 Dec 2009 23:18:05 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Thu, 17 Dec 2009 23:27:14 -0200
 
 gpaint (0.3.3-4) unstable; urgency=low
 
