@@ -6,8 +6,11 @@ gpaint (0.3.3-5) UNRELEASED; urgency=low
     - Added build-dependency on libgtk2.0-dev (>= 2.10) for using GtkPrint
     (Closes: #542569)
     - Removed spurious build-dependency on libgnomeui-dev
+  * Updated debhelper compatibility level 7
+    - debian/compat: changed to 7
+    - debian/control: changed version of debhelper build-dependency to 7
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Thu, 17 Dec 2009 22:12:41 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Thu, 17 Dec 2009 23:18:05 -0200
 
 gpaint (0.3.3-4) unstable; urgency=low
 
