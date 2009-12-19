@@ -17,8 +17,10 @@ gpaint (0.3.3-5) UNRELEASED; urgency=low
     - debian/patches/00list: removed
     - debian/patches/04_update_pt_br_translation.dpatch: removed
     - debian/patches/*: updated so they apply cleanly with quilt
+  * debian/patches/25_fix_color_selection.dpatch: Fix color selection through
+    click in the foreground and background color indicators. (LP: #344237)
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 19 Dec 2009 17:18:22 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 19 Dec 2009 17:40:15 -0200
 
 gpaint (0.3.3-4) unstable; urgency=low
 

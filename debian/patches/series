@@ -8,3 +8,4 @@
 22_fix_not_printable_string.dpatch
 23_add_accelerator_keys.dpatch
 24_fix_crash_on_failed_write.dpatch
+25_fix_color_selection.dpatch
