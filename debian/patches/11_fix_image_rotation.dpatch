@@ -6,11 +6,11 @@
 ## DP: rotation algorithm.
 
 @DPATCH@
-diff --git a/src/drawing.c b/src/drawing.c
-index 4f69569..c498c7d 100644
---- a/src/drawing.c
-+++ b/src/drawing.c
-@@ -462,12 +462,23 @@ drawing_prompt_to_save(gpaint_drawing *drawing)
+Index: b/src/drawing.c
+===================================================================
+--- a/src/drawing.c	2009-12-19 17:12:10.000000000 -0200
++++ b/src/drawing.c	2009-12-19 17:12:11.000000000 -0200
+@@ -462,12 +462,23 @@
  }
  
  void
@@ -36,11 +36,11 @@ index 4f69569..c498c7d 100644
          
          /* copy rotated image on the pixmap */
          gdk_pixmap_unref(drawing->backing_pixmap);
-diff --git a/src/drawing.h b/src/drawing.h
-index 6eae802..6cf1f84 100644
---- a/src/drawing.h
-+++ b/src/drawing.h
-@@ -58,6 +58,6 @@ gpaint_image *drawing_create_image(gpaint_drawing *drawing);
+Index: b/src/drawing.h
+===================================================================
+--- a/src/drawing.h	2009-12-19 17:11:48.000000000 -0200
++++ b/src/drawing.h	2009-12-19 17:12:11.000000000 -0200
+@@ -58,6 +58,6 @@
  void drawing_clear(gpaint_drawing *drawing);
  void drawing_clear_selection(gpaint_drawing *drawing, gpaint_point_array *points);
  gboolean drawing_prompt_to_save(gpaint_drawing *drawing);
@@ -48,11 +48,11 @@ index 6eae802..6cf1f84 100644
 +void drawing_rotate(gpaint_drawing *drawing, int degrees);
  
  #endif
-diff --git a/src/image.c b/src/image.c
-index 0720d75..189d8a8 100644
---- a/src/image.c
-+++ b/src/image.c
-@@ -628,6 +628,27 @@ image_rotate(gpaint_image *image, double degrees)
+Index: b/src/image.c
+===================================================================
+--- a/src/image.c	2009-12-19 17:11:48.000000000 -0200
++++ b/src/image.c	2009-12-19 17:12:11.000000000 -0200
+@@ -628,6 +628,27 @@
      return 0;
  }
  
@@ -80,22 +80,22 @@ index 0720d75..189d8a8 100644
  
  GdkPixbuf* image_pixbuf(gpaint_image* image) {
      return image->pixbuf;
-diff --git a/src/image.h b/src/image.h
-index d2402f9..ab25f5f 100644
---- a/src/image.h
-+++ b/src/image.h
-@@ -45,5 +45,6 @@ gpaint_image*  image_from_selection(GdkPixmap *pixmap, gpaint_point_array *pa);
+Index: b/src/image.h
+===================================================================
+--- a/src/image.h	2009-12-19 17:11:48.000000000 -0200
++++ b/src/image.h	2009-12-19 17:12:11.000000000 -0200
+@@ -45,5 +45,6 @@
  int            image_flip_x(gpaint_image *image);
  int            image_flip_y(gpaint_image *image);
  int            image_rotate(gpaint_image *image, double radians);
 +int            image_rotate_simple(gpaint_image *image, int degrees);
  GdkPixbuf*     image_pixbuf(gpaint_image *image);
  #endif
-diff --git a/src/menu.c b/src/menu.c
-index 29441f4..df2d647 100644
---- a/src/menu.c
-+++ b/src/menu.c
-@@ -487,9 +487,9 @@ on_rotate_menu_activate                (GtkMenuItem     *menuitem,
+Index: b/src/menu.c
+===================================================================
+--- a/src/menu.c	2009-12-19 17:12:10.000000000 -0200
++++ b/src/menu.c	2009-12-19 17:12:11.000000000 -0200
+@@ -486,9 +486,9 @@
  
      sscanf(name, "rotate_%c%d_menu", &sign, &degrees);
      debug2("sign = %c  degrees = %d", sign, degrees);

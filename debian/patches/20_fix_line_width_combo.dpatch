@@ -6,10 +6,11 @@
 ## DP: part again in gpaint.glade.
 
 @DPATCH@
-diff -urNad gpaint-0.3.3~/gpaint.glade gpaint-0.3.3/gpaint.glade
---- gpaint-0.3.3~/gpaint.glade	2008-09-20 16:27:27.000000000 -0300
-+++ gpaint-0.3.3/gpaint.glade	2008-09-20 16:29:57.000000000 -0300
-@@ -1229,6 +1229,34 @@
+Index: b/gpaint.glade
+===================================================================
+--- a/gpaint.glade	2009-12-19 17:12:10.000000000 -0200
++++ b/gpaint.glade	2009-12-19 17:12:11.000000000 -0200
+@@ -1230,6 +1230,34 @@
  		      <property name="column_spacing">0</property>
  
  		      <child>
@@ -44,7 +45,7 @@ diff -urNad gpaint-0.3.3~/gpaint.glade gpaint-0.3.3/gpaint.glade
  			<widget class="GtkCombo" id="line_width_combo">
  			  <property name="width_request">60</property>
  			  <property name="height_request">25</property>
-@@ -1238,27 +1266,264 @@
+@@ -1239,27 +1267,264 @@
  			  <property name="case_sensitive">False</property>
  			  <property name="enable_arrow_keys">True</property>
  			  <property name="enable_arrows_always">False</property>
@@ -313,7 +314,7 @@ diff -urNad gpaint-0.3.3~/gpaint.glade gpaint-0.3.3/gpaint.glade
  			    </widget>
  			  </child>
  			</widget>
-@@ -1271,35 +1536,6 @@
+@@ -1272,35 +1537,6 @@
  			  <property name="y_options"></property>
  			</packing>
  		      </child>

@@ -5,9 +5,10 @@
 ## DP: Fixes the gpaint.desktop file to work in the new menu scheme.
 
 @DPATCH@
-diff -urNad gpaint-0.3.1~/gpaint.desktop gpaint-0.3.1/gpaint.desktop
---- gpaint-0.3.1~/gpaint.desktop	2005-01-03 15:37:58.000000000 -0200
-+++ gpaint-0.3.1/gpaint.desktop	2007-08-18 16:55:38.000000000 -0300
+Index: b/gpaint.desktop
+===================================================================
+--- a/gpaint.desktop	2009-12-19 17:11:48.000000000 -0200
++++ b/gpaint.desktop	2009-12-19 17:12:10.000000000 -0200
 @@ -3,11 +3,9 @@
  Comment=A small-scale painting program for GNOME, the GNU Desktop
  Comment[fr]=Un petit outil de dessin pour GNOME, le desktop GNU

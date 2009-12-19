@@ -6,11 +6,11 @@
 ## DP: GtkWidget.
 
 @DPATCH@
-diff --git a/src/text.c b/src/text.c
-index 810bc94..85f2d0f 100644
---- a/src/text.c
-+++ b/src/text.c
-@@ -153,7 +153,10 @@ text_attribute(gpaint_tool* tool, gpaint_attribute attrib, gpointer data)
+Index: b/src/text.c
+===================================================================
+--- a/src/text.c	2009-12-19 17:12:10.000000000 -0200
++++ b/src/text.c	2009-12-19 17:12:11.000000000 -0200
+@@ -156,7 +156,10 @@
  {
      debug_fn();
      GtkStyle *style;

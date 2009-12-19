@@ -5,9 +5,10 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad gpaint-0.3.3~/gpaint.glade gpaint-0.3.3/gpaint.glade
---- gpaint-0.3.3~/gpaint.glade	2007-09-10 10:33:17.000000000 +0100
-+++ gpaint-0.3.3/gpaint.glade	2009-10-08 20:20:52.000000000 +0100
+Index: b/gpaint.glade
+===================================================================
+--- a/gpaint.glade	2009-12-19 17:12:11.000000000 -0200
++++ b/gpaint.glade	2009-12-19 17:12:11.000000000 -0200
 @@ -341,6 +341,7 @@
  			  <property name="label" translatable="yes">_New</property>
  			  <property name="use_underline">True</property>

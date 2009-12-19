@@ -5,14 +5,15 @@
 ## DP: Removes a reference to a non-existing menu.h file
 
 @DPATCH@
-diff -urNad gpaint-0.3.1~/src/menu.c gpaint-0.3.1/src/menu.c
---- gpaint-0.3.1~/src/menu.c	2007-06-11 05:34:57.000000000 -0300
-+++ gpaint-0.3.1/src/menu.c	2007-06-12 18:42:29.000000000 -0300
-@@ -31,7 +31,6 @@
+Index: b/src/menu.c
+===================================================================
+--- a/src/menu.c	2009-12-19 17:11:48.000000000 -0200
++++ b/src/menu.c	2009-12-19 17:12:10.000000000 -0200
+@@ -34,7 +34,6 @@
  #include "image.h"
  #include "image_processing.h"
  #include "tool_palette.h"
 -#include "menu.h"
  #include "print.h"
  #include "file.h"
- 
+ #include "text.h"

@@ -5,9 +5,10 @@
 ## DP: before trying to save.
 
 @DPATCH@
-diff -urNad gpaint~/src/drawing.c gpaint/src/drawing.c
---- gpaint~/src/drawing.c	2009-10-29 20:00:21.000000000 -0200
-+++ gpaint/src/drawing.c	2009-10-29 22:50:32.925445266 -0200
+Index: b/src/drawing.c
+===================================================================
+--- a/src/drawing.c	2009-12-19 17:12:11.000000000 -0200
++++ b/src/drawing.c	2009-12-19 17:12:12.000000000 -0200
 @@ -262,7 +262,7 @@
                           (error && error->message) ? error->message : "");
          gtk_dialog_run(GTK_DIALOG(dialog));
@@ -17,9 +18,10 @@ diff -urNad gpaint~/src/drawing.c gpaint/src/drawing.c
      }
      return saved;
  }
-diff -urNad gpaint~/src/image.c gpaint/src/image.c
---- gpaint~/src/image.c	2009-10-29 20:00:21.000000000 -0200
-+++ gpaint/src/image.c	2009-10-29 22:50:32.937443439 -0200
+Index: b/src/image.c
+===================================================================
+--- a/src/image.c	2009-12-19 17:12:11.000000000 -0200
++++ b/src/image.c	2009-12-19 17:12:12.000000000 -0200
 @@ -32,6 +32,7 @@
  #include <gdk/gdkx.h>  /* for gdk_root_parent */
  #include <gdk-pixbuf/gdk-pixbuf.h>

@@ -16,8 +16,9 @@ gpaint (0.3.3-5) UNRELEASED; urgency=low
   	- debian/control: removed build-dependency on dpatch
     - debian/patches/00list: removed
     - debian/patches/04_update_pt_br_translation.dpatch: removed
+    - debian/patches/*: updated so they apply cleanly with quilt
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Fri, 18 Dec 2009 00:33:20 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 19 Dec 2009 17:18:22 -0200
 
 gpaint (0.3.3-4) unstable; urgency=low
 

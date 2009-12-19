@@ -5,10 +5,11 @@
 ## DP: Ignore non-printable characters on text input.
 
 @DPATCH@
-diff -urNad gpaint-0.3.3~/src/text.c gpaint-0.3.3/src/text.c
---- gpaint-0.3.3~/src/text.c	2007-09-05 15:33:04.000000000 +0800
-+++ gpaint-0.3.3/src/text.c	2009-03-25 00:15:53.745155529 +0800
-@@ -232,7 +232,9 @@
+Index: b/src/text.c
+===================================================================
+--- a/src/text.c	2009-12-19 17:12:11.000000000 -0200
++++ b/src/text.c	2009-12-19 17:12:11.000000000 -0200
+@@ -238,7 +238,9 @@
      }
      else if (keyevent->string)
      {
