@@ -9,3 +9,4 @@
 23_add_accelerator_keys.dpatch
 24_fix_crash_on_failed_write.dpatch
 25_fix_color_selection.dpatch
+26_fix_toolbar.diff
