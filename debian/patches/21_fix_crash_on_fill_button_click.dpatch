@@ -6,10 +6,10 @@
 ## DP: GtkWidget.
 
 @DPATCH@
-Index: b/src/text.c
+Index: pkg-gpaint/src/text.c
 ===================================================================
---- a/src/text.c	2009-12-19 17:12:10.000000000 -0200
-+++ b/src/text.c	2009-12-19 17:12:11.000000000 -0200
+--- pkg-gpaint.orig/src/text.c	2009-12-22 21:03:29.000000000 -0200
++++ pkg-gpaint/src/text.c	2009-12-23 13:01:33.000000000 -0200
 @@ -156,7 +156,10 @@
  {
      debug_fn();
@@ -17,7 +17,7 @@ Index: b/src/text.c
 -    GtkWidget *widget = GTK_WIDGET(tool->canvas->drawing_area);
 +    GtkWidget *widget = NULL;
 +
-+    if ((tool->canvas == NULL) || (tool->canvas->drawing_area)) return FALSE;
++    if ((tool->canvas == NULL) || (tool->canvas->drawing_area == NULL)) return FALSE;
 +    widget = GTK_WIDGET(tool->canvas->drawing_area);
      style = gtk_widget_get_style(widget);
      g_assert(style);

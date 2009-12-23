@@ -1,10 +1,12 @@
 gpaint (0.3.3-6) UNRELEASED; urgency=low
 
   * debian/patches/26_fix_toolbar.diff: don't set the style for the toolbar,
-    allowing gpaint to follow the user's preferences (Closes: #497488) 
+    allowing gpaint to follow the user's preferences (Closes: #497488)
     (LP: #127296)
+  * debian/patches/21_fix_crash_on_fill_button_click.dpatch: fixed the check
+    for null drawing_area.
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Tue, 22 Dec 2009 21:00:53 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Wed, 23 Dec 2009 13:04:10 -0200
 
 gpaint (0.3.3-5) unstable; urgency=low
 
