@@ -5,8 +5,11 @@ gpaint (0.3.3-6) UNRELEASED; urgency=low
     (LP: #127296)
   * debian/patches/21_fix_crash_on_fill_button_click.dpatch: fixed the check
     for null drawing_area.
+  * debian/patches/*.dpatch: renamed to *.diff since we're not using dpatch
+    anymore
+  
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Wed, 23 Dec 2009 13:04:10 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Wed, 23 Dec 2009 20:12:16 -0200
 
 gpaint (0.3.3-5) unstable; urgency=low
 
