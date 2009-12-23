@@ -7,9 +7,9 @@ gpaint (0.3.3-6) UNRELEASED; urgency=low
     for null drawing_area.
   * debian/patches/*.dpatch: renamed to *.diff since we're not using dpatch
     anymore
-  
+  * debian/control: added ${misc:Depends} to the binary package Depends
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Wed, 23 Dec 2009 20:12:16 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Wed, 23 Dec 2009 20:27:38 -0200
 
 gpaint (0.3.3-5) unstable; urgency=low
 

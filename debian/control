@@ -9,7 +9,7 @@ Standards-Version: 3.8.3
 
 Package: gpaint
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends},${misc:Depends}
 Description: GNU Paint - a small, easy to use paint program for GNOME
  This is gpaint (GNU Paint), a small-scale painting program for GNOME,
  the GNU Desktop Environment. gpaint does not attempt to compete with
