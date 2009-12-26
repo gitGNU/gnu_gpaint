@@ -1,11 +1,12 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 11_fix_image_rotation.dpatch by Goedson Teixeira Paixao <goedson@debian.org>
-##
-## DP: Implement rotation in multiples of 90 degrees using the
-## DP: gdk_pixbuf_rotate_simple function instead of the custom (and broken)
-## DP: rotation algorithm.
+Author: Goedson Teixeira Paixao <goedson@debian.org>
+Description: Fixes rotation operations
+ Implement the rotation in multiples of 90 degrees using the
+ gdk_pixbuf_rotate_simple function instead of the custom (and broken)
+ rotation algorithm
+Bug-Debian: http://bugs.debian.org/497487
+Bug-Ubuntu: https://bugs.edge.launchpad.net/ubuntu/+source/gpaint/+bug/262942
+Forwarded: https://savannah.gnu.org/patch/?6643
 
-@DPATCH@
 Index: b/src/drawing.c
 ===================================================================
 --- a/src/drawing.c	2009-12-19 17:12:10.000000000 -0200

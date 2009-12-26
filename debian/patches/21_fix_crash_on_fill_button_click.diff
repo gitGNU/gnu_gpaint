@@ -1,11 +1,12 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 21_fix_crash_on_fill_button_click.dpatch by Goedson Teixeira Paixao <goedson@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: Check that tool->canvas->drawing_area is not null when casting it to a
-## DP: GtkWidget.
+Author: Goedson Teixeira Paixao <goedson@debian.org>
+Description: fix crash on fill button click
+ Avoid crashing when clicking on fill button by checking that
+ tool->canvas->drawing_area is not null before casting it to GtkWidget
+Bug-Debian: http://bugs.debian.org/544162
+Bug-Ubuntu: https://bugs.edge.launchpad.net/ubuntu/+source/gpaint/+bug/227174
+Bug: https://savannah.gnu.org/bugs/?25117
+Forwarded: https://savannah.gnu.org/patch/?7045
 
-@DPATCH@
 Index: pkg-gpaint/src/text.c
 ===================================================================
 --- pkg-gpaint.orig/src/text.c	2009-12-22 21:03:29.000000000 -0200

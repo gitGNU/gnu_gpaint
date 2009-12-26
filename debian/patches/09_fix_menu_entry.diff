@@ -1,10 +1,8 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 09_fix_menu_entry.dpatch by  Goedson Teixeira Paixao <goedson@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: Fixes the gpaint.desktop file to work in the new menu scheme.
+Author: Goedson Teixeira Paixao <goedson@debian.org>
+Description: Fixes the gpaint.desktop file
+ Change executable and icon filenames according to changes applied in the
+ Debian packaging.
 
-@DPATCH@
 Index: b/gpaint.desktop
 ===================================================================
 --- a/gpaint.desktop	2009-12-19 17:11:48.000000000 -0200

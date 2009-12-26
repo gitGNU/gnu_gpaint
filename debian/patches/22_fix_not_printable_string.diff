@@ -1,10 +1,10 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 22_fix_not_printable_string.dpatch by  <Ying-Chun Liu (PaulLiu) <grandpaul@gmail.com>>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: Ignore non-printable characters on text input.
+Author: Ying-Chun Liu (PaulLiu) <grandpaul@gmail.com>
+Description: Ignore non-printable characters on text input
+Bug-Debian: http://bugs.debian.org/535217
+Bug-Ubuntu: https://bugs.edge.launchpad.net/ubuntu/+source/gpaint/+bug/262648
+Bug: https://savannah.gnu.org/bugs/?26923
+Forwarded: https://savannah.gnu.org/patch/?7051
 
-@DPATCH@
 Index: b/src/text.c
 ===================================================================
 --- a/src/text.c	2009-12-19 17:12:11.000000000 -0200

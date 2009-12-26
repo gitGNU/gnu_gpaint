@@ -1,10 +1,11 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## add_accelerator_keys.dpatch by Matt Wheeler <m@funkyhat.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+Author: Matt Wheeler <m@funkyhat.org>
+Description: Add accelerator keys to common functions
+ Add accelerator keys for common operations in gpaint
+Bug-Debian: http://bugs.debian.org/550305
+Bug-Ubuntu: https://bugs.edge.launchpad.net/ubuntu/+source/gpaint/+bug/444750
+Bug: https://savannah.gnu.org/bugs/?27618
+Forwarded: https://savannah.gnu.org/patch/?7053
 
-@DPATCH@
 Index: b/gpaint.glade
 ===================================================================
 --- a/gpaint.glade	2009-12-19 17:12:11.000000000 -0200

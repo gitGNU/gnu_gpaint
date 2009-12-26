@@ -1,3 +1,10 @@
+Author: Goedson Teixeira Paixao <goedson@debian.org>
+Description: Fix foreground/background color selection
+ Fixes the foreground/background color selection by checking the GtkColorButton
+ color when the user chooses the color.
+Bug-Ubuntu: https://bugs.edge.launchpad.net/ubuntu/+source/gpaint/+bug/344237
+Forwarded: https://savannah.gnu.org/patch/index.php?7028
+
 diff --git a/src/callbacks.h b/src/callbacks.h
 index 985dddf..5485329 100644
 --- a/src/callbacks.h

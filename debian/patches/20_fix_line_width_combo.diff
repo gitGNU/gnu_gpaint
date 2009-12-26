@@ -1,11 +1,11 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 20_fix_line_width_combo.dpatch by Thomas Viehmann <tv@beamnet.de>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: Fixes line width combo box by putting items in the drop down
-## DP: part again in gpaint.glade.
+Author: Thomas Viehmann <tv@beamnet.de>
+Description: Fix line width combo box
+ Fixes the line width combo box by puting items in the drop down
+ menu in the gpaint.glade file.
+Bug-Debian: http://bugs.debian.org/497484
+Bug-Ubuntu: https://bugs.edge.launchpad.net/ubuntu/+source/gpaint/+bug/209173
+Forwarded: https://savannah.gnu.org/patch/?6644
 
-@DPATCH@
 Index: b/gpaint.glade
 ===================================================================
 --- a/gpaint.glade	2009-12-19 17:12:10.000000000 -0200

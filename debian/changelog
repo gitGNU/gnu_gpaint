@@ -8,8 +8,10 @@ gpaint (0.3.3-6) UNRELEASED; urgency=low
   * debian/patches/*.dpatch: renamed to *.diff since we're not using dpatch
     anymore
   * debian/control: added ${misc:Depends} to the binary package Depends
+  * debian/patches/*.diff: Added meta information tags compliant with DEP-3
+    recommendations.
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Wed, 23 Dec 2009 20:27:38 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 26 Dec 2009 14:41:53 -0200
 
 gpaint (0.3.3-5) unstable; urgency=low
 
@@ -31,7 +33,8 @@ gpaint (0.3.3-5) unstable; urgency=low
     - debian/patches/04_update_pt_br_translation.dpatch: removed
     - debian/patches/*: updated so they apply cleanly with quilt
   * debian/patches/25_fix_color_selection.dpatch: Fix color selection through
-    click in the foreground and background color indicators. (LP: #344237)
+    click in the foreground and background color indicators. (Closes: #497488)
+    (LP: #344237)
 
  -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 19 Dec 2009 17:43:18 -0200
 

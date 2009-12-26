@@ -1,10 +1,10 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 24_fix_crash_on_failed_write.dpatch by Goedson Teixeira Paixao <goedson@debian.org>
-##
-## DP: Checks if it is possible to save in the format choosen by the user
-## DP: before trying to save.
+Author: Goedson Teixeira Paixao <goedson@debian.org>
+Description: Fix crash when saving in unsupported format
+ Check if the format chosen by the user is supported before trying to save.
+Bug-Ubuntu: https://bugs.edge.launchpad.net/ubuntu/+source/gpaint/+bug/386234
+Bug: https://savannah.gnu.org/bugs/?25334
+Forwarded: https://savannah.gnu.org/patch/?7052
 
-@DPATCH@
 Index: b/src/drawing.c
 ===================================================================
 --- a/src/drawing.c	2009-12-19 17:12:11.000000000 -0200
