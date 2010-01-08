@@ -1,4 +1,4 @@
-gpaint (0.3.3-6) UNRELEASED; urgency=low
+gpaint (0.3.3-6) unstable; urgency=low
 
   * debian/patches/26_fix_toolbar.diff: don't set the style for the toolbar,
     allowing gpaint to follow the user's preferences (Closes: #497488)
@@ -11,7 +11,7 @@ gpaint (0.3.3-6) UNRELEASED; urgency=low
   * debian/patches/*.diff: Added meta information tags compliant with DEP-3
     recommendations.
 
- -- Goedson Teixeira Paixao <goedson@debian.org>  Sat, 26 Dec 2009 14:41:53 -0200
+ -- Goedson Teixeira Paixao <goedson@debian.org>  Fri, 08 Jan 2010 16:04:00 -0200
 
 gpaint (0.3.3-5) unstable; urgency=low
 
