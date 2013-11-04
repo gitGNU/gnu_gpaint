@@ -1,0 +1,2327 @@
+<?xml version="1.0"?>
+<interface>
+  <!-- interface-requires gtk+ 3.6 -->
+  <object class="GtkWindow" id="new_canvas_window">
+    <property name="title" translatable="yes">New Canvas</property>
+    <property name="type">GTK_WINDOW_TOPLEVEL</property>
+    <property name="window_position">GTK_WIN_POS_NONE</property>
+    <property name="modal">True</property>
+    <property name="resizable">True</property>
+    <property name="destroy_with_parent">False</property>
+    <property name="decorated">True</property>
+    <property name="skip_taskbar_hint">False</property>
+    <property name="skip_pager_hint">False</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+    <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+    <property name="focus_on_map">True</property>
+    <property name="urgency_hint">False</property>
+
+    <!--<ui>
+      <menubar name="main_menu">
+        <menu action="file_menu_item">
+          <menuitem action="new_file_menu"/>
+          <menuitem action="open_menu"/>
+          <menuitem action="save_menu"/>
+          <menuitem action="save_as_menu"/>
+          <separator/>
+          <menuitem action="print_preview_men"/>
+          <menuitem action="print_menu"/>
+          <separator/>
+          <menuitem action="close_menu"/>
+          <menuitem action="quit_menu_item"/>
+        </menu>
+        <menu action="edit_menu_item">
+          <menuitem action="cut_menu"/>
+          <menuitem action="copy_menu"/>
+          <menuitem action="paste_menu"/>
+          <menuitem action="clear_menu"/>
+          <separator/>
+          <menuitem action="select_all"/>
+        </menu>
+        <menu action="image_menu_item">
+          <menu action="desktop_menu">
+            <menuitem action="get_desktop"/>
+            <menuitem action="set_as_background_titled"/>
+          </menu>
+          <separator/>
+          <menuitem action="rotate_p90_menu"/>
+          <menuitem action="rotate_n90_menu"/>
+          <separator/>
+          <menuitem action="flip_x_axis_menu"/>
+          <menuitem action="flip_y_axis_menu"/>
+        </menu>
+        <menu action="effects_menu">
+          <menuitem action="invert_menu"/>
+          <menuitem action="sharpen"/>
+          <separator/>
+          <menuitem action="smooth"/>
+          <menuitem action="directional_smooth"/>
+          <menuitem action="despeckle"/>
+          <separator/>
+          <menuitem action="edge_detect"/>
+          <menuitem action="emboss"/>
+          <menuitem action="oil_paint"/>
+          <menuitem action="add_noise"/>
+          <menuitem action="spread"/>
+          <menuitem action="pixelize"/>
+          <menuitem action="blend"/>
+          <menuitem action="solarize"/>
+          <separator/>
+          <menuitem action="normalize_contrast"/>
+          <menuitem action="quantize_color"/>
+          <menuitem action="convert_to_greyscale"/>
+        </menu>
+        <menu action="windows_menu_item">
+          <menuitem action="create_new_window"/>
+          <menuitem action="close_this_window"/>
+        </menu>
+        <menu action="help_menu_item">
+          <menuitem action="about_menu"/>
+        </menu>
+      </menubar>
+    </ui>-->
+    <child>
+      <object class="GtkVBox" id="vbox1">
+        <property name="visible">True</property>
+        <property name="homogeneous">False</property>
+        <property name="spacing">5</property>
+        <child>
+          <object class="GtkLabel" >
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Enter the desired image size:</property>
+            <property name="use_underline">False</property>
+            <property name="use_markup">False</property>
+            <property name="justify">GTK_JUSTIFY_FILL</property>
+            <property name="wrap">False</property>
+            <property name="selectable">False</property>
+            <property name="xalign">1.49012002737e-08</property>
+            <property name="yalign">0.5</property>
+            <property name="xpad">14</property>
+            <property name="ypad">4</property>
+            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+            <property name="width_chars">-1</property>
+            <property name="single_line_mode">False</property>
+            <property name="angle">0</property>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTable" id="table6">
+            <property name="border_width">3</property>
+            <property name="visible">True</property>
+            <property name="n_rows">2</property>
+            <property name="n_columns">4</property>
+            <property name="homogeneous">False</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">0</property>
+            <child>
+              <object class="GtkLabel" id="label6">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes"/>
+                <property name="use_underline">False</property>
+                <property name="use_markup">False</property>
+                <property name="justify">GTK_JUSTIFY_FILL</property>
+                <property name="wrap">False</property>
+                <property name="selectable">False</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0.5</property>
+                <property name="xpad">0</property>
+                <property name="ypad">0</property>
+                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                <property name="width_chars">-1</property>
+                <property name="single_line_mode">False</property>
+                <property name="angle">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="right_attach">1</property>
+                <property name="top_attach">0</property>
+                <property name="bottom_attach">1</property>
+                <property name="x_options"/>
+                <property name="y_options"/>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label7">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes"/>
+                <property name="use_underline">False</property>
+                <property name="use_markup">False</property>
+                <property name="justify">GTK_JUSTIFY_CENTER</property>
+                <property name="wrap">False</property>
+                <property name="selectable">False</property>
+                <property name="xalign">0.5</property>
+                <property name="yalign">0.5</property>
+                <property name="xpad">0</property>
+                <property name="ypad">0</property>
+                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                <property name="width_chars">-1</property>
+                <property name="single_line_mode">False</property>
+                <property name="angle">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="right_attach">4</property>
+                <property name="top_attach">0</property>
+                <property name="bottom_attach">1</property>
+                <property name="x_options"/>
+                <property name="y_options"/>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Height: </property>
+                <property name="use_underline">False</property>
+                <property name="use_markup">False</property>
+                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                <property name="wrap">False</property>
+                <property name="selectable">False</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0.5</property>
+                <property name="xpad">0</property>
+                <property name="ypad">0</property>
+                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                <property name="width_chars">-1</property>
+                <property name="single_line_mode">False</property>
+                <property name="angle">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+                <property name="x_options"/>
+                <property name="y_options"/>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Width: </property>
+                <property name="use_underline">False</property>
+                <property name="use_markup">False</property>
+                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                <property name="wrap">False</property>
+                <property name="selectable">False</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0.5</property>
+                <property name="xpad">0</property>
+                <property name="ypad">0</property>
+                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                <property name="width_chars">-1</property>
+                <property name="single_line_mode">False</property>
+                <property name="angle">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">0</property>
+                <property name="bottom_attach">1</property>
+                <property name="x_options"/>
+                <property name="y_options"/>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="new_canvas_height_text_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="editable">True</property>
+                <property name="visibility">True</property>
+                <property name="max_length">0</property>
+                <property name="text" translatable="yes"/>
+                <property name="has_frame">True</property>
+                <property name="invisible_char">*</property>
+                <property name="activates_default">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="right_attach">3</property>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+                <property name="y_options"/>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="new_canvas_width_text_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="editable">True</property>
+                <property name="visibility">True</property>
+                <property name="max_length">0</property>
+                <property name="text" translatable="yes"/>
+                <property name="has_frame">True</property>
+                <property name="invisible_char">*</property>
+                <property name="activates_default">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="right_attach">3</property>
+                <property name="top_attach">0</property>
+                <property name="bottom_attach">1</property>
+                <property name="y_options"/>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkAlignment" id="alignment2">
+            <property name="visible">True</property>
+            <property name="xalign">0.5</property>
+            <property name="yalign">0.5</property>
+            <property name="xscale">0.800000011921</property>
+            <property name="yscale">1</property>
+            <property name="top_padding">0</property>
+            <property name="bottom_padding">0</property>
+            <property name="left_padding">0</property>
+            <property name="right_padding">0</property>
+            <child>
+              <object class="GtkHBox" id="hbox2">
+                <property name="border_width">2</property>
+                <property name="visible">True</property>
+                <property name="homogeneous">False</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkButton" id="new_canvas_ok_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label">gtk-ok</property>
+                    <property name="use_stock">True</property>
+                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                    <property name="focus_on_click">True</property>
+                    <signal handler="on_new_canvas_ok_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="padding">0</property>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="new_canvas_cancel_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label">gtk-cancel</property>
+                    <property name="use_stock">True</property>
+                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                    <property name="focus_on_click">True</property>
+                    <signal handler="on_new_canvas_cancel_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="padding">0</property>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="main_window">
+    <property name="title" translatable="yes">gpaint</property>
+    <property name="type">GTK_WINDOW_TOPLEVEL</property>
+    <property name="window_position">GTK_WIN_POS_NONE</property>
+    <property name="modal">False</property>
+    <property name="resizable">True</property>
+    <property name="destroy_with_parent">False</property>
+    <property name="decorated">True</property>
+    <property name="skip_taskbar_hint">False</property>
+    <property name="skip_pager_hint">False</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+    <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+    <property name="focus_on_map">True</property>
+    <property name="urgency_hint">False</property>
+    <signal handler="on_mainwindow_focus_out_event" name="focus_out_event"/>
+    <signal handler="on_mainwindow_focus_in_event" name="focus_in_event"/>
+    <signal handler="on_mainwindow_realize" name="realize"/>
+    <signal handler="on_mainwindow_destroy" name="destroy"/>
+    <signal handler="on_mainwindow_set_focus_child" name="set_focus_child"/>
+    <signal handler="on_mainwindow_delete_event" name="delete_event"/>
+    <signal handler="on_mainwindow_set_focus" name="set_focus"/>
+    <child>
+      <object class="GtkVBox" id="vbox2">
+        <property name="visible">True</property>
+        <property name="homogeneous">False</property>
+        <property name="spacing">0</property>
+        <child>
+          <object class="GtkHandleBox" id="handlebox1">
+            <property name="visible">True</property>
+            <property name="shadow_type">GTK_SHADOW_OUT</property>
+            <property name="handle_position">GTK_POS_LEFT</property>
+            <property name="snap_edge">GTK_POS_TOP</property>
+    <child>
+      <object class="GtkMenuBar" id="menubar1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkMenuItem" id="menuitem1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">_File</property>
+            <property name="use_underline">True</property>
+            <child type="submenu">
+              <object class="GtkMenu" id="menu1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkImageMenuItem" id="new_menu_item">
+                    <property name="label">gtk-new</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImageMenuItem" id="open_menu_item">
+                    <property name="label">gtk-open</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImageMenuItem" id="save_menu_item">
+                    <property name="label">gtk-save</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImageMenuItem" id="save_as_menu_item">
+                    <property name="label">gtk-save-as</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuItem" id="print_menu_item">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">_Print</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparatorMenuItem" id="separatormenuitem4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImageMenuItem" id="quit_menu_item">
+                    <property name="label">gtk-quit</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuItem" id="menuitem2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">_Edit</property>
+            <property name="use_underline">True</property>
+            <child type="submenu">
+              <object class="GtkMenu" id="menu2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkImageMenuItem" id="cut_menu_item">
+                    <property name="label">gtk-cut</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImageMenuItem" id="copy_menu_item">
+                    <property name="label">gtk-copy</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImageMenuItem" id="paste_menu_item">
+                    <property name="label">gtk-paste</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImageMenuItem" id="delete_menu_item">
+                    <property name="label">gtk-delete</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuItem" id="menuitem3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">_Image</property>
+            <property name="use_underline">True</property>
+            <child type="submenu">
+              <object class="GtkMenu" id="menu4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkMenuItem" id="menuitem6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">_Desktop</property>
+                    <property name="use_underline">True</property>
+                    <child type="submenu">
+                      <object class="GtkMenu" id="menu5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkMenuItem" id="capture_screen_menu_item">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">_Capture screen</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkMenuItem" id="set_background_menu_item">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">_Set as desktop background</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuItem" id="rotate_90_menu_item">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">_Rotate 90 degrees</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuItem" id="rotate_n90_menu_item">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">_Rotate -90 degrees</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuItem" id="flip_by_x_menu_item">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Flip by X axis</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuItem" id="flip_by_y_menu_item">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">_Flip by Y axis</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuItem" id="menuitem5">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">_Effects</property>
+            <property name="use_underline">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuItem" id="menuitem4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">_Help</property>
+            <property name="use_underline">True</property>
+            <child type="submenu">
+              <object class="GtkMenu" id="menu3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkImageMenuItem" id="about_menu_item">
+                    <property name="label">gtk-about</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="use_stock">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHandleBox" id="handlebox2">
+            <property name="visible">True</property>
+            <property name="shadow_type">GTK_SHADOW_OUT</property>
+            <property name="handle_position">GTK_POS_LEFT</property>
+            <property name="snap_edge">GTK_POS_TOP</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar1">
+                <property name="width_request">375</property>
+                <property name="height_request">55</property>
+                <property name="visible">True</property>
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+                <property name="tooltips">True</property>
+                <property name="show_arrow">True</property>
+                <child>
+                  <object class="GtkToolButton" id="new_button">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">New File</property>
+                    <property name="label" translatable="yes">New</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-new</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <signal handler="on_new_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="open_button">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Open File</property>
+                    <property name="label" translatable="yes">Open</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-open</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <signal handler="on_open_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="save_button">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Save File</property>
+                    <property name="label" translatable="yes">Save</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-save</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <signal handler="on_save_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="save_as_button">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Save File As</property>
+                    <property name="label" translatable="yes">Save As</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-save-as</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <signal handler="on_save_as_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="separatortoolitem1">
+                    <property name="visible">True</property>
+                    <property name="draw">True</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="print_button">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Print</property>
+                    <property name="label" translatable="yes">Print</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-print</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <signal handler="on_print_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHandleBox" id="handlebox3">
+            <property name="visible">True</property>
+            <property name="shadow_type">GTK_SHADOW_OUT</property>
+            <property name="handle_position">GTK_POS_LEFT</property>
+            <property name="snap_edge">GTK_POS_TOP</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar6">
+                <property name="width_request">375</property>
+                <property name="height_request">53</property>
+                <property name="visible">True</property>
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+                <property name="tooltips">True</property>
+                <property name="show_arrow">True</property>
+                <child>
+                  <object class="GtkToolItem" id="toolitem1">
+                    <property name="visible">True</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <child>
+                      <object class="GtkFontButton" id="fontpicker">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="show_style">True</property>
+                        <property name="show_size">True</property>
+                        <property name="use_font">False</property>
+                        <property name="use_size">False</property>
+                        <property name="focus_on_click">True</property>
+                        <signal handler="on_fontpicker_map_event" name="map_event"/>
+                        <signal handler="on_fontpicker_map" name="map"/>
+                        <signal handler="on_fontpicker_font_set" name="font_set"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="bold_button">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="tooltip-text" translatable="yes">bold text</property>
+                    <property name="label" translatable="yes">Bold</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-bold</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <signal handler="on_bold_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="italic_button">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="tooltip-text" translatable="yes">italic text</property>
+                    <property name="label" translatable="yes">Italic</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-italic</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <signal handler="on_italic_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="underline_button">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="tooltip-text" translatable="yes">underline text</property>
+                    <property name="label" translatable="yes">Underline</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-underline</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <signal handler="on_underline_button_clicked" name="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolItem" id="toolitem2">
+                    <property name="visible">True</property>
+                    <property name="visible_horizontal">True</property>
+                    <property name="visible_vertical">True</property>
+                    <property name="is_important">False</property>
+                    <child>
+                      <object class="GtkTable" id="table5">
+                        <property name="visible">True</property>
+                        <property name="n_rows">2</property>
+                        <property name="n_columns">1</property>
+                        <property name="homogeneous">False</property>
+                        <property name="row_spacing">0</property>
+                        <property name="column_spacing">0</property>
+                        <child>
+                          <object class="GtkLabel" id="Line Width">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">line width</property>
+                            <property name="use_underline">False</property>
+                            <property name="use_markup">False</property>
+                            <property name="justify">GTK_JUSTIFY_CENTER</property>
+                            <property name="wrap">False</property>
+                            <property name="selectable">False</property>
+                            <property name="xalign">0.5</property>
+                            <property name="yalign">0.5</property>
+                            <property name="xpad">0</property>
+                            <property name="ypad">0</property>
+                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                            <property name="width_chars">-1</property>
+                            <property name="single_line_mode">False</property>
+                            <property name="angle">0</property>
+                            <signal handler="on_small_label_realize" name="realize"/>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="right_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="bottom_attach">1</property>
+                            <property name="x_options"/>
+                            <property name="y_options"/>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox3">
+            <property name="visible">True</property>
+            <property name="homogeneous">False</property>
+            <property name="spacing">0</property>
+            <child>
+              <object class="GtkHandleBox" id="handlebox5">
+                <property name="visible">True</property>
+                <property name="shadow_type">GTK_SHADOW_OUT</property>
+                <property name="handle_position">GTK_POS_TOP</property>
+                <property name="snap_edge">GTK_POS_TOP</property>
+                <child>
+                  <object class="GtkToolbar" id="tool_palette_toolbar">
+                    <property name="width_request">84</property>
+                    <property name="height_request">350</property>
+                    <property name="visible">True</property>
+                    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                    <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+                    <property name="tooltips">True</property>
+                    <property name="show_arrow">True</property>
+                    <child>
+                      <object class="GtkToolItem" id="tool_palette_tool_item">
+                        <property name="width_request">85</property>
+                        <property name="height_request">327</property>
+                        <property name="visible">True</property>
+                        <property name="visible_horizontal">True</property>
+                        <property name="visible_vertical">True</property>
+                        <property name="is_important">False</property>
+                        <child>
+                          <object class="GtkTable" id="tool_palette_table">
+                            <property name="width_request">80</property>
+                            <property name="height_request">350</property>
+                            <property name="visible">True</property>
+                            <property name="n_rows">2</property>
+                            <property name="n_columns">2</property>
+                            <property name="homogeneous">False</property>
+                            <property name="row_spacing">3</property>
+                            <property name="column_spacing">0</property>
+                            <child>
+                              <object class="GtkToggleButton" id="filled_button">
+                                <property name="border_width">3</property>
+                                <property name="width_request">40</property>
+                                <property name="height_request">33</property>
+                                <property name="visible">True</property>
+                                <property name="tooltip-text" translatable="yes">fill</property>
+                                <property name="relief">GTK_RELIEF_NORMAL</property>
+                                <property name="focus_on_click">True</property>
+                                <property name="active">False</property>
+                                <property name="inconsistent">False</property>
+                                <signal handler="on_filled_button_toggled" name="toggled"/>
+                                <signal handler="on_filled_button_realize" name="realize"/>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options"/>
+                                <property name="y_options"/>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolbar" id="toolbar5">
+                                <property name="width_request">40</property>
+                                <property name="height_request">284</property>
+                                <property name="visible">True</property>
+                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                                <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+                                <property name="tooltips">True</property>
+                                <property name="show_arrow">True</property>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem4">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="pen_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">pen</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">True</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem6">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="polselect_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">polyselect</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem8">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="text_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">text</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem13">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="arc_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">arc</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem14">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="curve_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">curve</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem15">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="oval_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">oval</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem16">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="brush_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">brush</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">0</property>
+                                <property name="bottom_attach">1</property>
+                                <property name="x_options"/>
+                                <property name="y_options"/>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolbar" id="toolbar4">
+                                <property name="width_request">40</property>
+                                <property name="height_request">284</property>
+                                <property name="visible">True</property>
+                                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                                <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+                                <property name="tooltips">True</property>
+                                <property name="show_arrow">True</property>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem3">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="erase_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">erase</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem5">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="lasso_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">lasso</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem7">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="fill_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">fill</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem9">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="line_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">line</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem10">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="multiline_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">multiline</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem11">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="rectangle_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">rectangle</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolItem" id="toolitem12">
+                                    <property name="visible">True</property>
+                                    <property name="visible_horizontal">True</property>
+                                    <property name="visible_vertical">True</property>
+                                    <property name="is_important">False</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="closed_freehand_button">
+                                        <property name="width_request">40</property>
+                                        <property name="height_request">40</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="label" translatable="yes">freehand</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="relief">GTK_RELIEF_NORMAL</property>
+                                        <property name="focus_on_click">True</property>
+                                        <property name="active">False</property>
+                                        <property name="inconsistent">False</property>
+                                        <signal handler="on_tool_button_realize" name="realize"/>
+                                        <signal handler="on_tool_button_clicked" name="clicked"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="right_attach">1</property>
+                                <property name="top_attach">0</property>
+                                <property name="bottom_attach">1</property>
+                                <property name="x_options"/>
+                                <property name="y_options"/>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="padding">0</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHandleBox" id="handlebox4">
+            <property name="visible">True</property>
+            <property name="shadow_type">GTK_SHADOW_OUT</property>
+            <property name="handle_position">GTK_POS_LEFT</property>
+            <property name="snap_edge">GTK_POS_TOP</property>
+            <child>
+              <object class="GtkTable" id="table8">
+                <property name="border_width">5</property>
+                <property name="visible">True</property>
+                <property name="n_rows">2</property>
+                <property name="n_columns">15</property>
+                <property name="homogeneous">False</property>
+                <property name="row_spacing">1</property>
+                <property name="column_spacing">1</property>
+                <child>
+                  <object class="GtkFrame" id="frame29">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry27">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">14</property>
+                    <property name="right_attach">15</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame28">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry13">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">14</property>
+                    <property name="right_attach">15</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame27">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry26">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">13</property>
+                    <property name="right_attach">14</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame26">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry12">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">13</property>
+                    <property name="right_attach">14</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame25">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry25">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">12</property>
+                    <property name="right_attach">13</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame24">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry11">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">12</property>
+                    <property name="right_attach">13</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame23">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry24">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">11</property>
+                    <property name="right_attach">12</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame22">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry10">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">11</property>
+                    <property name="right_attach">12</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame21">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry23">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">10</property>
+                    <property name="right_attach">11</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame20">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry9">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">10</property>
+                    <property name="right_attach">11</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame19">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry22">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">9</property>
+                    <property name="right_attach">10</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame18">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry8">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">9</property>
+                    <property name="right_attach">10</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame17">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry21">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">8</property>
+                    <property name="right_attach">9</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame16">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry7">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">8</property>
+                    <property name="right_attach">9</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame15">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry20">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">7</property>
+                    <property name="right_attach">8</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame14">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry6">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">7</property>
+                    <property name="right_attach">8</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame13">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry19">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="right_attach">7</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame12">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry5">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">6</property>
+                    <property name="right_attach">7</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame11">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry18">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">5</property>
+                    <property name="right_attach">6</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame10">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry4">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">5</property>
+                    <property name="right_attach">6</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame9">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry17">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="right_attach">5</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame8">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry3">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="right_attach">5</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame7">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry16">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame6">
+                    <property name="width_request">20</property>
+                    <property name="height_request">20</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry2">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="right_attach">4</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame5">
+                    <property name="width_request">20</property>
+                    <property name="height_request">20</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry15">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry1">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="right_attach">3</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame3">
+                    <property name="width_request">20</property>
+                    <property name="height_request">20</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry0">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="frame2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label_xalign">0</property>
+                    <property name="label_yalign">0.5</property>
+                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="color_palette_entry14">
+                        <property name="width_request">16</property>
+                        <property name="height_request">16</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="extension_events">GDK_EXTENSION_EVENTS_ALL</property>
+                        <signal handler="on_color_palette_entry_button_press_event" name="button_press_event"/>
+                        <signal handler="on_color_palette_entry_realize" name="realize"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">1</property>
+                    <property name="x_options"/>
+                    <property name="y_options"/>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFixed" id="fixed1">
+                    <property name="border_width">2</property>
+                    <property name="width_request">70</property>
+                    <property name="height_request">40</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkColorButton" id="background_color_picker">
+                        <property name="width_request">36</property>
+                        <property name="height_request">24</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="use_alpha">False</property>
+                        <property name="focus_on_click">True</property>
+                        <signal handler="on_background_color_picker_color_set" name="color_set"/>
+                        <signal handler="on_background_color_picker_realize" name="realize"/>
+                      </object>
+                      <packing>
+                        <property name="x">31</property>
+                        <property name="y">16</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkColorButton" id="foreground_color_picker">
+                        <property name="width_request">36</property>
+                        <property name="height_request">24</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="use_alpha">False</property>
+                        <property name="focus_on_click">True</property>
+                        <signal handler="on_foreground_color_picker_color_set" name="color_set"/>
+                        <signal handler="on_foreground_color_picker_realize" name="realize"/>
+                      </object>
+                      <packing>
+                        <property name="x">0</property>
+                        <property name="y">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="right_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"/>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStatusbar" id="statusbar1">
+            <property name="visible">True</property>
+            <property name="has_resize_grip">True</property>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
