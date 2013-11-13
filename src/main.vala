@@ -23,37 +23,61 @@ using Pango;
 using Gtk;
 using Gee;
 
-const string ui_file = "gpaint.ui";
 
 namespace Gpaint
 {
 
-Builder builder;
-Window create_new_document()
-{
-	builder.add_from_file(ui_file);
-	builder.connect_signals(null);
-	Gtk.Window window = builder.get_object("main_window") as Gtk.Window;
-    	
-	window.destroy.connect(Gtk.main_quit);
+    public class App : Gtk.Application
+    {        
+        private static const string ui_file = "gpaint.ui";
+        private const GLib.ActionEntry[] actions = 
+        {
+            { "action_new", on_new },
+            { "action_quit", on_quit }
+            
+        };
+        Builder builder;
+        private void on_new(SimpleAction action, GLib.Variant? parameter) 
+        {
+            
+        }
+        
+        private void on_quit(SimpleAction action, GLib.Variant? parameter) 
+        {
+            Gtk.main_quit();
+        }
+        Window create_new_document()
+        {
 
-	window.show_all();
-    return window;
-    
-}
+            builder.add_from_file(ui_file);
+            builder.connect_signals(null);
+            Gtk.Window window = builder.get_object("main_window") as Gtk.Window;
+                
+            window.destroy.connect(Gtk.main_quit);
+        
+            window.show_all();
+            return window;
+            
+        }
+        protected override void startup()
+        {
+            base.startup();
+            builder = new Builder();	
 
-int main(string[] args)
-{
-    builder = new Builder();	
+            add_action_entries(actions, this);            
+            
+        }
+        protected override void activate()
+        {
+            create_new_document();	
+            
+            
+        }
+    }
     
-	Gtk.init(ref args);
-	
-	create_new_document();	
-	
-	Gtk.main();
-	
-	return 0;
-	
-}
+    /* main creates and runs the application. */
+    public int main (string[] args) {
+        return new App().run(args);
+    }
 }
 
