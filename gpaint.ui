@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
+  <requires lib="gtk+" version="3.6"/>
   <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">gpaint</property>
-    <signal name="destroy" handler="on_mainwindow_destroy" swapped="no"/>
-    <signal name="set-focus-child" handler="on_mainwindow_set_focus_child" swapped="no"/>
-    <signal name="set-focus" handler="on_mainwindow_set_focus" swapped="no"/>
-    <signal name="realize" handler="on_mainwindow_realize" swapped="no"/>
-    <signal name="focus-out-event" handler="on_mainwindow_focus_out_event" swapped="no"/>
-    <signal name="focus-in-event" handler="on_mainwindow_focus_in_event" swapped="no"/>
     <signal name="delete-event" handler="on_mainwindow_delete_event" swapped="no"/>
+    <signal name="destroy" handler="on_mainwindow_destroy" swapped="no"/>
+    <signal name="focus-in-event" handler="on_mainwindow_focus_in_event" swapped="no"/>
+    <signal name="focus-out-event" handler="on_mainwindow_focus_out_event" swapped="no"/>
+    <signal name="realize" handler="on_mainwindow_realize" swapped="no"/>
+    <signal name="set-focus" handler="on_mainwindow_set_focus" swapped="no"/>
+    <signal name="set-focus-child" handler="on_mainwindow_set_focus_child" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox2">
         <property name="visible">True</property>
@@ -359,6 +360,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -405,14 +407,16 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <signal name="map-event" handler="on_fontpicker_map_event" swapped="no"/>
+                        <property name="font">Sans 12</property>
                         <signal name="font-set" handler="on_fontpicker_font_set" swapped="no"/>
                         <signal name="map" handler="on_fontpicker_map" swapped="no"/>
+                        <signal name="map-event" handler="on_fontpicker_map_event" swapped="no"/>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -476,6 +480,15 @@
                           <placeholder/>
                         </child>
                         <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
                           <object class="GtkLabel" id="Line Width">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -493,6 +506,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
@@ -545,8 +559,8 @@
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">fill</property>
                                 <property name="border_width">3</property>
-                                <signal name="toggled" handler="on_filled_button_toggled" swapped="no"/>
                                 <signal name="realize" handler="on_filled_button_realize" swapped="no"/>
+                                <signal name="toggled" handler="on_filled_button_toggled" swapped="no"/>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -581,13 +595,14 @@
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
                                         <property name="active">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -603,13 +618,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -625,13 +641,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -647,13 +664,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -670,13 +688,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -692,13 +711,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -714,13 +734,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -752,13 +773,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -774,13 +796,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -796,13 +819,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -818,13 +842,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -840,13 +865,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -862,13 +888,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -884,13 +911,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                         <signal name="clicked" handler="on_tool_button_clicked" swapped="no"/>
+                                        <signal name="realize" handler="on_tool_button_realize" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -904,6 +932,7 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
                       </packing>
                     </child>
                   </object>

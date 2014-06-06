@@ -101,7 +101,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_gpaint_OBJECTS = main.$(OBJEXT)
-gpaint_OBJECTS = $(am_gpaint_OBJECTS)
+nodist_gpaint_OBJECTS = res.$(OBJEXT)
+gpaint_OBJECTS = $(am_gpaint_OBJECTS) $(nodist_gpaint_OBJECTS)
 am__DEPENDENCIES_1 =
 gpaint_DEPENDENCIES = $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -150,7 +151,7 @@ AM_V_VALAC = $(am__v_VALAC_@AM_V@)
 am__v_VALAC_ = $(am__v_VALAC_@AM_DEFAULT_V@)
 am__v_VALAC_0 = @echo "  VALAC   " $@;
 am__v_VALAC_1 = 
-SOURCES = $(gpaint_SOURCES)
+SOURCES = $(gpaint_SOURCES) $(nodist_gpaint_SOURCES)
 DIST_SOURCES = $(gpaint_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -321,9 +322,11 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
+GLIB_COMPILE_RESOURCES = `which glib-compile-resources`
 AM_CFLAGS = $(GUI_CFLAGS)
-AM_VALAFLAGS = -g --save-temps --pkg "gtk+-3.0" --pkg "glib-2.0" --pkg gee-0.8 --pkg pango --pkg gmodule-2.0
+AM_VALAFLAGS = -g --save-temps --pkg "gtk+-3.0" --pkg "glib-2.0" --pkg "gio-2.0" --pkg gee-0.8 --pkg pango --pkg gmodule-2.0
 gpaint_SOURCES = src/main.vala
+nodist_gpaint_SOURCES = res.c
 gpaint_LDADD = $(GUI_LIBS)
 EXTRA_DIST = \
         gpaint.desktop \
@@ -432,6 +435,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/res.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -837,6 +841,12 @@ uninstall-am: uninstall-binPROGRAMS
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS
 
+
+res.c: res.h $(top_srcdir)/gpaint.gresource.xml $(sh $(GLIB_COMPILE_RESOURCES) --sourcedir=$(top_srcdir) --generate-dependencies $(top_srcdir)/gpaint.gresource.xml)
+	$(GLIB_COMPILE_RESOURCES) --c-name=gpaint --target=$@   --sourcedir=$(top_srcdir) --generate-source  $(top_srcdir)/gpaint.gresource.xml 	
+
+res.h: $(top_srcdir)/gpaint.gresource.xml $(sh $(GLIB_COMPILE_RESOURCES)  --sourcedir=$(top_srcdir) --generate-dependencies $(top_srcdir)/gpaint.gresource.xml)
+	$(GLIB_COMPILE_RESOURCES) --c-name=gpaint --target=$@   --sourcedir=$(top_srcdir) --generate-header  $(top_srcdir)/gpaint.gresource.xml  
 
 dist-hook:
 	if test -d $(srcdir)/pixmaps; then \

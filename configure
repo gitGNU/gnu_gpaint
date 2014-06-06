@@ -6969,10 +6969,10 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
 	  x86_64-*linux*)
 	    LD="${LD-ld} -m elf_i386"
 	    ;;
-	  powerpcle-*linux*)
+	  powerpc64le-*linux*)
 	    LD="${LD-ld} -m elf32lppclinux"
 	    ;;
-	  powerpc-*linux*)
+	  powerpc64-*linux*)
 	    LD="${LD-ld} -m elf32ppclinux"
 	    ;;
 	  s390x-*linux*)
@@ -12734,12 +12734,12 @@ if test -n "$GUI_CFLAGS"; then
     pkg_cv_GUI_CFLAGS="$GUI_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GUI_CFLAGS=`$PKG_CONFIG --cflags "gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango" 2>/dev/null`
+  pkg_cv_GUI_CFLAGS=`$PKG_CONFIG --cflags "gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -12751,12 +12751,12 @@ if test -n "$GUI_LIBS"; then
     pkg_cv_GUI_LIBS="$GUI_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GUI_LIBS=`$PKG_CONFIG --libs "gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango" 2>/dev/null`
+  pkg_cv_GUI_LIBS=`$PKG_CONFIG --libs "gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -12777,14 +12777,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GUI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango" 2>&1`
+	        GUI_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango" 2>&1`
         else
-	        GUI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango" 2>&1`
+	        GUI_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$GUI_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (gtk+-3.0 glib-2.0 gmodule-2.0 gee-0.8 pango) were not met:
+	as_fn_error $? "Package requirements (gtk+-3.0 glib-2.0 gio-2.0 gmodule-2.0 gee-0.8 pango) were not met:
 
 $GUI_PKG_ERRORS
 

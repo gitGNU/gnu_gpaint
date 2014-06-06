@@ -1,5 +1,5 @@
 /*
-	Copyright 2013 Li-Cheng (Andy) Tai
+	Copyright 2013, 2014 Li-Cheng (Andy) Tai
                       atai@atai.org
                       
 	gpaint is free software: you can redistribute it and/or modify it
@@ -48,17 +48,30 @@ namespace Gpaint
         }
         Window create_new_document()
         {
-
-            builder.add_from_file(ui_file);
-            builder.connect_signals(null);
-            Gtk.Window window = builder.get_object("main_window") as Gtk.Window;
-                
-            window.destroy.connect(Gtk.main_quit);
-        
-            window.show_all();
-            return window;
+            try
+            {
+                builder.add_from_file(ui_file);
+                builder.connect_signals(null);
+                Gtk.Window window = builder.get_object("main_window") as Gtk.Window;
+                window.@set("application", this);    /* hack, to make window a GtkApplicationWindow*/
+                window.destroy.connect(Gtk.main_quit);
             
+                //window.show_all();
+                window.show();
+                
+                return window;
+            } 
+            catch (GLib.Error err)
+            {
+                stdout.printf("failure in created new document, %s\n", err.message);
+            }
+            return (ApplicationWindow) null;
         }
+        
+        public App() 
+        {            
+        }
+        
         protected override void startup()
         {
             base.startup();
@@ -67,17 +80,18 @@ namespace Gpaint
             add_action_entries(actions, this);            
             
         }
+        
         protected override void activate()
         {
             create_new_document();	
-            
-            
         }
     }
     
     /* main creates and runs the application. */
-    public int main (string[] args) {
-        return new App().run(args);
+    public static int main (string[] args) {
+        App app = new App();
+        
+        return app.run(args);
     }
 }
 
