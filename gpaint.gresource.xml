@@ -2,5 +2,6 @@
 <gresources>
     <gresource prefix="/org/gnu/gpaint">
         <file>svg/GPLv3_Logo.svg</file>
+        <file>gpaint.ui</file>
     </gresource>
 </gresources>

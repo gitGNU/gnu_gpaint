@@ -24,12 +24,17 @@ using Gtk;
 using Gee;
 
 
+extern Resource gpaint_get_resource();
+
 namespace Gpaint
 {
 
+    
     public class App : Gtk.Application
     {        
-        private static const string ui_file = "gpaint.ui";
+        private static const string resource_prefix = "/org/gnu/gpaint/";
+        private static const string ui_file = resource_prefix + "gpaint.ui";
+        private Resource resources;
         private const GLib.ActionEntry[] actions = 
         {
             { "action_new", on_new },
@@ -50,7 +55,7 @@ namespace Gpaint
         {
             try
             {
-                builder.add_from_file(ui_file);
+                builder.add_from_resource(ui_file);
                 builder.connect_signals(null);
                 Gtk.Window window = builder.get_object("main_window") as Gtk.Window;
                 window.@set("application", this);    /* hack, to make window a GtkApplicationWindow*/
@@ -75,6 +80,7 @@ namespace Gpaint
         protected override void startup()
         {
             base.startup();
+            resources = gpaint_get_resource();
             builder = new Builder();	
 
             add_action_entries(actions, this);            
