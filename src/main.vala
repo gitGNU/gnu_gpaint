@@ -34,54 +34,72 @@ namespace Gpaint
     {        
         private static const string resource_prefix = "/org/gnu/gpaint/";
         private static const string ui_file = resource_prefix + "gpaint.ui";
+        public static const string app_name = "gpaint";
+        public static const string app_id = "org.gnu." + app_name;
         private Resource resources;
         private const GLib.ActionEntry[] actions = 
         {
             { "action_new", on_new },
+            { "action_about", on_about },
             { "action_quit", on_quit }
             
         };
         Builder builder;
+        
+       
         private void on_new(SimpleAction action, GLib.Variant? parameter) 
         {
-            
+            create_new_document();
         }
         
+        
+        private void on_about(SimpleAction action, GLib.Variant? parameter) 
+        {
+            GLib.message("on_about!");
+            
+        }
         private void on_quit(SimpleAction action, GLib.Variant? parameter) 
         {
             Gtk.main_quit();
         }
+        
         Window create_new_document()
         {
-            try
+            builder = new Builder();	
+            try 
             {
-                builder.add_from_resource(ui_file);
-                builder.connect_signals(null);
-                Gtk.Window window = builder.get_object("main_window") as Gtk.Window;
-                window.@set("application", this);    /* hack, to make window a GtkApplicationWindow*/
-                window.destroy.connect(Gtk.main_quit);
-            
-                //window.show_all();
-                window.show();
                 
-                return window;
-            } 
-            catch (GLib.Error err)
-            {
-                stdout.printf("failure in created new document, %s\n", err.message);
+                builder.add_from_resource(ui_file);
             }
-            return (ApplicationWindow) null;
+            catch (GLib.Error err) 
+            {
+                GLib.critical("Failed to add builder UI to resource, %s", err.message);    
+            }
+            builder.connect_signals(null);
+            Gtk.ApplicationWindow window = (Gtk.ApplicationWindow) builder.get_object("main_window") ;
+            if (window == null) 
+            {
+                GLib.critical("Cannot build gpaint main window!");    
+            }
+           
+            add_window(window);
+            window.destroy.connect(Gtk.main_quit);
+            //window.show_all();
+            window.show();
+            
+            return window;
+            
         }
         
         public App() 
-        {            
+        {          
+            Object(application_id: app_name, flags: ApplicationFlags.FLAGS_NONE);
         }
         
         protected override void startup()
         {
             base.startup();
             resources = gpaint_get_resource();
-            builder = new Builder();	
 
             add_action_entries(actions, this);            
             

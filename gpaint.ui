@@ -2,8 +2,7 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.6"/>
-  <object class="GtkWindow" id="main_window">
-    <property name="can_focus">False</property>
+  <object class="GtkApplicationWindow" id="main_window">
     <property name="title" translatable="yes">gpaint</property>
     <signal name="delete-event" handler="on_mainwindow_delete_event" swapped="no"/>
     <signal name="destroy" handler="on_mainwindow_destroy" swapped="no"/>
@@ -265,6 +264,7 @@
                             <property name="label">gtk-about</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="action_name">action_about</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
                           </object>
@@ -476,6 +476,9 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="n_rows">2</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                         <child>
                           <placeholder/>
                         </child>
