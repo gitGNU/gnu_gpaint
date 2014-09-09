@@ -7,8 +7,14 @@ AM_VALAFLAGS = -g --save-temps --pkg "gtk+-3.0" --pkg "glib-2.0" --pkg "gio-2.0"
 
 bin_PROGRAMS = gpaint
 
-gpaint_SOURCES = src/main.vala
+gpaint_SOURCES = src/config.vapi src/main.vala
 nodist_gpaint_SOURCES = res.c
+gpaint_CFLAGS = \
+        -DLOCALEDIR=\"@localedir@\" \
+        -DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
+        -w \
+        $(GUI_CFLAGS)
+
 gpaint_LDADD = $(GUI_LIBS)
 
 GPAINT_RESOURCES = $(sh $(GLIB_COMPILE_RESOURCES) --sourcedir=$(top_srcdir) --generate-dependencies $(top_srcdir)/gpaint.gresource.xml)

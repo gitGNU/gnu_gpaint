@@ -38,6 +38,7 @@
                             <property name="label">gtk-new</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="action_name">app.action_new</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
                           </object>
@@ -94,7 +95,7 @@
                             <property name="label">gtk-quit</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="action_name">action_quit</property>
+                            <property name="action_name">app.action_quit</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
                           </object>
@@ -264,7 +265,7 @@
                             <property name="label">gtk-about</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="action_name">action_about</property>
+                            <property name="action_name">app.action_about</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
                           </object>
@@ -960,7 +961,7 @@
                       <object class="GtkImage" id="edit_image">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="pixbuf">/tmp/crystal_beauty.png</property>
+                        <property name="pixbuf"></property>
                       </object>
                     </child>
                   </object>

@@ -19,6 +19,7 @@
 */
 
 using GLib;
+using Gdk;
 using Pango;
 using Gtk;
 using Gee;
@@ -36,6 +37,8 @@ namespace Gpaint
         private static const string ui_file = resource_prefix + "gpaint.ui";
         public static const string app_name = "gpaint";
         public static const string app_id = "org.gnu." + app_name;
+        
+        private static const string menu_id = "menubar1";
         private Resource resources;
         private const GLib.ActionEntry[] actions = 
         {
@@ -44,9 +47,9 @@ namespace Gpaint
             { "action_quit", on_quit }
             
         };
-        Builder builder;
         
-       
+        private Builder builder;
+
         private void on_new(SimpleAction action, GLib.Variant? parameter) 
         {
             create_new_document();
@@ -63,12 +66,11 @@ namespace Gpaint
             Gtk.main_quit();
         }
         
-        Window create_new_document()
+        Gtk.Window create_new_document()
         {
             builder = new Builder();	
             try 
-            {
-                
+            {                
                 builder.add_from_resource(ui_file);
             }
             catch (GLib.Error err) 
@@ -83,6 +85,7 @@ namespace Gpaint
             }
            
             add_window(window);
+            //set_app_menu(builder.get_object(menu_id) as MenuModel);
             window.destroy.connect(Gtk.main_quit);
             //window.show_all();
             window.show();
@@ -93,12 +96,18 @@ namespace Gpaint
         
         public App() 
         {          
-            Object(application_id: app_name, flags: ApplicationFlags.FLAGS_NONE);
+            Object(application_id: app_id, flags: ApplicationFlags.FLAGS_NONE);
         }
         
         protected override void startup()
         {
             base.startup();
+
+            Intl.setlocale (LocaleCategory.ALL, "");
+            Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+            Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+            Intl.textdomain (GETTEXT_PACKAGE);
+            
             resources = gpaint_get_resource();
 
             add_action_entries(actions, this);            

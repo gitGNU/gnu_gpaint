@@ -100,8 +100,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_gpaint_OBJECTS = main.$(OBJEXT)
-nodist_gpaint_OBJECTS = res.$(OBJEXT)
+am_gpaint_OBJECTS = gpaint-main.$(OBJEXT)
+nodist_gpaint_OBJECTS = gpaint-res.$(OBJEXT)
 gpaint_OBJECTS = $(am_gpaint_OBJECTS) $(nodist_gpaint_OBJECTS)
 am__DEPENDENCIES_1 =
 gpaint_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -109,6 +109,9 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+gpaint_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(gpaint_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -325,8 +328,14 @@ AUTOMAKE_OPTIONS = foreign
 GLIB_COMPILE_RESOURCES = `which glib-compile-resources`
 AM_CFLAGS = $(GUI_CFLAGS)
 AM_VALAFLAGS = -g --save-temps --pkg "gtk+-3.0" --pkg "glib-2.0" --pkg "gio-2.0" --pkg gee-0.8 --pkg pango --pkg gmodule-2.0
-gpaint_SOURCES = src/main.vala
+gpaint_SOURCES = src/config.vapi src/main.vala
 nodist_gpaint_SOURCES = res.c
+gpaint_CFLAGS = \
+        -DLOCALEDIR=\"@localedir@\" \
+        -DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
+        -w \
+        $(GUI_CFLAGS)
+
 gpaint_LDADD = $(GUI_LIBS)
 GPAINT_RESOURCES = $(sh $(GLIB_COMPILE_RESOURCES) --sourcedir=$(top_srcdir) --generate-dependencies $(top_srcdir)/gpaint.gresource.xml)
 EXTRA_DIST = \
@@ -427,7 +436,7 @@ clean-binPROGRAMS:
 
 gpaint$(EXEEXT): $(gpaint_OBJECTS) $(gpaint_DEPENDENCIES) $(EXTRA_gpaint_DEPENDENCIES) 
 	@rm -f gpaint$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(gpaint_OBJECTS) $(gpaint_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(gpaint_LINK) $(gpaint_OBJECTS) $(gpaint_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -435,8 +444,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/res.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gpaint-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gpaint-res.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -459,27 +468,41 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-main.o: src/main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT main.o -MD -MP -MF $(DEPDIR)/main.Tpo -c -o main.o `test -f 'src/main.c' || echo '$(srcdir)/'`src/main.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/main.Tpo $(DEPDIR)/main.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/main.c' object='main.o' libtool=no @AMDEPBACKSLASH@
+gpaint-main.o: src/main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gpaint_CFLAGS) $(CFLAGS) -MT gpaint-main.o -MD -MP -MF $(DEPDIR)/gpaint-main.Tpo -c -o gpaint-main.o `test -f 'src/main.c' || echo '$(srcdir)/'`src/main.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gpaint-main.Tpo $(DEPDIR)/gpaint-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/main.c' object='gpaint-main.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o main.o `test -f 'src/main.c' || echo '$(srcdir)/'`src/main.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gpaint_CFLAGS) $(CFLAGS) -c -o gpaint-main.o `test -f 'src/main.c' || echo '$(srcdir)/'`src/main.c
 
-main.obj: src/main.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT main.obj -MD -MP -MF $(DEPDIR)/main.Tpo -c -o main.obj `if test -f 'src/main.c'; then $(CYGPATH_W) 'src/main.c'; else $(CYGPATH_W) '$(srcdir)/src/main.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/main.Tpo $(DEPDIR)/main.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/main.c' object='main.obj' libtool=no @AMDEPBACKSLASH@
+gpaint-main.obj: src/main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gpaint_CFLAGS) $(CFLAGS) -MT gpaint-main.obj -MD -MP -MF $(DEPDIR)/gpaint-main.Tpo -c -o gpaint-main.obj `if test -f 'src/main.c'; then $(CYGPATH_W) 'src/main.c'; else $(CYGPATH_W) '$(srcdir)/src/main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gpaint-main.Tpo $(DEPDIR)/gpaint-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/main.c' object='gpaint-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o main.obj `if test -f 'src/main.c'; then $(CYGPATH_W) 'src/main.c'; else $(CYGPATH_W) '$(srcdir)/src/main.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gpaint_CFLAGS) $(CFLAGS) -c -o gpaint-main.obj `if test -f 'src/main.c'; then $(CYGPATH_W) 'src/main.c'; else $(CYGPATH_W) '$(srcdir)/src/main.c'; fi`
+
+gpaint-res.o: res.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gpaint_CFLAGS) $(CFLAGS) -MT gpaint-res.o -MD -MP -MF $(DEPDIR)/gpaint-res.Tpo -c -o gpaint-res.o `test -f 'res.c' || echo '$(srcdir)/'`res.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gpaint-res.Tpo $(DEPDIR)/gpaint-res.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='res.c' object='gpaint-res.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gpaint_CFLAGS) $(CFLAGS) -c -o gpaint-res.o `test -f 'res.c' || echo '$(srcdir)/'`res.c
+
+gpaint-res.obj: res.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gpaint_CFLAGS) $(CFLAGS) -MT gpaint-res.obj -MD -MP -MF $(DEPDIR)/gpaint-res.Tpo -c -o gpaint-res.obj `if test -f 'res.c'; then $(CYGPATH_W) 'res.c'; else $(CYGPATH_W) '$(srcdir)/res.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gpaint-res.Tpo $(DEPDIR)/gpaint-res.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='res.c' object='gpaint-res.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gpaint_CFLAGS) $(CFLAGS) -c -o gpaint-res.obj `if test -f 'res.c'; then $(CYGPATH_W) 'res.c'; else $(CYGPATH_W) '$(srcdir)/res.c'; fi`
 $(srcdir)/src/main.c: $(srcdir)/gpaint_vala.stamp
 	@if test -f $@; then :; else rm -f $(srcdir)/gpaint_vala.stamp; fi
 	@if test -f $@; then :; else \
 	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/gpaint_vala.stamp; \
 	fi
-$(srcdir)/gpaint_vala.stamp: src/main.vala
+$(srcdir)/gpaint_vala.stamp: src/config.vapi src/main.vala
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(AM_VALAFLAGS) $(VALAFLAGS) -C src/main.vala
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(AM_VALAFLAGS) $(VALAFLAGS) -C src/config.vapi src/main.vala
 	$(AM_V_at)mv -f $@-t $@
 
 mostlyclean-libtool:
