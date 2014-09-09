@@ -19,6 +19,7 @@
 */
 
 using GLib;
+using Cairo;
 using Gdk;
 using Pango;
 using Gtk;
@@ -35,6 +36,7 @@ namespace Gpaint
     {        
         private static const string resource_prefix = "/org/gnu/gpaint/";
         private static const string ui_file = resource_prefix + "gpaint.ui";
+        private static const string about_pic_file = resource_prefix + "pixmaps/about_pict.xpm";
         public static const string app_name = "gpaint";
         public static const string app_id = "org.gnu." + app_name;
         
@@ -59,6 +61,24 @@ namespace Gpaint
         private void on_about(SimpleAction action, GLib.Variant? parameter) 
         {
             GLib.message("on_about!");
+            Gtk.AboutDialog about_dialog = new Gtk.AboutDialog();
+
+            about_dialog.program_name = PACKAGE_NAME;
+            about_dialog.copyright = "Copyright © 2013, 2014 Li-Cheng (Andy) Tai";
+            about_dialog.version = PACKAGE_VERSION;
+            
+            about_dialog.wrap_license = true;
+            Pixbuf pixbuf = new Pixbuf.from_resource(about_pic_file);
+            about_dialog.set_logo(pixbuf);
+            about_dialog.response.connect ((response_id) => {
+                if (response_id == Gtk.ResponseType.CANCEL || response_id == Gtk.ResponseType.DELETE_EVENT) {
+                    about_dialog.hide_on_delete ();
+                }
+            });
+
+            // Show the dialog:
+            about_dialog.present ();
+            
             
         }
         private void on_quit(SimpleAction action, GLib.Variant? parameter) 
