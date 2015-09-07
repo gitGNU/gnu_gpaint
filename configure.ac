@@ -1,11 +1,12 @@
 AC_INIT(gpaint, 0.4, http://savannah.gnu.org/bugs/?group=gpaint)
 AC_CONFIG_SRCDIR([src/main.vala])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE([1.7.9])
+AM_INIT_AUTOMAKE([subdir-objects])
 
 AC_GNU_SOURCE
 
@@ -18,7 +19,7 @@ AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 AC_PROG_CC
 
-AM_PROG_VALAC([0.11.0])
+AM_PROG_VALAC([0.21.2])
 
 AC_DEFINE(_GNU_SOURCE, 1)
 

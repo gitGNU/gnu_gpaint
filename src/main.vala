@@ -1,5 +1,5 @@
 /*
-	Copyright 2013, 2014 Li-Cheng (Andy) Tai
+	Copyright 2013, 2014, 2015 Li-Cheng (Andy) Tai
                       atai@atai.org
                       
 	gpaint is free software: you can redistribute it and/or modify it
@@ -63,9 +63,9 @@ namespace Gpaint
             GLib.message("on_about!");
             Gtk.AboutDialog about_dialog = new Gtk.AboutDialog();
 
-            about_dialog.program_name = PACKAGE_NAME;
+            about_dialog.program_name = Config.PACKAGE_NAME;
             about_dialog.copyright = "Copyright © 2013, 2014 Li-Cheng (Andy) Tai";
-            about_dialog.version = PACKAGE_VERSION;
+            about_dialog.version = Config.PACKAGE_VERSION;
             
             about_dialog.wrap_license = true;
             Pixbuf pixbuf = new Pixbuf.from_resource(about_pic_file);
@@ -124,9 +124,9 @@ namespace Gpaint
             base.startup();
 
             Intl.setlocale (LocaleCategory.ALL, "");
-            Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-            Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-            Intl.textdomain (GETTEXT_PACKAGE);
+            Intl.bindtextdomain (Config.GETTEXT_PACKAGE, Config.LOCALEDIR);
+            Intl.bind_textdomain_codeset (Config.GETTEXT_PACKAGE, "UTF-8");
+            Intl.textdomain (Config.GETTEXT_PACKAGE);
             
             resources = gpaint_get_resource();
 
