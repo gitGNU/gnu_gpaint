@@ -115,11 +115,28 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
+                          <object class="GtkImageMenuItem" id="undo_menu_item">
+                            <property name="label">gtk-undo</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="action_name">app.action_undo</property>
+                            <property name="use_stock">True</property>
+                          </object>
+                        </child>
+                       <child>
+                          <object class="GtkSeparatorMenuItem">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkImageMenuItem" id="cut_menu_item">
                             <property name="label">gtk-cut</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="use_underline">True</property>
+                            <property name="action_name">app.action_clipboard_cut</property>
                             <property name="use_stock">True</property>
                           </object>
                         </child>
@@ -128,6 +145,7 @@
                             <property name="label">gtk-copy</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="action_name">app.action_clipboard_copy</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
                           </object>
@@ -137,6 +155,7 @@
                             <property name="label">gtk-paste</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="action_name">app.action_clipboard_paste</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
                           </object>
@@ -146,6 +165,7 @@
                             <property name="label">gtk-delete</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="action_name">app.action_clipboard_delete</property>
                             <property name="use_underline">True</property>
                             <property name="use_stock">True</property>
                           </object>

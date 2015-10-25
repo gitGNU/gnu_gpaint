@@ -46,8 +46,12 @@ namespace Gpaint
         {
             { "action_new", on_new },
             { "action_about", on_about },
-            { "action_quit", on_quit }
-            
+            { "action_quit", on_quit },
+            { "action_undo", on_undo },
+            { "app.action_clipboard_cut", on_clipboard_cut },
+            { "app.action_clipboard_copy", on_clipboard_copy },
+            { "app.action_clipboard_paste", on_clipboard_paste },
+            { "app.action_clipboard_delete", on_clipboard_delete },
         };
         
         private Builder builder;
@@ -68,8 +72,16 @@ namespace Gpaint
             about_dialog.version = Config.PACKAGE_VERSION;
             
             about_dialog.wrap_license = true;
-            Pixbuf pixbuf = new Pixbuf.from_resource(about_pic_file);
-            about_dialog.set_logo(pixbuf);
+            try 
+            {
+                Pixbuf pixbuf = new Pixbuf.from_resource(about_pic_file);
+                about_dialog.set_logo(pixbuf);
+            }            
+            catch (GLib.Error err) 
+            {
+                GLib.critical("Failed to add builder UI to resource, %s", err.message);    
+            }
+            
             about_dialog.response.connect ((response_id) => {
                 if (response_id == Gtk.ResponseType.CANCEL || response_id == Gtk.ResponseType.DELETE_EVENT) {
                     about_dialog.hide_on_delete ();
@@ -79,13 +91,38 @@ namespace Gpaint
             // Show the dialog:
             about_dialog.present ();
             
-            
         }
+        
         private void on_quit(SimpleAction action, GLib.Variant? parameter) 
         {
             Gtk.main_quit();
         }
+
+        private void on_undo(SimpleAction action, GLib.Variant? parameter)
+        {
+            
+        }
+
+        private void on_clipboard_cut(SimpleAction action, GLib.Variant? parameter)
+        {
+            
+        }
         
+        private void on_clipboard_copy(SimpleAction action, GLib.Variant? parameter)
+        {
+            
+        }
+        
+        private void on_clipboard_paste(SimpleAction action, GLib.Variant? parameter)
+        {
+            
+        }
+        
+        private void on_clipboard_delete(SimpleAction action, GLib.Variant? parameter)
+        {
+            
+        }
+                
         Gtk.Window create_new_document()
         {
             builder = new Builder();	
