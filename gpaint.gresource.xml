@@ -2,7 +2,7 @@
 <gresources>
     <gresource prefix="/org/gnu/gpaint">
         <file>svg/GPLv3_Logo.svg</file>
-        <file>gpaint.ui</file>
+        <file compressed="true">gpaint.ui</file>
         <file>pixmaps/about_pict.xpm</file>
     </gresource>
 </gresources>

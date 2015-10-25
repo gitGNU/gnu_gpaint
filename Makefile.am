@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS = foreign
 GLIB_COMPILE_RESOURCES = `which glib-compile-resources`
 
 AM_CFLAGS = $(GUI_CFLAGS)
-AM_VALAFLAGS = -g --save-temps --pkg "gtk+-3.0" --pkg "glib-2.0" --pkg "gio-2.0" --pkg gee-0.8 --pkg pango --pkg gmodule-2.0
+AM_VALAFLAGS = -g --pkg "gtk+-3.0" --pkg "glib-2.0" --pkg "gio-2.0" --pkg gee-0.8 --pkg pango --pkg gmodule-2.0 --gresources $(top_srcdir)/gpaint.gresource.xml
 
 bin_PROGRAMS = gpaint
 
@@ -17,13 +17,9 @@ gpaint_CFLAGS = \
 
 gpaint_LDADD = $(GUI_LIBS)
 
-GPAINT_RESOURCES = $(sh $(GLIB_COMPILE_RESOURCES) --sourcedir=$(top_srcdir) --generate-dependencies $(top_srcdir)/gpaint.gresource.xml)
 
-res.c: res.h $(top_srcdir)/gpaint.gresource.xml $(GPAINT_RESOURCES)
-	$(GLIB_COMPILE_RESOURCES) --c-name=gpaint --target=$@   --sourcedir=$(top_srcdir) --generate-source  $(top_srcdir)/gpaint.gresource.xml 	
-
-res.h: $(top_srcdir)/gpaint.gresource.xml $(GPAINT_RESOURCES)
-	$(GLIB_COMPILE_RESOURCES) --c-name=gpaint --target=$@   --sourcedir=$(top_srcdir) --generate-header  $(top_srcdir)/gpaint.gresource.xml  
+res.c res.h: $(top_srcdir)/gpaint.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(top_srcdir) --generate-dependencies $(top_srcdir)/gpaint.gresource.xml)
+	$(GLIB_COMPILE_RESOURCES) --c-name=gpaint --target=$@   --sourcedir=$(top_srcdir) --generate-source  $< 	
 
 EXTRA_DIST =            \
         gpaint.desktop \
